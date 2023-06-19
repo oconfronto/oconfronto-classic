@@ -1,6 +1,6 @@
 # O Confronto
 
-## Pré-requsitos
+## Pré-requisitos
 - Docker
 - Docker Compose
 
