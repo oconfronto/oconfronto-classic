@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+  mysql:
+    image: mysql/mysql-server:5.7.37
+    restart: always
+    environment:
+      MYSQL_DATABASE: database
+      MYSQL_USER: usuariosql
+      MYSQL_PASSWORD: senhasql
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+    - 3306:3306
+    - 33060:33060
+    volumes:
+    - ./confronto.sql:/docker-entrypoint-initdb.d/confronto.sql 
+  legacy-php:
+    depends_on:
+    - mysql
+    image: php:5.3.29-apache
+    volumes:
+    - .:/var/www/html
+    ports:
+    - "8002:80"

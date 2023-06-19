@@ -1,5 +1,5 @@
 <?php
-$config_server = "localhost";
+$config_server = "host.docker.internal:3306";
 $config_database = "database";
 $config_username = "usuariosql";
 $config_password = "senhasql";
