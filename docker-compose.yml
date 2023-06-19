@@ -12,7 +12,7 @@ services:
     - 3306:3306
     - 33060:33060
     volumes:
-    - ./confronto.sql:/docker-entrypoint-initdb.d/confronto.sql 
+    - ./src/confronto.sql:/docker-entrypoint-initdb.d/confronto.sql 
   legacy-php:
     depends_on:
     - mysql

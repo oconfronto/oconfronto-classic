@@ -6,4 +6,5 @@
 
 ## Comandos
 - Para rodar localmente
-`docker-compose run -T legacy-php php ./config.php`
+`docker-compose run -T legacy-php php ./src/config.php`
+> Talvez precise rodar o comando duas vezes
