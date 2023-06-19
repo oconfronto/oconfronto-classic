@@ -1,0 +1,29 @@
+.dvHdr {
+   width: 150px;
+   font-family: arial;
+   border: 1px solid #B9892F;
+   padding: 3px;
+   fontSize: 10px;
+   color: #000000;
+   background: #FFECCC;
+   filter: alpha(opacity=85); /* IE */
+   opacity: 0.85; /* FF */
+   z-index: 10; 
+   position: relative;
+}
+
+.dvBdy {
+   border-bottom: 1px solid #B9892F;
+   border-left: 1px solid #B9892F;
+   border-right: 1px solid #B9892F;
+   width: 150px;
+   font-family: arial;
+   fontSize: 11px;
+   padding: 3px;
+   color: #000000;
+   background: #FFFFFF;
+   filter: alpha(opacity=85); /* IE */
+   opacity: 0.85; /* FF */
+   z-index: 10; 
+   position: relative;
+}

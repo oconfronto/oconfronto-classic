@@ -1,0 +1,68 @@
+Geral
+-Layout Novo (Designer)
+	-Buscar algo profissional.
+	-Buscar remover o bounce rate.
+
+Tela de inicio
+-Arrumar screen shots.
+
+Batalha
+-Dobro de experiência para passar de nível?
+	-Nível 100 em 1 dia = Fail
+
+Sistema de Magias
+-Concertar Bugs 
+	-Bug z-index.
+-Balancear sistema de magias.
+
+Clãs
+-Consertar Bugs
+-Discutir sistema de guerras
+	-Fazer sistema de guerras
+-Pesquisar idéias que façam dos clãs algo importante.
+
+Items
+-Balancear preços.
+-Agrupar vários items iguais no inventário.
+-Sistema de items drag n drop. (Possível?)
+
+Pontos de Status
+-Balancear status nos montros e nos players.
+-Vitalidade aumentar mana?
+
+Torneio
+-Investigar possibilidade de um torneio com sistema de chaves.
+	-Fazer se possível.
+
+Imagens
+-Novas bars/cartões para convidar amigos. (Designer)
+-Pesquisar formas criativas de se convidar amigos.
+	-Lembrar de sistema anti fraude.
+
+Quests
+-Remover bugs.
+-Padronizar quests.
+
+Reinauguração
+-Terminar todos os balanceamentos
+-Concertar bugs
+-Terminar sistemas incompletos
+	-Novo Design, se possivel.
+
+--Extras
+
+Multiliguagens (extra)
+-Auto tradução através de php.
+	-Muito tempo gasto.
+	-Poucas mudanças.
+	+Abrir portas aos outros paises.
+
+Mapas (extra)
+-Mapa da cidade com links para ferreiro, hospital, etc. (Designer)
+-Mapa da ilha com links para a cidade e zonas de caça. (Designer)
+
+Chat (extra)
+Sistama de chat gtalk? Moderno demais para o game?
+
+Tutorial (extra)
+-Refazer o tutorial de primeiro login.

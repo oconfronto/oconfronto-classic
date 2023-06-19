@@ -1,0 +1,57 @@
+/* SimpleTabs: default style */
+
+div.simpleTabs {
+padding:10px;
+}
+ul.simpleTabsNavigation {
+margin:0 6px;
+padding:0;
+text-align:left;
+}
+ul.simpleTabsNavigation li {
+list-style:none;
+display:inline;
+margin:0;
+padding:0; 
+}
+ul.simpleTabsNavigation li a {
+	border-left: 1px solid #B9892F;
+	border-right: 1px solid #B9892F;
+	border-top: 1px solid #B9892F;
+	border-bottom: 1px solid #B9892F;
+	background-color: #B9892F;
+  	padding: 2px;
+  	margin: 2px;
+	color:#222;
+	text-decoration:none;
+	font-weight:bold;
+  	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+ul.simpleTabsNavigation li a:hover
+{
+	text-decoration:none;
+	font-weight:bold;
+	background-color:#FFECCC;
+  	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+ul.simpleTabsNavigation li a.current
+{
+background:#FFECCC;
+color:#222;
+border-bottom:1px solid #FFECCC;
+}
+div.simpleTabsContent
+{
+	border-left: 6px solid #B9892F;
+	border-right: 1px solid #B9892F;
+	border-top: 1px solid #B9892F;
+	border-bottom: 1px solid #B9892F;
+	background-color: #FFECCC;
+  	padding: 2px;
+  	margin: 2px;
+	display:none;
+}
+div.simpleTabsContent.currentTab
+{
+display:block;
+}

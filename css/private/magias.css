@@ -1,0 +1,181 @@
+#spells {
+        position: relative;
+        background: url('back.gif') no-repeat;
+        width: 263px;
+        margin: 0 auto;
+        height: 298px;
+
+}
+
+#infobox {
+        position: relative;
+        z-index: 4;
+}
+
+#magia1 {
+        position: absolute; 
+        top: 89px; 
+        left: 50px; 
+        z-index: 2;
+}
+
+#magia2 {
+        position: absolute; 
+        top: 156px; 
+        left: 115px; 
+        z-index: 2;
+}
+
+#magia3 {
+        position: absolute; 
+        top: 89px; 
+        left: 83px; 
+        z-index: 2;
+}
+
+#magia4 {
+        position: absolute; 
+        top: 30px; 
+        left: 115px; 
+        z-index: 2;
+}
+
+#magia5 {
+        position: absolute; 
+        top: 217px; 
+        left: 115px; 
+        z-index: 2;
+}
+
+#magia6 {
+        position: absolute; 
+        top: 89px; 
+        left: 148px; 
+        z-index: 2;
+}
+
+#magia7 {
+        position: absolute; 
+        top: 89px; 
+        left: 181px; 
+        z-index: 2;
+}
+
+#magia8 {
+        position: absolute; 
+        top: 210px; 
+        left: 43px; 
+        z-index: 2;
+}
+
+#magia9 {
+        position: absolute; 
+        top: 210px; 
+        left: 188px; 
+        z-index: 2;
+}
+
+#magia10 {
+        position: absolute; 
+        top: 247px; 
+        left: 188px; 
+        z-index: 2;
+}
+
+#magia11 {
+        position: absolute; 
+        top: 149px; 
+        left: 188px; 
+        z-index: 2;
+}
+
+#magia12 {
+        position: absolute; 
+        top: 149px; 
+        left: 43px; 
+        z-index: 2;
+}
+
+#block1 {
+        position: absolute; 
+        top: 89px; 
+        left: 50px; 
+        z-index: 3;
+}
+
+#block2 {
+        position: absolute; 
+        top: 156px; 
+        left: 115px; 
+        z-index: 3;
+}
+
+#block3 {
+        position: absolute; 
+        top: 89px; 
+        left: 83px; 
+        z-index: 3;
+}
+
+#block4 {
+        position: absolute; 
+        top: 30px; 
+        left: 115px; 
+        z-index: 3;
+}
+
+#block5 {
+        position: absolute; 
+        top: 217px; 
+        left: 115px; 
+        z-index: 3;
+}
+
+#block6 {
+        position: absolute; 
+        top: 89px; 
+        left: 148px; 
+        z-index: 3;
+}
+
+#block7 {
+        position: absolute; 
+        top: 89px; 
+        left: 181px; 
+        z-index: 3;
+}
+
+#block8 {
+        position: absolute; 
+        top: 210px; 
+        left: 43px; 
+        z-index: 3;
+}
+
+#block9 {
+        position: absolute; 
+        top: 210px; 
+        left: 188px; 
+        z-index: 3;
+}
+
+#block10 {
+        position: absolute; 
+        top: 247px; 
+        left: 188px; 
+        z-index: 3;
+}
+
+#block11 {
+        position: absolute; 
+        top: 149px; 
+        left: 188px; 
+        z-index: 3;
+}
+
+#block12 {
+        position: absolute; 
+        top: 149px; 
+        left: 43px; 
+        z-index: 3;
+}

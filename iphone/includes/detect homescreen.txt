@@ -1,0 +1,9 @@
+	echo"<script language=\"JavaScript\" type=\"text/javascript\">";
+
+	echo"if (window.navigator.standalone) {";
+	echo"alert ('Thanks for launching this app your home screen')";
+	echo"} else {";
+	echo"alert('Add this app to your home screen for the best experience')";
+	echo"}";
+
+	echo"</script>";
