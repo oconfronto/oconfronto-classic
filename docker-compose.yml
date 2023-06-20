@@ -20,4 +20,4 @@ services:
     volumes:
     - ./src:/var/www/html
     ports:
-    - "8002:80"
+    - "5000:80"
