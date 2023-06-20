@@ -1,5 +1,9 @@
 # O Confronto
 
+<p align="center">
+    <img src="src/images/topo.jpg">
+</p>
+
 ## Pré-requisitos
 - Docker
 - Docker Compose
