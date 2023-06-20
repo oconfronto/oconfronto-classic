@@ -1,6 +1,6 @@
 <?php
 	include("lib.php");
-	define("PAGENAME", "Inventário");
+	define("PAGENAME", "Inventï¿½rio");
 	$player = check_user($secret_key, $db);
 	include("checkbattle.php");
 	include("checkhp.php");
@@ -16,7 +16,7 @@
 
 	include("templates/private_header.php");
 
-echo "<center><b>Inventário</b></center>";
+echo "<center><b>Inventï¿½rio</b></center>";
 echo "<br/>";
 
 		echo "<div id=\"main_container\">";
@@ -33,14 +33,24 @@ echo "<br/>";
 
 $backpackquery = $db->execute("select items.id, items.tile, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where items.player_id=? and items.status='unequipped' and items.item_id=blueprint_items.id and blueprint_items.type!='potion' and blueprint_items.type!='stone' and items.mark='f' order by items.tile asc limit 49", array($player->id));
 
-	echo "<center><font size=\"1px\"><b>Capacidade:</b> 49</font><br/>";
-	echo "<font size=\"1px\"><b>Espaço Restante:</b> ";
-	if ((49 - $backpackquery->recordcount()) >= 0){ echo (49 - $backpackquery->recordcount()); }else{ echo "0"; }
-	echo "</font></center>";
+if ($backpackquery && is_object($backpackquery)) {
+    echo "<center><font size=\"1px\"><b>Capacidade:</b> 49</font><br/>";
+    echo "<font size=\"1px\"><b>EspaÃ§o Restante:</b> ";
+    if ((49 - $backpackquery->recordcount()) >= 0){ echo (49 - $backpackquery->recordcount()); }else{ echo "0"; }
+    echo "</font></center>";
+} else {
+    // Handle the error situation when $backpackquery is not a valid object
+    echo "An error occurred while querying the database.";
+}
+
+
+if($backpackquery === false) {
+    die('The query failed with error: ' . $db->ErrorMsg());
+}
 
 echo "</div><div id=\"right\">";
 
-echo "<table id=\"table2\" align=\"center\">";
+echo "<table id=\"table2\" align=\"center\" style=\"display: block;height: 100%;overflow-y: scroll\">";
 echo "<tr>";
 while($bag = $backpackquery->fetchrow())
 {
@@ -137,7 +147,7 @@ echo "</tr></table>";
 
 if ($backpackquery->recordcount() > 49){
 echo "<div style=\"background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">";
-echo "<center><font size=\"1\"><b>Espaço insuficiente na mochila.<br/>Venda alguns de seus itens para ver os outros.</b></font></center>";
+echo "<center><font size=\"1\"><b>Espaï¿½o insuficiente na mochila.<br/>Venda alguns de seus itens para ver os outros.</b></font></center>";
 echo "</div>";
 }
 
@@ -158,31 +168,31 @@ $query4 = $db->execute("select `id` from `items` where `player_id`=? and `item_i
 $numerodepocoes4 = $query4->recordcount();
 
 echo "<fieldset>";
-echo "<legend><b>Poções</b></legend>";
-echo "<table width=\"100%\"><tr><td><table width=\"80px\"><tr><td><div title=\"header=[Health Potion] body=[Recupera até 5 mil de vida.]\"><img src=\"images/itens/healthpotion.gif\"></div></td><td><b>x" . $numerodepocoes . "</b>";
+echo "<legend><b>PoÃ§Ãµes</b></legend>";
+echo "<table width=\"100%\"><tr><td><table width=\"80px\"><tr><td><div title=\"header=[Health Potion] body=[Recupera atÃ© 5 mil de vida.]\"><img src=\"images/itens/healthpotion.gif\"></div></td><td><b>x" . $numerodepocoes . "</b>";
 if ($numerodepocoes > 0){
 $item = $query->fetchrow();
 echo "<br/><a href=\"hospt.php?act=potion&pid=" . $item['id'] . "\">Usar</a>";
 }
 echo "</td></tr></table></td>";
-echo "<td><table width=\"80px\"><tr><td><div title=\"header=[Big Health Potion] body=[Recupera até 10 mil de vida.]\"><img src=\"images/itens/bighealthpotion.gif\"></div></td><td><b>x" . $numerodepocoes3 . "</b>";
+echo "<td><table width=\"80px\"><tr><td><div title=\"header=[Big Health Potion] body=[Recupera atÃ© 10 mil de vida.]\"><img src=\"images/itens/bighealthpotion.gif\"></div></td><td><b>x" . $numerodepocoes3 . "</b>";
 if ($numerodepocoes3 > 0){
 $item3 = $query3->fetchrow();
 echo "<br/><a href=\"hospt.php?act=potion&pid=" . $item3['id'] . "\">Usar</a>";
 }
 echo "</td></tr></table></td>";
-echo "<td><table width=\"80px\"><tr><td><div title=\"header=[Mana Potion] body=[Recupera até 500 de mana.]\"><img src=\"images/itens/manapotion.gif\"></div></td><td><b>x" . $numerodepocoes4 . "</b>";
+echo "<td><table width=\"80px\"><tr><td><div title=\"header=[Mana Potion] body=[Recupera atÃ© 500 de mana.]\"><img src=\"images/itens/manapotion.gif\"></div></td><td><b>x" . $numerodepocoes4 . "</b>";
 if ($numerodepocoes4 > 0){
 $item4 = $query4->fetchrow();
 echo "<br/><a href=\"hospt.php?act=potion&pid=" . $item4['id'] . "\">Usar</a>";
 }
 echo "</td></tr></table></td>";
-echo "<td><table width=\"80px\"><tr><td><div title=\"header=[Energy Potion] body=[Recupera até 50 de energia.]\"><img src=\"images/itens/energypotion.gif\"></div></td><td><b>x" . $numerodepocoes2 . "</b>";
+echo "<td><table width=\"80px\"><tr><td><div title=\"header=[Energy Potion] body=[Recupera atÃ© 50 de energia.]\"><img src=\"images/itens/energypotion.gif\"></div></td><td><b>x" . $numerodepocoes2 . "</b>";
 if ($numerodepocoes2 > 0){
 $item2 = $query2->fetchrow();
 echo "<br/><a href=\"hospt.php?act=potion&pid=" . $item2['id'] . "\">Usar</a>";
 }
-echo "</td></tr></table></td><td><font size=\"1\"><a href=\"hospt.php?act=sell\">Vender Poções</a><br/><a href=\"inventory.php?transpotion=true\">Transferir Poções</a></font></td></tr></table>";
+echo "</td></tr></table></td><td><font size=\"1\"><a href=\"hospt.php?act=sell\">Vender PoÃ§Ãµes</a><br/><a href=\"inventory.php?transpotion=true\">Transferir PoÃ§Ãµes</a></font></td></tr></table>";
 echo "</fieldset>";
 
 echo "<br>";
@@ -193,26 +203,26 @@ $verifikeuser = $db->execute("select `id` from `quests` where `quest_id`=4 and `
 
 if ($player->level < $setting->activate_level)
 {
-	echo "<center><font size=\"1\">Para poder transferir itens sua conta precisa estar ativa. Ela será ativada automaticamente quando você alcançar o nível " . $setting->activate_level . ".</font></center>";
+	echo "<center><font size=\"1\">Para poder transferir itens sua conta precisa estar ativa. Ela serï¿½ ativada automaticamente quando vocï¿½ alcanï¿½ar o nï¿½vel " . $setting->activate_level . ".</font></center>";
 }elseif ($verifikeuser->recordcount() == 0) {
-	echo"<center><font size=\"1\">Você precisa chegar ao nivel 40 e completar uma missão para utilizar esta função.</font></center>";
+	echo"<center><font size=\"1\">Vocï¿½ precisa chegar ao nivel 40 e completar uma missï¿½o para utilizar esta funï¿½ï¿½o.</font></center>";
 	if ($player->level > 39) {
-		echo"<center><font size=\"1\"><a href=\"quest2.php\"><b>Clique aqui para fazer a missão.</b></a></font></center>";
+		echo"<center><font size=\"1\"><a href=\"quest2.php\"><b>Clique aqui para fazer a missï¿½o.</b></a></font></center>";
 	}
 	}elseif ($player->transpass == f){
 	echo "<form method=\"POST\" action=\"transferpass.php\">";
-	echo "<table><tr><td width=\"35%\"><b>Escolha uma senha para enviar ouro e itens:</b></td><td width=\"65%\"><font size=\"1\"><b>Senha:</b></font> <input type=\"password\" name=\"pass\" size=\"15\"/><br/><font size=\"1\"><b>Confirme:</b></font> <input type=\"password\" name=\"pass2\" size=\"15\"/> <input type=\"submit\" name=\"submit\" value=\"Definir Senha\"></td></tr></table><br/><font size=\"1\">Lembre-se desta senha, ela sempre será usada para fazer transferências bancárias. Se você perdela não poderá recupera-la.</font>";
+	echo "<table><tr><td width=\"35%\"><b>Escolha uma senha para enviar ouro e itens:</b></td><td width=\"65%\"><font size=\"1\"><b>Senha:</b></font> <input type=\"password\" name=\"pass\" size=\"15\"/><br/><font size=\"1\"><b>Confirme:</b></font> <input type=\"password\" name=\"pass2\" size=\"15\"/> <input type=\"submit\" name=\"submit\" value=\"Definir Senha\"></td></tr></table><br/><font size=\"1\">Lembre-se desta senha, ela sempre serï¿½ usada para fazer transferï¿½ncias bancï¿½rias. Se vocï¿½ perdela nï¿½o poderï¿½ recupera-la.</font>";
 	echo "</form>";
 	}else{
 
 echo "<table width=\"100%\">";
 echo "<form method=\"POST\" action=\"inventory.php\">";
-echo "<tr><td width=\"40%\">Usuário:</td><td><input type=\"text\" name=\"username\" size=\"20\"/></td></tr>";
+echo "<tr><td width=\"40%\">Usuï¿½rio:</td><td><input type=\"text\" name=\"username\" size=\"20\"/></td></tr>";
 echo "<tr><td width=\"40%\">Item:</td><td>";
 
 $queoppa = $db->execute("select items.id, items.item_bonus, items.item_id, items.mark, blueprint_items.name from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type!='stone' and blueprint_items.type!='potion' and items.mark='f' order by blueprint_items.type, blueprint_items.name asc", array($player->id));
     if ($queoppa->recordcount() == 0) {
-echo "<b>Você não possui itens.</b>";
+echo "<b>Vocï¿½ nï¿½o possui itens.</b>";
 }else{
 	echo "<select name=\"itselected\">";
 	while($item = $queoppa->fetchrow())
@@ -223,16 +233,16 @@ echo "<b>Você não possui itens.</b>";
 	}
 
 echo "</td></tr>";
-echo "<tr><td width=\"40%\">Senha de transferência:</td><td><input type=\"password\" name=\"passcode\" size=\"20\"/></td></tr>";
+echo "<tr><td width=\"40%\">Senha de transferï¿½ncia:</td><td><input type=\"password\" name=\"passcode\" size=\"20\"/></td></tr>";
 echo "<tr><td colspan=\"2\" align=\"center\"><input type=\"submit\" name=\"transferitems\" value=\"Enviar\"></td></tr>";
 echo "</table></form>";
-echo "<font size=\"1\"><a href=\"forgottrans.php\">Esqueceu sua senha de transferência?</a></font>";
+echo "<font size=\"1\"><a href=\"forgottrans.php\">Esqueceu sua senha de transferï¿½ncia?</a></font>";
 
 $morelogs = 1;
 }
 echo "</fieldset>";
 if ($morelogs == 1){
-echo "<center><font size=\"1\"><a href=\"#\" onclick=\"javascript:window.open('logitem.php', '_blank','top=100, left=100, height=350, width=450, status=no, menubar=no, resizable=no, scrollbars=yes, toolbar=no, location=no, directories=no');\">Transferências realizadas nos últimos 14 dias.</a></font></center>";
+echo "<center><font size=\"1\"><a href=\"#\" onclick=\"javascript:window.open('logitem.php', '_blank','top=100, left=100, height=350, width=450, status=no, menubar=no, resizable=no, scrollbars=yes, toolbar=no, location=no, directories=no');\">Transferï¿½ncias realizadas nos ï¿½ltimos 14 dias.</a></font></center>";
 }
 
 
