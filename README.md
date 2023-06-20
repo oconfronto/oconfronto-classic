@@ -5,6 +5,10 @@
 - Docker Compose
 
 ## Comandos
-- Para subir o servidor
-`docker-compose up -d`
+- Para subir o servidor:
+
+`docker-compose up`
 > A aplicação estará rodando em `localhost:5000` por padrão
+- Para parar o servidor:
+
+`docker-compose down`
