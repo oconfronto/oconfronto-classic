@@ -123,12 +123,12 @@ REDIPS.drag = (function () {
 			obj_new_div = document.createElement('div');
 			obj_new_div.id = 'obj_new';
 			obj_new_div.style.width = obj_new_div.style.height = '1px';
-			div_drag.appendChild(obj_new_div);
+			div_drag?.appendChild(obj_new_div);
 		}
 		// collect tables inside DIV id=drag and make static nodeList
-		tables_nodeList = div_drag.getElementsByTagName('table');
+		tables_nodeList = div_drag?.getElementsByTagName('table');
 		// search for not nested tables
-		for (i = 0, j = 0; i < tables_nodeList.length; i++) {
+		for (i = 0, j = 0; i < tables_nodeList?.length; i++) {
 			// set table_nested flag to true and define parent node as search point
 			table_nested = true;
 			element = tables_nodeList[i].parentNode;
@@ -159,24 +159,26 @@ REDIPS.drag = (function () {
 		// attach onmousedown event handler to the DIV elements and onscroll='calculate_cells' for DIV elements with 'scroll' in class name
 		enable_drag('init');
 		// collect images inside div=drag to prevent default action of onmousemove event (needed for IE to enable dragging on image)
-		imgs = div_drag.getElementsByTagName('img');
+		imgs = div_drag?.getElementsByTagName('img');
 		// disable onmousemove event for images
-		for (i = 0; i < imgs.length; i++) {
+		for (i = 0; i < imgs?.length; i++) {
 			imgs[i].onmousemove = img_onmousemove;
 		}
 		// dissable text selection (but not for links and form elements)
 		// onselectstart is supported by IE browsers, other browsers "understand" return false in onmousedown handler
-		div_drag.onselectstart = function (e) {
-			evt = e || window.event;
-			if (!elementControl(evt)) {
-				// this lines are needed for IE8 in case when leftmouse button was clicked and CTRL key was pressed
-				// IE8 selected text anyway but document.selection.clear() prevented text selection
-				if (evt.ctrlKey) {
-					document.selection.clear();
+		if (div_drag) {
+			div_drag.onselectstart = function (e) {
+				evt = e || window.event;
+				if (!elementControl(evt)) {
+					// this lines are needed for IE8 in case when leftmouse button was clicked and CTRL key was pressed
+					// IE8 selected text anyway but document.selection.clear() prevented text selection
+					if (evt.ctrlKey) {
+						document.selection.clear();
+					}
+					return false;
 				}
-			    return false;
-			}
-		};
+			};
+		}
 		// attach onscroll event to the window (needed for recalculating table cells positions)
 		window.onscroll = calculate_cells;
 	};
@@ -780,9 +782,9 @@ REDIPS.drag = (function () {
 		// loop up through DOM hierarchy (getScrollPosition() takes care about page scroll positions)
 		if (type === undefined) {
 			do {
-				oLeft += box.offsetLeft - box.scrollLeft;
-				oTop += box.offsetTop - box.scrollTop;
-				box = box.offsetParent;
+				oLeft += box?.offsetLeft - box?.scrollLeft;
+				oTop += box?.offsetTop - box?.scrollTop;
+				box = box?.offsetParent;
 			}
 			while (box && box.nodeName !== 'BODY');
 		}
@@ -797,7 +799,7 @@ REDIPS.drag = (function () {
 		}
 		// return box offset array
 		//       top               right,                     bottom             left
-		return [ oTop, oLeft + box_old.offsetWidth, oTop + box_old.offsetHeight, oLeft ];
+		return [ oTop, oLeft + box_old?.offsetWidth, oTop + box_old?.offsetHeight, oLeft ];
 	};
 
 
@@ -1222,7 +1224,7 @@ REDIPS.drag = (function () {
 		// collect all DIV elements
 		if (div_id === undefined) {
 			// collect div elements inside DIV id="drag" (drag elements and scrollable containers)
-			divs = div_drag.getElementsByTagName('div');
+			divs = div_drag?.getElementsByTagName('div');
 		}
 		// or prepare array with only one div element
 		else {
@@ -1230,7 +1232,7 @@ REDIPS.drag = (function () {
 		}
 		// attach onmousedown event handler only to DIV elements that have "drag" in class name
 		// allow other div elements inside <div id="drag" ...
-		for (i = 0, j = 0; i < divs.length; i = i + 1) { 
+		for (i = 0, j = 0; i < divs?.length; i = i + 1) { 
 			if (divs[i].className.indexOf('drag') > -1) {
 				divs[i].onmousedown = handler;
 				divs[i].style.borderStyle = borderStyle;
