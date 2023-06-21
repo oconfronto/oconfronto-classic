@@ -16,7 +16,7 @@
 
 	include("templates/private_header.php");
 
-echo "<center><b>Invent�rio</b></center>";
+echo "<center><b>Inventario</b></center>";
 echo "<br/>";
 
 		echo "<div id=\"main_container\">";
