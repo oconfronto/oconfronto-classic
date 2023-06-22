@@ -89,7 +89,7 @@ while($newwork = $updategeralwork->fetchrow())
         die("Error updating players: " . $db->ErrorMsg());
     }
 
-    $worklog = "Seu trabalho como " . $newwork['worktype'] . " terminou! Voc?recebeu <b>" . ($newwork['gold'] * $newwork['worktime']) . " moedas de ouro</b>.";
+    $worklog = "Seu trabalho como " . $newwork['worktype'] . " terminou! Você recebeu <b>" . ($newwork['gold'] * $newwork['worktime']) . " moedas de ouro</b>.";
     addlog($newwork['player_id'], $worklog, $db);
 }
 
