@@ -6,7 +6,6 @@ $player = check_user($secret_key, $db);
 include("templates/chat_header.php");
 ?>
 <center>
-<embed src="http://www.xatech.com/web_gear/chat/chat.swf" quality="high" width="700" height="490" name="chat" FlashVars="id=64980752&rl=Brazilian" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://xat.com/update_flash.shtml" />
-</center>
+<iframe src="https://xat.com/embed/chat.php#id=220522347&gn=oconfrontorpg1234" width="540" height="405" frameborder="0" scrolling="no"></iframe><br><small><a target="_BLANK" href="https://xat.com/web_gear/chat/embed.php?id=220522347&GroupName=oconfrontorpg1234">Get oconfrontorpg1234 chat group</a> | <a target="_BLANK" href="https://xat.com/oconfrontorpg1234"> Go to oconfrontorpg1234 website</a></small><br>
 </body>
 </html>
