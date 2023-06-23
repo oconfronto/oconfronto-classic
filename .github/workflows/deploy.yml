@@ -7,8 +7,20 @@ jobs:
     build:
         runs-on: ubuntu-22.04
         steps:
+            - name: Create SSH key
+              run: |
+                mkdir -p ~/.ssh/
+                echo "$SSH_PRIVATE_KEY" > ../private.key
+                sudo chmod 600 ../private.key
+              shell: bash
+              env:
+                SSH_PRIVATE_KEY: ${{secrets.DEPLOY_PRIVATE_KEY}}
+                SSH_KEY_PATH: ${{ github.workspace }}/../private.key
+
             - name: Connect via SSH
-              run: ssh -i ${{ secrets.DEPLOY_PRIVATE_KEY }} ${{ secrets.DEPLOY_USERNAME }}@${{ secrets.DEPLOY_EXTERNAL_IP }}
+              run: ssh -i $SSH_KEY_PATH ${{ secrets.DEPLOY_USERNAME }}@${{ secrets.DEPLOY_EXTERNAL_IP }}
+              env:
+                SSH_KEY_PATH: ${{ github.workspace }}/../private.key
 
             - name: Stash changes
               # Use this until we have appropriate environment variables handling
