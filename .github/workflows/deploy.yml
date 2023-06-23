@@ -1,0 +1,39 @@
+name: Deploy
+
+on:
+  workflow_dispatch
+
+jobs:
+    build:
+        runs-on: ubuntu-22.04
+        steps:
+            - name: Create SSH key
+              run: |
+                mkdir -p ~/.ssh/
+                echo "$SSH_PRIVATE_KEY" > ../private.key
+                sudo chmod 600 ../private.key
+              shell: bash
+              env:
+                SSH_PRIVATE_KEY: ${{secrets.DEPLOY_PRIVATE_KEY}}
+                SSH_KEY_PATH: ${{ github.workspace }}/../private.key
+
+            - name: Connect via SSH
+              run: ssh -i $SSH_KEY_PATH ${{ secrets.DEPLOY_USERNAME }}@${{ secrets.DEPLOY_EXTERNAL_IP }}
+              env:
+                SSH_KEY_PATH: ${{ github.workspace }}/../private.key
+
+            - name: Stash changes
+              # Use this until we have appropriate environment variables handling
+              run: cd ${{ secrets.DEPLOY_APPLICATION_PATH }} && git stash
+
+            - name: Stop Docker Compose
+              run: docker-compose stop -t 1 legacy-php
+
+            - name: Pull from remote
+              run: git pull
+
+            - name: Stash apply
+              run: git stash apply
+
+            - name: Run Docker Compose
+              run: sudo docker-compose up -d --build legacy-php
