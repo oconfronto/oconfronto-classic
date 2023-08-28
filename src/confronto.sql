@@ -4055,6 +4055,17 @@ CREATE TABLE IF NOT EXISTS `loot` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
 
+--
+-- Dumping data for table `loot`
+--
+
+INSERT INTO `loot` (`id`, `monster_id`, `item_id`, `item_prepo`, `item_name`) VALUES
+(1, 13, 107, 'um', 'Orbe do vento'),
+(2, 14, 108, 'um', 'Orbe da terra'),
+(3, 15, 110, 'um', 'Orbe da água'),
+(4, 16, 109, 'um', 'Orbe do fogo'),
+(5, 17, 112, 'um', 'Cristal encantado');
+
 -- --------------------------------------------------------
 
 --
