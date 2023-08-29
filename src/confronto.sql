@@ -4489,7 +4489,7 @@ INSERT INTO `monsters` (`id`, `prepo`, `username`, `image_path`, `level`, `magic
 (8, 'o', 'Thrall', 'thrall.png', 45, 45, 100, 68, 90, 900, 1125, 1, 'f'),
 (11, 'a', 'Mumia', 'mumia.png', 50, 50, 111, 75, 100, 1000, 1250, 1, 'f'),
 (12, 'o', 'Feiticeiro', 'feiticeiro.gif', 55, 55, 122, 83, 110, 1100, 1375, 1, 'f'),
-(13, 'o', 'Decapitador', 'decapitador.gif', 60, 60, 133, 90, 120, 1200, 1500, 1, 'f'),
+(13, 'o', 'Decapitador', 'decapitador.gif', 60, 60, 133, 90, 120, 1200, 1500, 39, 'f'),
 (14, 'o', 'Guerreiro Zumbi', 'zumbi.png', 70, 70, 155, 105, 140, 1400, 1750, 39, 'f'),
 (15, 'o', 'Tauren', 'tauren.png', 80, 80, 177, 120, 160, 1600, 2000, 39, 'f'),
 (16, 'o', 'Menderiel', 'mend.png', 90, 90, 199, 135, 180, 1800, 2250, 39, 'f'),
