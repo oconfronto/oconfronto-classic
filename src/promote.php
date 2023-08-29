@@ -304,7 +304,7 @@ switch($_GET['act'])
 		{
 		include("templates/private_header.php");
 		echo "<fieldset><legend><b>Treinador</b></legend>\n";
-		echo "<i>Seu primeiro desafio é conseguir um <b>Wind Orb</b>. Você pode obtelo matando Guerreiros Zumbi ou comprando no mercado.</i><br/><br/>\n";
+		echo "<i>Seu primeiro desafio é conseguir um <b>Wind Orb</b>. Você pode obtê-lo matando Decapitadores ou comprando no mercado.</i><br/><br/>\n";
 		echo "<a href=\"promote.php?act=continue1\">Continuar missão</a> | <a href=\"home.php\">Voltar</a>.";
 	        echo "</fieldset>";
 		include("templates/private_footer.php");
@@ -315,7 +315,7 @@ switch($_GET['act'])
 		{
 		include("templates/private_header.php");
 		echo "<fieldset><legend><b>Treinador</b></legend>\n";
-		echo "<i>Seu segundo desafio é conseguir um <b>Earth Orb</b>. Você pode obtelo matando Taurens ou comprando no mercado.</i><br/><br/>\n";
+		echo "<i>Seu segundo desafio é conseguir um <b>Earth Orb</b>. Você pode obtê-lo matando Guerreiros Zumbi ou comprando no mercado.</i><br/><br/>\n";
 		echo "<a href=\"promote.php?act=continue2\">Continuar missão</a> | <a href=\"home.php\">Voltar</a>.";
 	        echo "</fieldset>";
 		include("templates/private_footer.php");
@@ -326,7 +326,7 @@ switch($_GET['act'])
 		{
 		include("templates/private_header.php");
 		echo "<fieldset><legend><b>Treinador</b></legend>\n";
-		echo "<i>Seu terceiro desafio é conseguir um <b>Water Orb</b>. Você pode obtelo matando Menderiels ou comprando no mercado.</i><br/><br/>\n";
+		echo "<i>Seu terceiro desafio é conseguir um <b>Water Orb</b>. Você pode obtê-lo matando Taurens ou comprando no mercado.</i><br/><br/>\n";
 		echo "<a href=\"promote.php?act=continue3\">Continuar missão</a> | <a href=\"home.php\">Voltar</a>.";
 	        echo "</fieldset>";
 		include("templates/private_footer.php");
@@ -337,7 +337,7 @@ switch($_GET['act'])
 		{
 		include("templates/private_header.php");
 		echo "<fieldset><legend><b>Treinador</b></legend>\n";
-		echo "<i>Seu ultimo desafio é conseguir um <b>Fire Orb</b>. Você pode obtelo matando Dragões ou comprando no mercado.</i><br/><br/>\n";
+		echo "<i>Seu ultimo desafio é conseguir um <b>Fire Orb</b>. Você pode obtê-lo matando Menderiels ou comprando no mercado.</i><br/><br/>\n";
 		echo "<a href=\"promote.php?act=continue4\">Finalizar missão</a> | <a href=\"home.php\">Voltar</a>.";
 	        echo "</fieldset>";
 		include("templates/private_footer.php");
