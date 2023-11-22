@@ -1,133 +1,133 @@
 <?php
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Duelos");
 $player = check_user($secret_key, $db);
-include("checkbattle.php");
-include("checkhp.php");
-include("checkwork.php");
+include(__DIR__ . "/checkbattle.php");
+include(__DIR__ . "/checkhp.php");
+include(__DIR__ . "/checkwork.php");
 $customprice = 0;
 
 if($_GET['add']){
 
 } elseif($_GET['deny']) {
-	$denyduel = $db->execute("select * from `duels` where `id`=?", array($_GET['deny']));
+	$denyduel = $db->execute("select * from `duels` where `id`=?", [$_GET['deny']]);
 	if ($denyduel->recordcount() == 0){
-        	include("templates/private_header.php");
+        	include(__DIR__ . "/templates/private_header.php");
         	echo "<fieldset><legend><b>Duelo</b></legend>";
         	echo "Convite de duelo não encontrado.";
         	echo "</fieldset>";
 		echo"<br/><a href=\"duel.php\">Voltar</a>.</br>";
-        	include("templates/private_footer.php");
+        	include(__DIR__ . "/templates/private_footer.php");
 		exit;
-	}else{
-	$denyrow = $denyduel->fetchrow();
 	}
-		if (($denyrow['owner'] != $player->id) and ($denyrow['rival'] != $player->id)){
-        		include("templates/private_header.php");
-        		echo "<fieldset><legend><b>Duelo</b></legend>";
-        		echo "Convite de duelo não encontrado.";
-        		echo "</fieldset>";
-			echo"<br/><a href=\"duel.php\">Voltar</a>.</br>";
-        		include("templates/private_footer.php");
-			exit;
-		}else if ($denyrow['owner'] == $player->id){
-			$db->execute("delete from `duels` where `id`=? and `owner`=?", array($_GET['deny'], $player->id));
-			$denyacao = "cancelar";
-		}else if ($denyrow['rival'] == $player->id){
-			$db->execute("update `duels` set `active`='d' where `id`=? and `rival`=?", array($_GET['deny'], $player->id));
-			$denyacao = "recusar";
-		}
+ $denyrow = $denyduel->fetchrow();
+ if ($denyrow['owner'] != $player->id && $denyrow['rival'] != $player->id) {
+     include(__DIR__ . "/templates/private_header.php");
+     echo "<fieldset><legend><b>Duelo</b></legend>";
+     echo "Convite de duelo não encontrado.";
+     echo "</fieldset>";
+     echo"<br/><a href=\"duel.php\">Voltar</a>.</br>";
+     include(__DIR__ . "/templates/private_footer.php");
+     exit;
+ }
+		if ($denyrow['owner'] == $player->id) {
+      $db->execute("delete from `duels` where `id`=? and `owner`=?", [$_GET['deny'], $player->id]);
+      $denyacao = "cancelar";
+  } elseif ($denyrow['rival'] == $player->id) {
+      $db->execute("update `duels` set `active`='d' where `id`=? and `rival`=?", [$_GET['deny'], $player->id]);
+      $denyacao = "recusar";
+  }
 
-        	include("templates/private_header.php");
+        	include(__DIR__ . "/templates/private_header.php");
 		echo "<fieldset><legend><b>Duelo</b></legend>";
         	echo "Você acaba de " . $denyacao . " o duelo.";
         	echo "</fieldset>";
 		echo"<br/><a href=\"duel.php\">Voltar</a>.</br>";
-        	include("templates/private_footer.php");
+        	include(__DIR__ . "/templates/private_footer.php");
 		exit;
 
 } elseif($_POST['submit']){
-$futurorival = $db->execute("select `id`, `username`, `bank`, `serv` from `players` where `username`=?", array($_POST['rival']));
+$futurorival = $db->execute("select `id`, `username`, `bank`, `serv` from `players` where `username`=?", [$_POST['rival']]);
 $rival = $futurorival->fetchrow();
 
-	if ((!$_POST['rival']) or ($futurorival->recordcount() == 0)){
-        include("templates/private_header.php");
+	if (!$_POST['rival'] || $futurorival->recordcount() == 0){
+        include(__DIR__ . "/templates/private_header.php");
         	echo "<fieldset><legend><b>Duelo</b></legend>";
         	echo "Preencha um nome de usuário válido.";
         	echo "</fieldset>";
 		echo"<br/><a href=\"duel.php\">Voltar</a>.</br>";
-        	include("templates/private_footer.php");
+        	include(__DIR__ . "/templates/private_footer.php");
 		exit;
 	}
 
 	if ($_POST['prize']){
 		if (!is_numeric($_POST['prize'])){
-        		include("templates/private_header.php");
+        		include(__DIR__ . "/templates/private_header.php");
         		echo "<fieldset><legend><b>Duelo</b></legend>";
         		echo "O valor da aposta não é válido.";
         		echo "</fieldset>";
 			echo"<br/><a href=\"duel.php\">Voltar</a>.</br>";
-        		include("templates/private_footer.php");
+        		include(__DIR__ . "/templates/private_footer.php");
         		exit;
 		}
 		if ($_POST['prize'] < 0){
-        		include("templates/private_header.php");
+        		include(__DIR__ . "/templates/private_header.php");
         		echo "<fieldset><legend><b>Duelo</b></legend>";
         		echo "O valor da aposta não é válido.";
         		echo "</fieldset>";
 			echo"<br/><a href=\"duel.php\">Voltar</a>.</br>";
-        		include("templates/private_footer.php");
+        		include(__DIR__ . "/templates/private_footer.php");
         		exit;
 		}
 		if ($_POST['prize'] > $player->bank){
-        		include("templates/private_header.php");
+        		include(__DIR__ . "/templates/private_header.php");
         		echo "<fieldset><legend><b>Duelo</b></legend>";
         		echo "Você não possui " . $_POST['prize'] . " no banco.";
         		echo "</fieldset>";
 			echo"<br/><a href=\"duel.php\">Voltar</a>.</br>";
-        		include("templates/private_footer.php");
+        		include(__DIR__ . "/templates/private_footer.php");
         		exit;
 		}
 		if ($_POST['prize'] > $rival['bank']){
-        		include("templates/private_header.php");
+        		include(__DIR__ . "/templates/private_header.php");
         		echo "<fieldset><legend><b>Duelo</b></legend>";
         		echo "Seu rival não possui " . $_POST['prize'] . " no banco.";
         		echo "</fieldset>";
 			echo"<br/><a href=\"duel.php\">Voltar</a>.</br>";
-        		include("templates/private_footer.php");
+        		include(__DIR__ . "/templates/private_footer.php");
         		exit;
 		}
 		$customprice = 1;
 	}
 
 	if ($player->serv != $rival['serv']){
-        	include("templates/private_header.php");
+        	include(__DIR__ . "/templates/private_header.php");
         	echo "<fieldset><legend><b>Duelo</b></legend>";
         	echo "Esse usuário pertence a outro servidor.";
         	echo "</fieldset>";
 		echo"<br/><a href=\"duel.php\">Voltar</a>.</br>";
-        	include("templates/private_footer.php");
+        	include(__DIR__ . "/templates/private_footer.php");
         	exit;
 	}
 
 	if ($player->username == $rival['username']){
-        	include("templates/private_header.php");
+        	include(__DIR__ . "/templates/private_header.php");
         	echo "<fieldset><legend><b>Duelo</b></legend>";
         	echo "Você não pode duelar contra você mesmo.";
         	echo "</fieldset>";
 		echo"<br/><a href=\"duel.php\">Voltar</a>.</br>";
-        	include("templates/private_footer.php");
+        	include(__DIR__ . "/templates/private_footer.php");
         	exit;
 	}
 
-	$addjahexists = $db->execute("select `id` from `duels` where ((`owner`=? and `rival`=?) or (`owner`=? and `rival`=?))", array($player->id, $rival['id'], $rival['id'], $player->id));
+	$addjahexists = $db->execute("select `id` from `duels` where ((`owner`=? and `rival`=?) or (`owner`=? and `rival`=?))", [$player->id, $rival['id'], $rival['id'], $player->id]);
 	if ($addjahexists->recordcount() > 0){
-        	include("templates/private_header.php");
+        	include(__DIR__ . "/templates/private_header.php");
         	echo "<fieldset><legend><b>Duelo</b></legend>";
         	echo "Já existe um convite de duelo entre você e " . $rival['username'] . ".";
         	echo "</fieldset>";
 		echo"<br/><a href=\"duel.php\">Voltar</a>.</br>";
-        	include("templates/private_footer.php");
+        	include(__DIR__ . "/templates/private_footer.php");
         	exit;
 	}
 
@@ -140,23 +140,23 @@ $rival = $futurorival->fetchrow();
 		$insert['active'] = 'w';
 		$query = $db->autoexecute('duels', $insert, 'INSERT');
 
-	include("templates/private_header.php");
+	include(__DIR__ . "/templates/private_header.php");
 	echo "<fieldset><legend><b>Duelo</b></legend>";
 	echo "Você desafiou " . $rival['username'] . " para um duelo.<br/>";
 	echo "Seu rival apenas poderá aceitar o duelo quando ambos estiverem online.<br/>";
 	echo "Você não poderá retirar do banco o ouro que apostou até que vença o duelo ou cancele-o.";
 	echo "</fieldset>";
 	echo"<br/><a href=\"duel.php\">Voltar</a>.</br>";
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 	exit;
 }
 
 
-include("templates/private_header.php");
+include(__DIR__ . "/templates/private_header.php");
 
 	echo "<fieldset>\n";
 	echo "<legend><b>Duelos</b></legend>\n";
-	$procuraseusduelos = $db->execute("select * from `duels` where `owner`=?", array($player->id));
+	$procuraseusduelos = $db->execute("select * from `duels` where `owner`=?", [$player->id]);
 		if ($procuraseusduelos->recordcount() == 0)
 		{
 		echo "<br/><center><b><font size=\"1\">Você não desafiou ninguém no momento.</font></b></center><br/>";
@@ -173,7 +173,7 @@ include("templates/private_header.php");
 
 			while($rivalid = $procuraseusduelos->fetchrow())
 			{
-			$getrivalinfo = $db->execute("select `username`, `level` from `players` where `id`=?", array($rivalid['rival']));
+			$getrivalinfo = $db->execute("select `username`, `level` from `players` where `id`=?", [$rivalid['rival']]);
 			$rivalinfo = $getrivalinfo->fetchrow();
 
 			echo "<tr>";
@@ -186,7 +186,7 @@ include("templates/private_header.php");
 			echo "<td><font size=\"1\">Aguardando aceitar convite.</font></td>";
 			}
 
-				$checkrivalonline = $db->execute("select * from `online` where `player_id`=?", array($rivalid['rival']));
+				$checkrivalonline = $db->execute("select * from `online` where `player_id`=?", [$rivalid['rival']]);
 				if ($checkrivalonline->recordcount() > 0) {
 				echo "<td><font size=\"1\">Online</font></td>";
 				}else{
@@ -216,5 +216,5 @@ include("templates/private_header.php");
 	echo "</table>";
 	echo "</form></fieldset>";
 
-include("templates/private_footer.php");
+include(__DIR__ . "/templates/private_footer.php");
 ?>

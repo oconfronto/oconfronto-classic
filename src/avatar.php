@@ -1,32 +1,26 @@
 <?php
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Editar perfil");
 $player = check_user($secret_key, $db);
 
 $error = 0;
 
-include("templates/private_header.php");
+include(__DIR__ . "/templates/private_header.php");
 
 if ($_POST['submit']) {
     if (!$_POST['avatar']) {
         $errmsg .= "Por favor preencha todos os campos!";
         $error = 1;
-	}
-
-	else if (($_POST['avatar']) and (!@GetImageSize($_POST['avatar']))) {
+    } elseif ($_POST['avatar'] && !@GetImageSize($_POST['avatar'])) {
         $errmsg .= "O endereço desta imagem não é válido!";
         $error = 1;
-	}
+    }
 
     if ($error == 0) {
 
-	if (!$_POST['avatar']){
-	$avat = "anonimo.gif";
-	}else{
-	$avat = $_POST['avatar'];
-	}
+	$avat = $_POST['avatar'] ?: "anonimo.gif";
 
-        $query = $db->execute("update `players` set `avatar`=? where `id`=?", array($avat, $player->id));
+        $query = $db->execute("update `players` set `avatar`=? where `id`=?", [$avat, $player->id]);
         $msg .= "Você alterou seu avatar com sucesso!";
     }
 }
@@ -46,5 +40,5 @@ if ($_POST['submit']) {
 <p /><font color=red><?=$errmsg?></font><p />
 </fieldset>
 
-<?php include("templates/private_footer.php");
+<?php include(__DIR__ . "/templates/private_footer.php");
 ?>

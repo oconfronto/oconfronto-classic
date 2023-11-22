@@ -27,24 +27,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class captchaZDR {
 
-  var $UserString;
-  var $font_path;
+  public $UserString;
+  /**
+   * @var 'png_bank/font.ttf'|'png_bank/freeserif.ttf'|'png_bank/freemonobold.ttf'|'png_bank/freesans.ttf'|'png_bank/amanbold.ttf'
+   */
+  public $font_path;
   
-  function captchaZDR(){
-	  switch(rand(1,5))
-        {
-          case 1  : $this->font_path = 'png_bank/font.ttf';							break;
-          case 2  : $this->font_path = 'png_bank/freeserif.ttf';				break;
-          case 3  : $this->font_path = 'png_bank/freemonobold.ttf';			break;
-          case 4  : $this->font_path = 'png_bank/freesans.ttf';					break;
-          case 5  : $this->font_path = 'png_bank/amanbold.ttf';					break;
-       
-          default : $this->font_path = 'png_bank/font.ttf';     	break;      
-        }  
+  function __construct(){
+	  $this->font_path = match (random_int(1,5)) {
+       1 => 'png_bank/font.ttf',
+       2 => 'png_bank/freeserif.ttf',
+       3 => 'png_bank/freemonobold.ttf',
+       4 => 'png_bank/freesans.ttf',
+       5 => 'png_bank/amanbold.ttf',
+       default => 'png_bank/font.ttf',
+   };  
   }
 
-  function LoadPNG(){  
-       $bgNUM = rand(1,8);
+  function LoadPNG(): \GdImage|bool{  
+       $bgNUM = random_int(1,8);
        $im = @imagecreatefrompng('png_bank/bg'.$bgNUM.'.png'); /* Attempt to open */
        if (!$im) { 
            $im  = imagecreatetruecolor(150, 30); /* Create a blank image */
@@ -56,70 +57,68 @@ class captchaZDR {
        return $im;
   }
     
-  function drawElipse($image){
+  function drawElipse($image): void{
         for($i=0;$i<5;$i++){
             // choose a color for the ellipse
-            $red         = rand(0,155);
-            $green       = rand(0,155);
-            $blue        = rand(0,155);
+            $red         = random_int(0,155);
+            $green       = random_int(0,155);
+            $blue        = random_int(0,155);
             $col_ellipse = imagecolorallocate($image, $red, $green, $blue);
             // draw the ellipse
-            $cx = rand(50,250);
-            $cy = rand(50,250);
-            $cw = rand(30,250);
-            $ch = rand(20,250);
+            $cx = random_int(50,250);
+            $cy = random_int(50,250);
+            $cw = random_int(30,250);
+            $ch = random_int(20,250);
             imageellipse($image, $cx, $cy, $cw, $ch, $col_ellipse);
         }
         
         foreach (range('A', 'Z') as $letter) {
-            $red    = rand(0,155);
-            $green  = rand(0,155);
-            $blue   = rand(0,155);
+            $red    = random_int(0,155);
+            $green  = random_int(0,155);
+            $blue   = random_int(0,155);
             $col_ellipse  = imagecolorallocate($image, $red, $green, $blue);  
             $font_size    = 3; //rand(1,12);
-            $x      = rand(0,200);
-            $y      = rand(0,100);
+            $x      = random_int(0,200);
+            $y      = random_int(0,100);
             imagechar($image, $font_size, $x, $y, $letter, $col_ellipse);       
         } 
 
         foreach (range('0', '9') as $letter) {
-            $red    = rand(0,155);
-            $green  = rand(0,155);
-            $blue   = rand(0,155);
+            $red    = random_int(0,155);
+            $green  = random_int(0,155);
+            $blue   = random_int(0,155);
             $col_ellipse  = imagecolorallocate($image, $red, $green, $blue);  
             $font_size    = 1; 
-            $x      = rand(0,200);
-            $y      = rand(0,100);
+            $x      = random_int(0,200);
+            $y      = random_int(0,100);
             imagechar($image, $font_size, $x, $y, $letter, $col_ellipse);                 
         }         
        
   }
   
-  function task_string(){
+  function task_string(): \GdImage|bool{
   
          // create a image from png bank
         $image = $this->LoadPNG(); 
   
-        $string_a = array("A","B","C","D","E","F","G","H","J","K",
-                          "L","M","N","P","R","S","T","U","V","W","X","Y","Z",
-                          "2","3","4","5","6","7","8","9");
+        $string_a = ["A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "2", "3", "4", "5", "6", "7", "8", "9"];
 
 		$width=0;
   
         for($i=0;$i<5;$i++)
         {
-            $colour     = imagecolorallocate($image, rand(0,155), rand(0,155), rand(0,155));
+            $colour     = imagecolorallocate($image, random_int(0,155), random_int(0,155), random_int(0,155));
             $font		= $this->font_path;
-            $angle      = rand(-15,15);
+            $angle      = random_int(-15,15);
             // Add the text
-            $width_pos  = rand(20,30);
-            $width      = $width  + $width_pos;
-            $height     = rand(35,75);
-            $temp       = $string_a[rand(0,25)];
+            $width_pos  = random_int(20,30);
+            $width += $width_pos;
+            $height     = random_int(35,75);
+            $temp       = $string_a[random_int(0,25)];
             $this->UserString .= $temp;
             imagettftext($image, 26, $angle, $width, $height, $colour, $font, $temp);
-            $width    = $width + 3;
-            $height   = $height + 3;
+            $width += 3;
+            $height += 3;
             imagettftext($image, 26, $angle, $width, $height, $colour, $font, $temp);
 
         }
@@ -129,29 +128,29 @@ class captchaZDR {
         return $image;
   }
   
-  function task_sum(){
+  function task_sum(): \GdImage|bool{
          // create a image from png bank
           $image    = $this->LoadPNG(); 
         
-          $colour = imagecolorallocate($image, rand(0,155), rand(0,155), rand(0,155));
+          $colour = imagecolorallocate($image, random_int(0,155), random_int(0,155), random_int(0,155));
           $font   = $this->font_path;
-          $angle  = rand(-15,15);
+          $angle  = random_int(-15,15);
           // Add the text
-          $width = rand(20,30);
-          $height = rand(35,75);
+          $width = random_int(20,30);
+          $height = random_int(35,75);
           
-          $number1 = rand(1,99);
-          $number2 = rand(1,9);
+          $number1 = random_int(1,99);
+          $number2 = random_int(1,9);
   
           imagettftext($image, 26, $angle, $width, $height, $colour, $font, $number1);
           
-          $colour = imagecolorallocate($image, rand(0,155), rand(0,155), rand(0,155));
+          $colour = imagecolorallocate($image, random_int(0,155), random_int(0,155), random_int(0,155));
           $width  += 45; 
           imagettftext($image, 26, 0, $width, $height, $colour, $font, '+');
   
-          $colour   = imagecolorallocate($image, rand(0,155), rand(0,155), rand(0,155));
+          $colour   = imagecolorallocate($image, random_int(0,155), random_int(0,155), random_int(0,155));
           $width   += 25; 
-          $angle    = rand(-15,15);
+          $angle    = random_int(-15,15);
           imagettftext($image, 26, $angle, $width, $height, $colour, $font, $number2.'=?');
   
           $this->UserString = $number1+$number2;  
@@ -161,29 +160,29 @@ class captchaZDR {
           return $image;         
   }
 
-  function task_deduction(){
+  function task_deduction(): \GdImage|bool{
          // create a image from png bank
           $image    = $this->LoadPNG(); 
         
-          $colour = imagecolorallocate($image, rand(0,155), rand(0,155), rand(0,155));
+          $colour = imagecolorallocate($image, random_int(0,155), random_int(0,155), random_int(0,155));
           $font   = $this->font_path;
-          $angle  = rand(-15,15);
+          $angle  = random_int(-15,15);
           // Add the text
-          $width = rand(20,30);
-          $height = rand(35,75);
+          $width = random_int(20,30);
+          $height = random_int(35,75);
           
-          $number1 = rand(1,99);
-          $number2 = rand(1,9);
+          $number1 = random_int(1,99);
+          $number2 = random_int(1,9);
   
           imagettftext($image, 26, $angle, $width, $height, $colour, $font, $number1);
           
-          $colour = imagecolorallocate($image, rand(0,155), rand(0,155), rand(0,155));
+          $colour = imagecolorallocate($image, random_int(0,155), random_int(0,155), random_int(0,155));
           $width  += 45; 
           imagettftext($image, 26, 0, $width, $height, $colour, $font, '-');
   
-          $colour   = imagecolorallocate($image, rand(0,155), rand(0,155), rand(0,155));
+          $colour   = imagecolorallocate($image, random_int(0,155), random_int(0,155), random_int(0,155));
           $width   += 25; 
-          $angle    = rand(-15,15);
+          $angle    = random_int(-15,15);
           imagettftext($image, 26, $angle, $width, $height, $colour, $font, $number2.'=?');
   
           $this->UserString = $number1-$number2;  
@@ -193,16 +192,14 @@ class captchaZDR {
           return $image;         
   } 
  
-  function display(){
+  function display(): void{
  	  
-        switch(rand(1,3))
-        {
-          case 1  : $image  = $this->task_string();     break;
-          case 2  : $image  = $this->task_sum();        break;
-          case 3  : $image  = $this->task_deduction();  break;
-          
-          default : $image  = $this->task_string();     break;      
-        }
+        $image = match (random_int(1,3)) {
+            1 => $this->task_string(),
+            2 => $this->task_sum(),
+            3 => $this->task_deduction(),
+            default => $this->task_string(),
+        };
         
         $this->drawElipse($image);
         
@@ -211,16 +208,13 @@ class captchaZDR {
         imagepng($image);  
   } 
 
-  function check_result(){
-	if($_SESSION['captcha']!=$_REQUEST['capt'] || $_SESSION['captcha']=='BADCODE')
+  function check_result(): bool{
+	if($_SESSION['captcha'] != $_REQUEST['capt'] || $_SESSION['captcha']=='BADCODE')
 	{ 	
 		$_SESSION['captcha']='BADCODE';
 		return false;
-	} 
-	else 
-	{
-	  	return true;
 	}
+ return true;
   } 
 
 }

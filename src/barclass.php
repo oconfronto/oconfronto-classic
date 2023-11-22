@@ -16,22 +16,37 @@
 class barGen
 {
 	
-	function setWidth($value)
+	public $bar_w;
+ public $bar_h;
+ public $fontSize;
+ public $cr;
+ public $cg;
+ public $value;
+ public $fill_color;
+ public $backColor;
+ public $max;
+ /**
+  * @var int
+  */
+ public $dataPercent;
+ public $bar;
+ public $barPercent;
+ function setWidth($value): void
 	{
 		$this->bar_w = $value;
 	}
 
-	function setHeight($value)
+	function setHeight($value): void
 	{
 		$this->bar_h = $value;
 	}
 
-	function setFontSize($value)
+	function setFontSize($value): void
 	{
 		$this->fontSize = $value;
 	}
 
-	function setFillColor($cr, $cg, $value)
+	function setFillColor($cr, $cg, $value): void
 	{
 		$this->cr = $cr;
 		$this->cg = $cg;
@@ -41,26 +56,26 @@ class barGen
 	}
 
 	
-	function setBackColor()
+	function setBackColor(): void
 	{
 		$this->backColor = imagecolorallocate($this->bar, 171, 171, 179);
 	}
 
-	function setData($max, $value)
+	function setData($max, $value): void
 	{
 		$this->max = $max;
 		$this->value = $value;
 		
-		$this->dataPercent = intval($this->value / $this->max * 100);
+		$this->dataPercent = (int) ($this->value / $this->max * 100);
 	}
 	
-	function makeBar()
+	function makeBar(): void
 	{
 		$this->bar = imagecreate($this->bar_w, $this->bar_h);
 		$this->setBackColor();
 	}
 
-	function generateBar()
+	function generateBar(): void
 	{
 		header('Content-type: image/png');
 
@@ -68,7 +83,6 @@ class barGen
 
 		$white 	= imagecolorallocate($this->bar, 255, 255, 255);
 		$grey 	= imagecolorallocate($this->bar, 120, 120, 120);
-		$black 	= imagecolorallocate($this->bar, 0, 0, 0);
 		
 		// Background
 		imagefill($this->bar, 0, 0, $this->backColor);

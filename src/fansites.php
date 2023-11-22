@@ -1,9 +1,9 @@
 <?php
 
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Fansites");
 
-include("templates/header.php");
+include(__DIR__ . "/templates/header.php");
 
 ?>
 
@@ -23,5 +23,5 @@ include("templates/header.php");
 </table>
 
 <?php
-include("templates/footer.php");
+include(__DIR__ . "/templates/footer.php");
 ?>

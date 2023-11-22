@@ -7,11 +7,11 @@
 /*    http://www.bbgamezone.com/     */
 /*************************************/
 
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Membros do Clã");
 $player = check_user($secret_key, $db);
-include("checkbattle.php");
-include("checkguild.php");
+include(__DIR__ . "/checkbattle.php");
+include(__DIR__ . "/checkguild.php");
 
 //Populates $guild variable
 $query = $db->execute("select * from `guilds` where `name` like '$player->guild'");
@@ -24,7 +24,7 @@ if ($query->recordcount() == 0) {
 
 $total_players = $db->getone("select count(ID) as `count` from `players` where `guild` like '$player->guild'");
 
-include("templates/private_header.php");
+include(__DIR__ . "/templates/private_header.php");
 ?>
 
 <fieldset>
@@ -63,5 +63,5 @@ while($member = $query->fetchrow())
 </table>
 </fieldset>
 
-<?php include("templates/private_footer.php");
+<?php include(__DIR__ . "/templates/private_footer.php");
 ?>

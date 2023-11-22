@@ -6,7 +6,7 @@
         <title>O Confronto :: <?php echo PAGENAME?></title>
 
 	<?php
-		$checknocur = $db->execute("select * from `other` where `value`=? and `player_id`=?", array(cursor, $player->acc_id));
+		$checknocur = $db->execute("select * from `other` where `value`=? and `player_id`=?", [\CURSOR, $player->acc_id]);
 		if ($checknocur->recordcount() > 0) {
 		echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/private_style_2.css\" />";
 		}else{
@@ -24,7 +24,7 @@
         <script src="js/jquery-1.3.2.min.js"></script>
         <script src="js/jquery.hotkeys.js"></script>
 	<?php
-	include("js/keys.php");
+	include(__DIR__ . "/js/keys.php");
 	?>
 
 		<script type="text/javascript" src="js/drag.js"></script>
@@ -104,12 +104,12 @@ echo "<body onload=\"divDown()\">";
 echo "<body>";
 }
 
-$mailcount = $db->execute("select `id` from `mail` where `to`=? and `status`='unread'", array($player->id));
-$logcount0 = $db->execute("select `id` from `user_log` where `player_id`=? and `status`='unread'", array($player->id));
-$logcount1 = $db->execute("select `id` from `logbat` where `player_id`=? and `status`='unread'", array($player->id));
-$logcount2 = $db->execute("select `id` from `log_gold` where `player_id`=? and `status`='unread'", array($player->id));
-$logcount3 = $db->execute("select `id` from `log_item` where `player_id`=? and `status`='unread'", array($player->id));
-$logcount4 = $db->execute("select `id` from `account_log` where `player_id`=? and `status`='unread'", array($player->acc_id));
+$mailcount = $db->execute("select `id` from `mail` where `to`=? and `status`='unread'", [$player->id]);
+$logcount0 = $db->execute("select `id` from `user_log` where `player_id`=? and `status`='unread'", [$player->id]);
+$logcount1 = $db->execute("select `id` from `logbat` where `player_id`=? and `status`='unread'", [$player->id]);
+$logcount2 = $db->execute("select `id` from `log_gold` where `player_id`=? and `status`='unread'", [$player->id]);
+$logcount3 = $db->execute("select `id` from `log_item` where `player_id`=? and `status`='unread'", [$player->id]);
+$logcount4 = $db->execute("select `id` from `account_log` where `player_id`=? and `status`='unread'", [$player->acc_id]);
 
 $logscount = $logcount0->recordcount() + $logcount1->recordcount() + $logcount2->recordcount() + $logcount3->recordcount() + $logcount4->recordcount();
 
@@ -130,73 +130,73 @@ else
 {
 	$questa = 0;
 
-	$lembrete = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`<90", array($player->id, 1));
-	if ($lembrete->recordcount() > 0 and $questa == 0){
+	$lembrete = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`<90", [$player->id, 1]);
+	if ($lembrete->recordcount() > 0 && $questa === 0){
 	echo "<i><a href=\"promote.php\">Clique aqui</a> para continuar sua missão!</i>";
 	$questa = 1;
 	}
-	$lembrete2 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`<90", array($player->id, 2));
-	if ($lembrete2->recordcount() > 0 and $questa == 0){
+	$lembrete2 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`<90", [$player->id, 2]);
+	if ($lembrete2->recordcount() > 0 && $questa == 0){
 	echo "<i><a href=\"quest1.php\">Clique aqui</a> para continuar sua missão!</i>";
 	$questa = 1;
 	}
-	$lembrete3 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", array($player->id, 3));
-	if ($lembrete3->recordcount() > 0 and $questa == 0){
+	$lembrete3 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", [$player->id, 3]);
+	if ($lembrete3->recordcount() > 0 && $questa == 0){
 	echo "<i><a href=\"quest2.php\">Clique aqui</a> para continuar sua missão!</i>";
 	$questa = 1;
 	}
-	$lembrete4 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", array($player->id, 4));
-	if ($lembrete4->recordcount() > 0 and $questa == 0){
+	$lembrete4 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", [$player->id, 4]);
+	if ($lembrete4->recordcount() > 0 && $questa == 0){
 	echo "<i><a href=\"quest2.php\">Clique aqui</a> para continuar sua missão!</i>";
 	$questa = 1;
 	}
-	$lembrete5 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", array($player->id, 5));
-	if ($lembrete5->recordcount() > 0 and $questa == 0){
+	$lembrete5 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", [$player->id, 5]);
+	if ($lembrete5->recordcount() > 0 && $questa == 0){
 	echo "<i><a href=\"quest3.php\">Clique aqui</a> para continuar sua missão!</i>";
 	$questa = 1;
 	}
-	$lembrete6 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", array($player->id, 6));
-	if ($lembrete6->recordcount() > 0 and $questa == 0){
+	$lembrete6 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", [$player->id, 6]);
+	if ($lembrete6->recordcount() > 0 && $questa == 0){
 	echo "<i><a href=\"quest3.php\">Clique aqui</a> para continuar sua missão!</i>";
 	$questa = 1;
 	}
-	$lembrete7 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", array($player->id, 7));
-	if ($lembrete7->recordcount() > 0 and $questa == 0){
+	$lembrete7 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", [$player->id, 7]);
+	if ($lembrete7->recordcount() > 0 && $questa == 0){
 	echo "<i><a href=\"quest4.php\">Clique aqui</a> para continuar sua missão!</i>";
 	$questa = 1;
 	}
-	$lembrete8 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", array($player->id, 9));
-	if ($lembrete8->recordcount() > 0 and $questa == 0){
+	$lembrete8 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", [$player->id, 9]);
+	if ($lembrete8->recordcount() > 0 && $questa == 0){
 	echo "<i><a href=\"quest5.php\">Clique aqui</a> para continuar sua missão!</i>";
 	$questa = 1;
 	}
-	$lembrete9 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", array($player->id, 12));
-	if ($lembrete9->recordcount() > 0 and $questa == 0){
+	$lembrete9 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", [$player->id, 12]);
+	if ($lembrete9->recordcount() > 0 && $questa == 0){
 	echo "<i><a href=\"promo1.php\">Clique aqui</a> para continuar sua missão!</i>";
 	$questa = 1;
 	}
-	$lembrete102 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", array($player->id, 13));
-	if ($lembrete102->recordcount() > 0 and $questa == 0){
+	$lembrete102 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", [$player->id, 13]);
+	if ($lembrete102->recordcount() > 0 && $questa == 0){
 	echo "<i><a href=\"quest6.php\">Clique aqui</a> para continuar sua missão!</i>";
 	$questa = 1;
 	}
-	$lembrete10 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90 and `quest_status`!=89", array($player->id, 14));
-	if ($lembrete10->recordcount() > 0 and $questa == 0){
+	$lembrete10 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90 and `quest_status`!=89", [$player->id, 14]);
+	if ($lembrete10->recordcount() > 0 && $questa == 0){
 	echo "<i><a href=\"quest6.php\">Clique aqui</a> para continuar sua missão!</i>";
 	$questa = 1;
 	}
-	$lembrete11 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", array($player->id, 15));
-	if ($lembrete11->recordcount() > 0 and $questa == 0){
+	$lembrete11 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", [$player->id, 15]);
+	if ($lembrete11->recordcount() > 0 && $questa == 0){
 	echo "<i><a href=\"quest7.php\">Clique aqui</a> para continuar sua missão!</i>";
 	$questa = 1;
 	}
-	$lembrete12 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", array($player->id, 17));
-	if ($lembrete12->recordcount() > 0 and $questa == 0){
+	$lembrete12 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", [$player->id, 17]);
+	if ($lembrete12->recordcount() > 0 && $questa == 0){
 	echo "<i><a href=\"quest8.php\">Clique aqui</a> para continuar sua missão!</i>";
 	$questa = 1;
 	}
-	$lembrete13 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", array($player->id, 18));
-	if ($lembrete13->recordcount() > 0 and $questa == 0){
+	$lembrete13 = $db->execute("select * from `quests` where `player_id`=? and `quest_id`=? and `quest_status`!=90", [$player->id, 18]);
+	if ($lembrete13->recordcount() > 0 && $questa == 0){
 	echo "<i><a href=\"quest9.php\">Clique aqui</a> para continuar sua missão!</i>";
 	$questa = 1;
 	}if ($questa == 0){
@@ -204,73 +204,61 @@ else
 
 if ($player->level < 100){
 $tier = 1;
-} elseif (($player->level > 99) and ($player->level < 200)){
+} elseif ($player->level > 99 && $player->level < 200){
 $tier = 2;
-} elseif (($player->level > 199) and ($player->level < 300)){
+} elseif ($player->level > 199 && $player->level < 300){
 $tier = 3;
-} elseif (($player->level > 299) and ($player->level < 400)){
+} elseif ($player->level > 299 && $player->level < 400){
 $tier = 4;
-} elseif (($player->level > 399) and ($player->level < 1000)){
+} elseif ($player->level > 399 && $player->level < 1000){
 $tier = 5;
 }
 
 $torneiovarificapelotier = "tournament_" . $tier . "_" . $player->serv . "";
 $lottoavisoheader = "lottery_" . $player->serv . "";
 
-		if ($setting->$torneiovarificapelotier == y) {
+		if ($setting->$torneiovarificapelotier == \Y) {
 		echo "<i>O <a href=\"tournament.php\">Torneio</a> começou!</i>";
 		}else{
 	
 
 		$messaged = 0;
 
-		$sorteia = rand(1, 6);
+		$sorteia = random_int(1, 6);
 
-		if ($setting->$torneiovarificapelotier == t){
-		if ($sorteia == 1){
-		echo "<i>Inscreva-se torneio! <a href=\"tournament.php\">Clique aqui</a>.</i>";
-		$messaged = 1;
-		}
-		}
+		if ($setting->$torneiovarificapelotier == \T && $sorteia == 1) {
+      echo "<i>Inscreva-se torneio! <a href=\"tournament.php\">Clique aqui</a>.</i>";
+      $messaged = 1;
+  }
 
-		if ($setting->promo == t){
-		if ($sorteia == 2){
-		echo "<i>Ganhe 2 milhões em ouro! <a href=\"promo.php\">Clique aqui</a>.</i>";
-		$messaged = 1;
-		}
-		}
+		if ($setting->promo == \T && $sorteia == 2) {
+      echo "<i>Ganhe 2 milhões em ouro! <a href=\"promo.php\">Clique aqui</a>.</i>";
+      $messaged = 1;
+  }
 
-		if ($setting->$lottoavisoheader == t){
-		if ($sorteia == 3){
-		echo "<i>Aposte na loteria! <a href=\"lottery.php\">Clique aqui</a>.</i>";
-		$messaged = 1;
-		}
-		}
+		if ($setting->$lottoavisoheader == \T && $sorteia == 3) {
+      echo "<i>Aposte na loteria! <a href=\"lottery.php\">Clique aqui</a>.</i>";
+      $messaged = 1;
+  }
 
-		if ($setting->eventoouro > time()){
-		if ($sorteia == 4){
-		echo "<i><b>Evento surpresa!</b> Monstros com ouro em dobro!.</i>";
-		$messaged = 1;
-		}
-		}
+		if ($setting->eventoouro > time() && $sorteia == 4) {
+      echo "<i><b>Evento surpresa!</b> Monstros com ouro em dobro!.</i>";
+      $messaged = 1;
+  }
 
-		if ($setting->eventoexp > time()){
-		if ($sorteia == 5){
-		echo "<i><b>Evento surpresa!</b> Monstros com experiência em dobro!.</i>";
-		$messaged = 1;
-		}
-		}
+		if ($setting->eventoexp > time() && $sorteia == 5) {
+      echo "<i><b>Evento surpresa!</b> Monstros com experiência em dobro!.</i>";
+      $messaged = 1;
+  }
 
-		if (strstr($_SERVER["HTTP_USER_AGENT"], "MSIE")) {
-		if ($sorteia == 6){
- 	   	echo "Seu navegador pode não suportar o jogo, se encontrar algum problema, <a href=\"view_topic.php?id=2601\">clique aqui</a>.";
-		$messaged = 1;
-		}
-		}
+		if (strstr((string) $_SERVER["HTTP_USER_AGENT"], "MSIE") && $sorteia == 6) {
+      echo "Seu navegador pode não suportar o jogo, se encontrar algum problema, <a href=\"view_topic.php?id=2601\">clique aqui</a>.";
+      $messaged = 1;
+  }
 
 	
 		if ($messaged == 0){
-		$mensagemespecial = rand(1, 3);
+		$mensagemespecial = random_int(1, 3);
 		if ($mensagemespecial == 1) {
 		echo "<i>Participe da nossa comunidade no <a href=\"http://www.orkut.com.br/Main#Community.aspx?cmm=73799681\" target=\"_blank\">ORKUT</a>!</i>";
 		}elseif ($mensagemespecial == 2) {
@@ -299,12 +287,12 @@ $lottoavisoheader = "lottery_" . $player->serv . "";
 <img src="bargen.php?energy"><br />
 <br />
 <?php
-include("showit.php");
+include(__DIR__ . "/showit.php");
 ?>
 <br />
 <b>Nível:</b> <?php echo $player->level?><br />
 <?php
-$percent = intval(100 - (($player->exp / $player->maxexp) * 100));
+$percent = (int) (100 - (($player->exp / $player->maxexp) * 100));
 ?>
 <div title="header=[Experiência] body=[<b><?php echo $percent?>%</b> restantes]\">
 <img src="bargen.php?exp">
@@ -368,7 +356,7 @@ $percent = intval(100 - (($player->exp / $player->maxexp) * 100));
     </span>
 </ul>
 <?php
-if ($setting->promo == t) {
+if ($setting->promo == \T) {
 echo "<br/>";
 echo "<ul id=\"verticalmenu\" class=\"glossymenu\">";
 echo "<div class=\"menutitle\">";

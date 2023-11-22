@@ -1,16 +1,16 @@
 <?php
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Novo Personagem");
 $acc = check_acc($secret_key, $db);
 $escolheper = 44;
 
-$querynumplayers = $db->execute("select `id` from `players` where `acc_id`=?", array($acc->id));
+$querynumplayers = $db->execute("select `id` from `players` where `acc_id`=?", [$acc->id]);
 
 if ($querynumplayers->recordcount() > 19)
 {
-include("templates/acc_header.php");
+include(__DIR__ . "/templates/acc_header.php");
 echo "<br/><br/><br/><br/><center>Você já atingiu o número máximo de personagens por conta, vinte.<br/>Você não pode mais criar usuários nesta conta. <a href=\"characters.php\">Voltar</a>.</center><br/>";
-include("templates/acc_footer.php");
+include(__DIR__ . "/templates/acc_footer.php");
 }else{
 
 
@@ -29,10 +29,10 @@ if ($_POST['register'])
 		$rep[0] = "";
 		$rep[1] = " ";
 		$rep[2] = "";
-		$nomedeusuari0 = ucwords(preg_replace($pat,$rep,$_POST['username']));
+		$nomedeusuari0 = ucwords(preg_replace($pat,(string) $rep,(string) $_POST['username']));
 
 	//Check if username has already been used
-	$query = $db->execute("select `id` from `players` where `username`=?", array($_POST['username']));
+	$query = $db->execute("select `id` from `players` where `username`=?", [$_POST['username']]);
 	//Check username
 	if (!$_POST['username']) { //If username isn't filled in...
 		$msg1 .= "Você precisa digitar um nome de usuário!<br />\n"; //Add to error message
@@ -43,41 +43,42 @@ if ($_POST['register'])
 	{ //If username is too short...
 		$msg1 .= "Seu nome de usuário deve ter mais que 2 caracteres!<br />\n"; //Add to error message
 		$error = 1; //Set error check
-	}
-	else if (strlen($nomedeusuari0) > 20)
-	{ //If username is too short...
-		$msg1 .= "Seu nome de usuário deve ser de 20 caracteres ou menos!<br />\n"; //Add to error message
-		$error = 1; //Set error check
-	}
-	else if (!preg_match("/^[A-Za-z[:space:]\-]+$/", $_POST['username']))
-	{ //If username contains illegal characters...
-		$msg1 .= "Seu nome de usuário não pode conter <b>números</b> ou <b>caracteres especiais</b>!<br />\n"; //Add to error message
-		$error = 1; //Set error check
-	}
-	else if ($query->recordcount() > 0)
-	{
-		$msg1 .= "Este nome de usuário já está sendo usado!<br />\n";
-		$error = 1; //Set error check
-	}
+	} elseif (strlen($nomedeusuari0) > 20) {
+     //If username is too short...
+     $msg1 .= "Seu nome de usuário deve ser de 20 caracteres ou menos!<br />\n";
+     //Add to error message
+     $error = 1;
+     //Set error check
+ } elseif (!preg_match("/^[A-Za-z[:space:]\-]+$/", (string) $_POST['username'])) {
+     //If username contains illegal characters...
+     $msg1 .= "Seu nome de usuário não pode conter <b>números</b> ou <b>caracteres especiais</b>!<br />\n";
+     //Add to error message
+     $error = 1;
+     //Set error check
+ } elseif ($query->recordcount() > 0) {
+     $msg1 .= "Este nome de usuário já está sendo usado!<br />\n";
+     $error = 1;
+     //Set error check
+ }
 
-	if ($_POST['voc'] == none)
+	if ($_POST['voc'] == \NONE)
 	{
 		$msg2 .= "<br/>Você precisa escolher uma vocação!";
 		$error = 1;
 	}
 
-	if (($_POST['voc'] != 'archer') and ($_POST['voc'] != 'knight') and ($_POST['voc'] != 'mage') and ($_POST['voc'] != 'none')){
+	if ($_POST['voc'] != 'archer' && $_POST['voc'] != 'knight' && $_POST['voc'] != 'mage' && $_POST['voc'] != 'none'){
 	$could_not_register = "<center><font size=\"1\">Desculpe, ocorreu um erro desconhecido! Tente novamente.</font></center><br /><br />";
 	$error = 1; //Set error check
 	}
 
-	if ($_POST['serv'] == none)
+	if ($_POST['serv'] == \NONE)
 	{
 		$msg3 .= "<br/>Você precisa escolher um servidor!";
 		$error = 1;
 	}
 
-	if (($_POST['serv'] != 1) and ($_POST['serv'] != 2) and ($_POST['serv'] != 'none')){
+	if ($_POST['serv'] != 1 && $_POST['serv'] != 2 && $_POST['serv'] != 'none'){
 	$could_not_register = "<center><font size=\"1\">Desculpe, ocorreu um erro desconhecido! Tente novamente.</font></center><br /><br />";
 	$error = 1; //Set error check
 	}
@@ -91,8 +92,8 @@ if ($_POST['register'])
 		$rep[0] = "";
 		$rep[1] = " ";
 		$rep[2] = "";
-		$nomedeusuario = ucwords(preg_replace($pat,$rep,$_POST['username']));
-		$nomedeusuario2 = ucwords($_POST['username']);
+		$nomedeusuario = ucwords(preg_replace($pat,(string) $rep,(string) $_POST['username']));
+		$nomedeusuario2 = ucwords((string) $_POST['username']);
 
 		$insert['acc_id'] = $acc->id;
 		$insert['username'] = $nomedeusuario;
@@ -103,25 +104,25 @@ if ($_POST['register'])
 		$insert['serv'] = $_POST['serv'];
 		$query = $db->autoexecute('players', $insert, 'INSERT');
 
-		$playerid = $db->execute("select `id` from `players` where `username`=?", array($nomedeusuario));
+		$playerid = $db->execute("select `id` from `players` where `username`=?", [$nomedeusuario]);
 		$player = $playerid->fetchrow();
 
 		if ($_POST['voc'] == 'archer'){
 		$insert['player_id'] = $player['id'];
 		$insert['item_id'] = 81;
-		$insert['status'] = equipped;
+		$insert['status'] = \EQUIPPED;
 		$query = $db->autoexecute('items', $insert, 'INSERT');
 		}
 		elseif ($_POST['voc'] == 'knight'){
 		$insert['player_id'] = $player['id'];
 		$insert['item_id'] = 8;
-		$insert['status'] = equipped;
+		$insert['status'] = \EQUIPPED;
 		$query = $db->autoexecute('items', $insert, 'INSERT');
 		}
 		elseif ($_POST['voc'] == 'mage'){
 		$insert['player_id'] = $player['id'];
 		$insert['item_id'] = 92;
-		$insert['status'] = equipped;
+		$insert['status'] = \EQUIPPED;
 		$query = $db->autoexecute('items', $insert, 'INSERT');
 		}
 		
@@ -144,15 +145,15 @@ if ($_POST['register'])
 		}
 		else
 		{		
-			include("templates/acc_header.php");
+			include(__DIR__ . "/templates/acc_header.php");
 			echo "<br/><br/><br/>";
-			if ($nomedeusuario != $nomedeusuario2){
+			if ($nomedeusuario !== $nomedeusuario2){
 			$alerta2 = "<b>Atenção</b>: Seu nome de usuário foi alterado para " . $nomedeusuario . ".<br/><br/>";
 			}
 
 			echo "<center>Parabéns! Seu personagem foi criado com sucesso!<br />";
 			echo "<a href=\"login.php?id=" . $player['id'] . "\">Clique aqui</a> e começe a jogar com " . $nomedeusuario . ".</center>";
-			include("templates/acc_footer.php");
+			include(__DIR__ . "/templates/acc_footer.php");
   			exit;
 		}
 	}
@@ -162,7 +163,7 @@ $msg1 .= "</font></b>";
 $msg2 .= "</font></b>";
 $msg3 .= "</font></b>";
 
-include("templates/acc_header.php");
+include(__DIR__ . "/templates/acc_header.php");
 echo "<br/><br/><br/>";
 
 ?>
@@ -181,6 +182,6 @@ echo "<br/><br/><br/>";
 
 
 <?php
-include("templates/acc_footer.php");
+include(__DIR__ . "/templates/acc_footer.php");
 }
 ?>

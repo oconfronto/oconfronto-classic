@@ -6,20 +6,13 @@
 /*    http://www.ezrpgproject.com/   */
 /*************************************/
 
-include("config.php");
-include("functions.php");
+include(__DIR__ . "/config.php");
+include(__DIR__ . "/functions.php");
 define("PAGENAME", "Cadastro");
-srand((double)microtime()*1000000);  //sets random seed
-$string = md5(rand(0,1000000));
+mt_srand((double)microtime()*1_000_000);  //sets random seed
+$string = md5(random_int(0,1_000_000));
 
-if (!$_GET['r'])
-{
-$usaar = "1";
-}
-else
-{
-$usaar = $_GET['r'];
-}
+$usaar = $_GET['r'] ?: "1";
 
 $msg1 = "<b><font color=\"red\" size=\"1\">";
 $msg2 = "<b><font color=\"red\" size=\"1\">";
@@ -35,118 +28,119 @@ if ($_POST['register'])
 {
 
 	//Check if username has already been used
-	$query = $db->execute("select `id` from `accounts` where `conta`=?", array($_POST['username']));
+	$query = $db->execute("select `id` from `accounts` where `conta`=?", [$_POST['username']]);
 	//Check username
 	if (!$_POST['username']) { //If username isn't filled in...
 		$msg1 .= "Você precisa digitar o nome da conta desejada.<br />\n"; //Add to error message
 		$error = 1; //Set error check
 	}
 
-	elseif (strlen($_POST['username']) < 3)
+	elseif (strlen((string) $_POST['username']) < 3)
 	{ //If username is too short...
 		$msg1 .= "Sua conta não pode ter menos de 3 caracteres!<br />\n"; //Add to error message
 		$error = 1; //Set error check
-	}
-	else if (strlen($_POST['username']) > 20)
-	{ //If username is too short...
-		$msg1 .= "Seu nome de usuário deve ser de 20 caracteres ou menos!<br />\n"; //Add to error message
-		$error = 1; //Set error check
-	}
-	else if (!preg_match("/^[-_a-zA-Z0-9]+$/", $_POST['username']))
-	{ //If username contains illegal characters...
-		$msg1 .= "Sua conta não pode conter <b>caracteres especiais</b>!<br />\n"; //Add to error message
-		$error = 1; //Set error check
-	}
-	else if ($query->recordcount() > 0)
-	{
-		$msg1 .= "Esta conta já está sendo usuada!<br />\n";
-		$error = 1; //Set error check
-	}
+	} elseif (strlen((string) $_POST['username']) > 20) {
+     //If username is too short...
+     $msg1 .= "Seu nome de usuário deve ser de 20 caracteres ou menos!<br />\n";
+     //Add to error message
+     $error = 1;
+     //Set error check
+ } elseif (!preg_match("/^[-_a-zA-Z0-9]+$/", (string) $_POST['username'])) {
+     //If username contains illegal characters...
+     $msg1 .= "Sua conta não pode conter <b>caracteres especiais</b>!<br />\n";
+     //Add to error message
+     $error = 1;
+     //Set error check
+ } elseif ($query->recordcount() > 0) {
+     $msg1 .= "Esta conta já está sendo usuada!<br />\n";
+     $error = 1;
+     //Set error check
+ }
 
 	//Check password
-	if (!$_POST['password'])
-	{ //If password isn't filled in...
-		$msg2 .= "Você precisa digitar uma senha!<br />\n"; //Add to error message
-		$error = 1; //Set error check
-	}
-	else if ($_POST['password'] != $_POST['password2'])
-	{
-		$msg3 .= "<br/>Você não digitou as duas senhas corretamente!<br />\n";
-		$error = 1;
-	}
-	else if (strlen($_POST['password']) < 4)
-	{ //If password is too short...
-		$msg2 .= "Sua senha deve ser maior que 3 caracteres!<br />\n"; //Add to error message
-		$error = 1; //Set error check
-	}
+	if (!$_POST['password']) {
+     //If password isn't filled in...
+     $msg2 .= "Você precisa digitar uma senha!<br />\n";
+     //Add to error message
+     $error = 1;
+     //Set error check
+ } elseif ($_POST['password'] != $_POST['password2']) {
+     $msg3 .= "<br/>Você não digitou as duas senhas corretamente!<br />\n";
+     $error = 1;
+ } elseif (strlen((string) $_POST['password']) < 4) {
+     //If password is too short...
+     $msg2 .= "Sua senha deve ser maior que 3 caracteres!<br />\n";
+     //Add to error message
+     $error = 1;
+     //Set error check
+ }
 	
 
 	//Check email
-	if (!$_POST['email'])
-	{ //If email address isn't filled in...
-		$msg4 .= "Você precisa digitar um email!<br />\n"; //Add to error message
-		$error = 1; //Set error check
-	}
-	else if ($_POST['email'] != $_POST['email2'])
-	{
-		$msg5 .= "<br/>Você não digitou os dois emails corretamente!";
-		$error = 1;
-	}
-	else if (strlen($_POST['email']) < 5)
-	{ //If email is too short...
-		$msg4 .= "O seu endereço de email deve conter mais de 5 caracteres.<br />\n"; //Add to error message
-		$error = 1; //Set error check
-	}
-	else if (!preg_match("/^[-!#$%&\'*+\\.\/0-9=?A-Z^_`{|}~]+@([-0-9A-Z]+\.)+([0-9A-Z]){2,4}$/i", $_POST['email']))
-	{
-		$msg4 .= "O formato do seu email é inválido!<br />\n"; //Add to error message
-		$error = 1; //Set error check
-	}
-	else
+	if (!$_POST['email']) {
+     //If email address isn't filled in...
+     $msg4 .= "Você precisa digitar um email!<br />\n";
+     //Add to error message
+     $error = 1;
+     //Set error check
+ } elseif ($_POST['email'] != $_POST['email2']) {
+     $msg5 .= "<br/>Você não digitou os dois emails corretamente!";
+     $error = 1;
+ } elseif (strlen((string) $_POST['email']) < 5) {
+     //If email is too short...
+     $msg4 .= "O seu endereço de email deve conter mais de 5 caracteres.<br />\n";
+     //Add to error message
+     $error = 1;
+     //Set error check
+ } elseif (!preg_match("/^[-!#$%&\'*+\\.\/0-9=?A-Z^_`{|}~]+@([-0-9A-Z]+\.)+([0-9A-Z]){2,4}$/i", (string) $_POST['email'])) {
+     $msg4 .= "O formato do seu email é inválido!<br />\n";
+     //Add to error message
+     $error = 1;
+     //Set error check
+ } else
 	{
 		//Check if email has already been used
-		$query = $db->execute("select `id` from `accounts` where `email`=?", array($_POST['email']));
-		$query2 = $db->execute("select * from `pending` where `pending_id`=1 and `pending_status`=?", array($_POST['email']));
-		if ($query->recordcount() > 0)
-		{
-			$msg4 .= "Este email já está sendo usado por outra conta!<br />\n";
-			$error = 1; //Set error check
-		}
-		else if ($query2->recordcount() > 0)
-		{
-			$msg4 .= "Este email já está em uso!<br />\n";
-			$error = 1; //Set error check
-		}
+		$query = $db->execute("select `id` from `accounts` where `email`=?", [$_POST['email']]);
+		$query2 = $db->execute("select * from `pending` where `pending_id`=1 and `pending_status`=?", [$_POST['email']]);
+		if ($query->recordcount() > 0) {
+      $msg4 .= "Este email já está sendo usado por outra conta!<br />\n";
+      $error = 1;
+      //Set error check
+  } elseif ($query2->recordcount() > 0) {
+      $msg4 .= "Este email já está em uso!<br />\n";
+      $error = 1;
+      //Set error check
+  }
 	}
 	
 
-	if (!$_POST['rules'])
-	{ //If email address isn't filled in...
-		$msg7 .= "Você precisa ler e aceitar as regras!";
-		$error = 1; //Set error check
-	}
-	else if ($_POST['rules'] != 'yes')
-	{
-		$msg7 .= "Você precisa ler e aceitar as regras!";
-		$error = 1; //Set error check
-	}
+	if (!$_POST['rules']) {
+     //If email address isn't filled in...
+     $msg7 .= "Você precisa ler e aceitar as regras!";
+     $error = 1;
+     //Set error check
+ } elseif ($_POST['rules'] != 'yes') {
+     $msg7 .= "Você precisa ler e aceitar as regras!";
+     $error = 1;
+     //Set error check
+ }
 
-	if (!$_POST['age'])
-	{ //If email address isn't filled in...
-		$msg8 .= "<br/>Você precisa ter 14 anos ou mais para jogar!<br/>";
-		$error = 1; //Set error check
-	}
-	else if ($_POST['age'] != 'yes')
-	{
-		$msg8 .= "<br/>Você precisa ter 14 anos ou mais para jogar!<br/>";
-		$error = 1; //Set error check
-	}
+	if (!$_POST['age']) {
+     //If email address isn't filled in...
+     $msg8 .= "<br/>Você precisa ter 14 anos ou mais para jogar!<br/>";
+     $error = 1;
+     //Set error check
+ } elseif ($_POST['age'] != 'yes') {
+     $msg8 .= "<br/>Você precisa ter 14 anos ou mais para jogar!<br/>";
+     $error = 1;
+     //Set error check
+ }
 
 	
 	if ($error == 0)
 	{
 		$insert['conta'] = $_POST['username'];
-		$insert['password'] = sha1($_POST['password']);
+		$insert['password'] = sha1((string) $_POST['password']);
 		$insert['email'] = $_POST['email'];
 		$insert['registered'] = time();
 		$insert['last_active'] = time();
@@ -156,13 +150,13 @@ if ($_POST['register'])
 		$insert['ref'] = $usaar;
 		$query = $db->autoexecute('accounts', $insert, 'INSERT');
 
-		$playerid = $db->execute("select `id` from `accounts` where `conta`=?", array($_POST['username']));
+		$playerid = $db->execute("select `id` from `accounts` where `conta`=?", [$_POST['username']]);
 		$player = $playerid->fetchrow();
 
-		$playerip = $db->execute("select `id` from `accounts` where `last_ip`=?", array($_SERVER['REMOTE_ADDR']));
-		if (($playerip->recordcount() > 1) and ($usaar != 1)){
+		$playerip = $db->execute("select `id` from `accounts` where `last_ip`=?", [$_SERVER['REMOTE_ADDR']]);
+		if ($playerip->recordcount() > 1 && $usaar != 1){
 		$alerta1 = "<b>Atenção</b>:  Muitas contas já foram cadastradas nesse computador, e o usuário que te convidou não ganhará nenhum bônus.<br/>";
-		$db->execute("update `accounts` set `ref`=? where `id`=?", array(1, $player['id']));
+		$db->execute("update `accounts` set `ref`=? where `id`=?", [1, $player['id']]);
 		}
 		
 
@@ -179,10 +173,10 @@ if ($_POST['register'])
 				$_SESSION['accid'] = $player['id'];
 				$_SESSION['hash'] = $hash;
 			
-			include("templates/header.php");
+			include(__DIR__ . "/templates/header.php");
 			echo "Parabéns! Você foi cadastrado com sucesso!<br />";
 			echo "Agora você pode entrar no jogo. <a href=\"characters.php\">Clique aqui.</a>";
-			include("templates/footer.php");
+			include(__DIR__ . "/templates/footer.php");
   			exit;
 		}
 	}
@@ -196,7 +190,7 @@ $msg5 .= "</font></b>";
 $msg7 .= "</font></b>";
 $msg8 .= "</font></b>"; 
 
-include("templates/header.php");
+include(__DIR__ . "/templates/header.php");
 
 ?>
 <?include("box.php");?>
@@ -224,5 +218,5 @@ include("templates/header.php");
 
 
 <?php
-include("templates/footer.php");
+include(__DIR__ . "/templates/footer.php");
 ?>

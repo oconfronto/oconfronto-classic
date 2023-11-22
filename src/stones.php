@@ -1,24 +1,24 @@
 <?php
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Pedras");
 $player = check_user($secret_key, $db);
-include("checkbattle.php");
-include("templates/private_header.php");
+include(__DIR__ . "/checkbattle.php");
+include(__DIR__ . "/templates/private_header.php");
 
  		if ($player->level < 50){
 		echo "<fieldset><legend><b>Erro</b></legend>\n";
 		echo "<i>Seu nível é inferior á 50.<br/></i>\n";
 		echo "<a href=\"home.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
-include("checkwork.php");
+include(__DIR__ . "/checkwork.php");
 
 
-	if (($_GET['pedra']) and ($_POST['maturar'])) {
-		$query = $db->execute("select * from `items` where `id`=? and `item_id`=141 and `player_id`=?", array($_GET['pedra'], $player->id));
+	if ($_GET['pedra'] && $_POST['maturar']) {
+		$query = $db->execute("select * from `items` where `id`=? and `item_id`=141 and `player_id`=?", [$_GET['pedra'], $player->id]);
 		if ($query->recordcount() == 0)
 		{
 		
@@ -26,12 +26,12 @@ include("checkwork.php");
 		echo "<i>Você não pode usar esta pedra.<br/></i>\n";
 		echo '<a href="stones.php">voltar.</a>';
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
 
-		$verifica = $db->execute("select items.id, items.item_bonus, items.item_id, items.status, items.mark, blueprint_items.name, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and items.id=?", array($player->id, $_POST['itemid']));
+		$verifica = $db->execute("select items.id, items.item_bonus, items.item_id, items.status, items.mark, blueprint_items.name, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and items.id=?", [$player->id, $_POST['itemid']]);
 
    		if ($verifica->recordcount() == 0) {
 		
@@ -39,7 +39,7 @@ include("checkwork.php");
 		echo "<i>Item não encontrado.<br/></i>\n";
 		echo "<a href=\"stones.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -51,7 +51,7 @@ include("checkwork.php");
 		echo "<i>Você não pode maturar um item que está à venda no mercado.<br/></i>\n";
 		echo "<a href=\"stones.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -60,7 +60,7 @@ include("checkwork.php");
 		echo "<i>Você não pode maturar este tipo de item.<br/></i>\n";
 		echo "<a href=\"stones.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -69,7 +69,7 @@ include("checkwork.php");
 		echo "<i>Você não pode maturar este tipo de item.<br/></i>\n";
 		echo "<a href=\"stones.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -78,7 +78,7 @@ include("checkwork.php");
 		echo "<i>Você não pode maturar este tipo de item.<br/></i>\n";
 		echo "<a href=\"stones.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -89,61 +89,61 @@ include("checkwork.php");
 		echo "<i>Você só pode maturar items +9.<br/></i>\n";
 		echo "<a href=\"stones.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
 		
-		$win=rand(0, 100);
+		$win=random_int(0, 100);
 			if ($win < 31){
-			$query = $db->execute("delete from `items` where `id`=? and `player_id`=?", array($_GET['pedra'], $player->id));
+			$query = $db->execute("delete from `items` where `id`=? and `player_id`=?", [$_GET['pedra'], $player->id]);
 			echo "Infelizmente a maturação não deu certo, e você perdeu sua pedra.";
 			echo "<br/><a href=\"stones.php\">voltar.</a>";
 			}else{
-			$points=rand(13, 14);
-			if (($item['status'] == 'equipped') and ($item['type'] == 'amulet') and ($points == 13)){
+			$points=random_int(13, 14);
+			if ($item['status'] == 'equipped' && $item['type'] == 'amulet' && $points == 13){
 			$addhp = 100;
-			}elseif (($item['status'] == 'equipped') and ($item['type'] == 'amulet') and ($points == 14)){
+			}elseif ($item['status'] == 'equipped' && $item['type'] == 'amulet' && $points == 14){
 			$addhp = 125;	
 			}else{
 			$addhp = 0;
 			}
-			$query = $db->execute("update `players` set `hp`=?, `maxhp`=? where `id`=?", array($player->hp + $addhp, $player->maxhp + $addhp, $player->id));
-			$query = $db->execute("delete from `items` where `id`=? and `player_id`=?", array($_GET['pedra'], $player->id));
-			$query = $db->execute("update `items` set `item_bonus`=? where `id`=?", array($points, $_POST['itemid']));
+			$query = $db->execute("update `players` set `hp`=?, `maxhp`=? where `id`=?", [$player->hp + $addhp, $player->maxhp + $addhp, $player->id]);
+			$query = $db->execute("delete from `items` where `id`=? and `player_id`=?", [$_GET['pedra'], $player->id]);
+			$query = $db->execute("update `items` set `item_bonus`=? where `id`=?", [$points, $_POST['itemid']]);
 			echo "A maturação do item foi feita com sucesso! Seu item agora é +" . $points . "";
 			echo "<br/><a href=\"stones.php\">voltar.</a>";
 			}
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 	}
 
 
-	if (($_GET['pedra']) and ($_POST['usar'])) {
-		$query5587 = $db->execute("select * from `items` where `id`=? and `player_id`=?", array($_GET['pedra'], $player->id));
+	if ($_GET['pedra'] && $_POST['usar']) {
+		$query5587 = $db->execute("select * from `items` where `id`=? and `player_id`=?", [$_GET['pedra'], $player->id]);
 		if ($query5587->recordcount() == 0)
 		{	
 		echo "<fieldset><legend><b>Erro</b></legend>\n";
 		echo "<i>Você não pode usar esta pedra.<br/></i>\n";
 		echo '<a href="stones.php">voltar.</a>';
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
 		$pedra = $query5587->fetchrow();
 
-		if (($pedra['item_id'] != 144) and ($pedra['item_id'] != 145) and ($pedra['item_id'] != 146) and ($pedra['item_id'] != 147)){
+		if ($pedra['item_id'] != 144 && $pedra['item_id'] != 145 && $pedra['item_id'] != 146 && $pedra['item_id'] != 147){
 		echo "<fieldset><legend><b>Erro</b></legend>\n";
 		echo "<i>Você não pode usar esta pedra.<br/></i>\n";
 		echo '<a href="stones.php">voltar.</a>';
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 		
 
-		$verifica = $db->execute("select items.id, items.for, items.vit, items.agi, items.res, items.item_id, items.status, items.mark, blueprint_items.name, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and items.id=?", array($player->id, $_POST['itemid']));
+		$verifica = $db->execute("select items.id, items.for, items.vit, items.agi, items.res, items.item_id, items.status, items.mark, blueprint_items.name, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and items.id=?", [$player->id, $_POST['itemid']]);
 
    		if ($verifica->recordcount() == 0) {
 		
@@ -151,7 +151,7 @@ include("checkwork.php");
 		echo "<i>Item não encontrado.<br/></i>\n";
 		echo "<a href=\"stones.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -163,7 +163,7 @@ include("checkwork.php");
 		echo "<i>Você não pode maturar um item que está à venda no mercado.<br/></i>\n";
 		echo "<a href=\"stones.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -172,7 +172,7 @@ include("checkwork.php");
 		echo "<i>Você não pode maturar este tipo de item.<br/></i>\n";
 		echo "<a href=\"stones.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -181,7 +181,7 @@ include("checkwork.php");
 		echo "<i>Você não pode maturar este tipo de item.<br/></i>\n";
 		echo "<a href=\"stones.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -190,92 +190,88 @@ include("checkwork.php");
 		echo "<i>Você não pode maturar este tipo de item.<br/></i>\n";
 		echo "<a href=\"stones.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
 
- 		if (($pedra['item_id'] == 144) and ($item['for'] > 4)){
+ 		if ($pedra['item_id'] == 144 && $item['for'] > 4){
 		echo "<fieldset><legend><b>Erro</b></legend>\n";
 		echo "<i>Você só pode usar esta pedra em itens com 4 de força ou menos.<br/></i>\n";
 		echo "<a href=\"stones.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
- 		if (($pedra['item_id'] == 145) and ($item['vit'] > 4)){
+ 		if ($pedra['item_id'] == 145 && $item['vit'] > 4){
 		echo "<fieldset><legend><b>Erro</b></legend>\n";
 		echo "<i>Você só pode usar esta pedra em itens com 4 de vitalidade ou menos.<br/></i>\n";
 		echo "<a href=\"stones.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
- 		if (($pedra['item_id'] == 146) and ($item['agi'] > 4)){
+ 		if ($pedra['item_id'] == 146 && $item['agi'] > 4){
 		echo "<fieldset><legend><b>Erro</b></legend>\n";
 		echo "<i>Você só pode usar esta pedra em itens com 4 de agilidade ou menos.<br/></i>\n";
 		echo "<a href=\"stones.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
- 		if (($pedra['item_id'] == 147) and ($item['res'] > 4)){
+ 		if ($pedra['item_id'] == 147 && $item['res'] > 4){
 		echo "<fieldset><legend><b>Erro</b></legend>\n";
 		echo "<i>Você só pode usar esta pedra em itens com 4 de resistencia ou menos.<br/></i>\n";
 		echo "<a href=\"stones.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
 		
-		$win=rand(0, 100);
+		$win=random_int(0, 100);
 			if ($win < 31){
-			$query = $db->execute("delete from `items` where `id`=? and `player_id`=?", array($_GET['pedra'], $player->id));
+			$query = $db->execute("delete from `items` where `id`=? and `player_id`=?", [$_GET['pedra'], $player->id]);
 			echo "Infelizmente a maturação não deu certo, e você perdeu sua pedra.";
 			echo "<br/><a href=\"stones.php\">voltar.</a>";
 			}else{
-			$query = $db->execute("delete from `items` where `id`=? and `player_id`=?", array($_GET['pedra'], $player->id));
+			$query = $db->execute("delete from `items` where `id`=? and `player_id`=?", [$_GET['pedra'], $player->id]);
 			
 			if ($pedra['item_id'] == 144) {
-			$query = $db->execute("update `items` set `for`=`for`+5 where `id`=?", array($_POST['itemid']));
+			$query = $db->execute("update `items` set `for`=`for`+5 where `id`=?", [$_POST['itemid']]);
 			$novaforca = $item['for'] + 5;
 			echo "A pedra foi usada com sucesso! Seu item agora tem " . $novaforca . " de força.";
 			}elseif ($pedra['item_id'] == 145) {
 
-			if ($item['status'] == 'equipped'){
-			$addhp = 125;
-			}else{
-			$addhp = 0;
-			}
-			$query = $db->execute("update `players` set `hp`=?, `maxhp`=? where `id`=?", array($player->hp + $addhp, $player->maxhp + $addhp, $player->id));
+			$addhp = $item['status'] == 'equipped' ? 125 : 0;
+			$query = $db->execute("update `players` set `hp`=?, `maxhp`=? where `id`=?", [$player->hp + $addhp, $player->maxhp + $addhp, $player->id]);
 
-			$query = $db->execute("update `items` set `vit`=`vit`+5 where `id`=?", array($_POST['itemid']));
+			$query = $db->execute("update `items` set `vit`=`vit`+5 where `id`=?", [$_POST['itemid']]);
 			$novaforca = $item['vit'] + 5;
 			echo "A pedra foi usada com sucesso! Seu item agora tem " . $novaforca . " de vitalidade.";
 			}elseif ($pedra['item_id'] == 146) {
-			$query = $db->execute("update `items` set `agi`=`agi`+5 where `id`=?", array($_POST['itemid']));
+			$query = $db->execute("update `items` set `agi`=`agi`+5 where `id`=?", [$_POST['itemid']]);
 			$novaforca = $item['agi'] + 5;
 			echo "A pedra foi usada com sucesso! Seu item agora tem " . $novaforca . " de agilidade.";
 			}elseif ($pedra['item_id'] == 147) {
-			$query = $db->execute("update `items` set `res`=`res`+5 where `id`=?", array($_POST['itemid']));
+			$query = $db->execute("update `items` set `res`=`res`+5 where `id`=?", [$_POST['itemid']]);
 			$novaforca = $item['res'] + 5;
 			echo "A pedra foi usada com sucesso! Seu item agora tem " . $novaforca . " de resistencia.";
 			}
 			echo "<br/><a href=\"stones.php\">voltar.</a>";
 			}
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 	}
 
 
 
 
-	if (($_GET['pedra']) and ($_GET['type'] == 'energy')) {
-		$query = $db->execute("select * from `items` where `id`=? and `item_id`=142 and `player_id`=?", array($_GET['pedra'], $player->id));
+	if ($_GET['pedra'] && $_GET['type'] == 'energy') {
+		$query = $db->execute("select * from `items` where `id`=? and `item_id`=142 and `player_id`=?", [$_GET['pedra'], $player->id]);
 		if ($query->recordcount() == 0)
 		{
 		
@@ -283,7 +279,7 @@ include("checkwork.php");
 		echo "<i>Você não pode usar esta pedra.<br/></i>\n";
 		echo '<a href="stones.php">voltar.</a>';
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -293,22 +289,22 @@ include("checkwork.php");
 		echo "<i>Você só pode usar a pedra de energia uma vez.<br/></i>\n";
 		echo "<a href=\"stones.php\">voltar.</a>";
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
-			$query = $db->execute("delete from `items` where `id`=? and `player_id`=?", array($_GET['pedra'], $player->id));
-			$query = $db->execute("update `players` set `maxenergy`=200 where `id`=?", array($player->id));
+			$query = $db->execute("delete from `items` where `id`=? and `player_id`=?", [$_GET['pedra'], $player->id]);
+			$query = $db->execute("update `players` set `maxenergy`=200 where `id`=?", [$player->id]);
 			echo "A pedra foi utilizada com sucesso. Sua nova energia máxima é de 200.";
 			echo "<br/><a href=\"stones.php\">voltar.</a>";
 
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 	}
 
 
-	if (($_GET['pedra']) and ($_GET['act'] == 'sell')) {
-		$query = $db->execute("select * from `items` where `id`=? and `item_id`=? and `player_id`=?", array($_GET['pedra'], $_GET['sellid'], $player->id));
+	if ($_GET['pedra'] && $_GET['act'] == 'sell') {
+		$query = $db->execute("select * from `items` where `id`=? and `item_id`=? and `player_id`=?", [$_GET['pedra'], $_GET['sellid'], $player->id]);
 		if ($query->recordcount() == 0)
 		{
 		
@@ -316,34 +312,34 @@ include("checkwork.php");
 		echo "<i>Você não pode vender esta pedra.<br/></i>\n";
 		echo '<a href="stones.php">voltar.</a>';
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 			
 
-		$verifica2 = $db->execute("select items.id, items.item_id, items.mark, blueprint_items.price from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and items.id=?", array($player->id, $_GET['pedra']));
+		$verifica2 = $db->execute("select items.id, items.item_id, items.mark, blueprint_items.price from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and items.id=?", [$player->id, $_GET['pedra']]);
 		$item2 = $verifica2->fetchrow();
 
-			$query = $db->execute("update `players` set `gold`=? where `id`=?", array($player->gold + $item2['price'], $player->id));
+			$query = $db->execute("update `players` set `gold`=? where `id`=?", [$player->gold + $item2['price'], $player->id]);
 			echo "Você vendeu sua pedra pelo preço de compra, " . $item2['price'] . " de ouro.";
 			echo "<br/><a href=\"stones.php\">voltar.</a>";
-			$query = $db->execute("delete from `items` where `id`=? and `player_id`=?", array($_GET['pedra'], $player->id));
+			$query = $db->execute("delete from `items` where `id`=? and `player_id`=?", [$_GET['pedra'], $player->id]);
 
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 	}
 
 
 
-	if (($_GET['buyid']) and (!$_GET['status'] == 'confirm')) {
-		$query4 = $db->execute("select * from `blueprint_items` where `id`=? and `type`='stone'", array($_GET['buyid']));
+	if ($_GET['buyid'] && !$_GET['status'] == 'confirm') {
+		$query4 = $db->execute("select * from `blueprint_items` where `id`=? and `type`='stone'", [$_GET['buyid']]);
 		if ($query4->recordcount() == 0)
 		{
 		echo "<fieldset><legend><b>Erro</b></legend>\n";
 		echo "<i>O item que você deseja comprar não é uma pedra.<br/></i>\n";
 		echo '<a href="stones.php">voltar.</a>';
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -365,21 +361,21 @@ include("checkwork.php");
 
 			echo "<a href=\"stones.php?buyid=" . $item4['id'] . "&status=confirm\">Comprar</a> | <a href=\"stones.php\">Voltar.</a>";
 
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 	}
 
 
 
-	if (($_GET['buyid']) and ($_GET['status'] == 'confirm')) {
-		$query5 = $db->execute("select * from `blueprint_items` where `id`=? and `type`='stone'", array($_GET['buyid']));
+	if ($_GET['buyid'] && $_GET['status'] == 'confirm') {
+		$query5 = $db->execute("select * from `blueprint_items` where `id`=? and `type`='stone'", [$_GET['buyid']]);
 		if ($query5->recordcount() == 0)
 		{
 		echo "<fieldset><legend><b>Erro</b></legend>\n";
 		echo "<i>O item que você deseja comprar não é uma pedra.<br/></i>\n";
 		echo '<a href="stones.php">voltar.</a>';
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -391,7 +387,7 @@ include("checkwork.php");
 		echo "<i>Você não possui dinheiro suficiente.<br/></i>\n";
 		echo '<a href="stones.php">voltar.</a>';
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -399,11 +395,11 @@ include("checkwork.php");
 		$insert['item_id'] = $_GET['buyid'];
 		$query2 = $db->autoexecute('items', $insert, 'INSERT');
 
-			$query = $db->execute("update `players` set `gold`=? where `id`=?", array($player->gold - $item5['price'], $player->id));
+			$query = $db->execute("update `players` set `gold`=? where `id`=?", [$player->gold - $item5['price'], $player->id]);
 			echo "Você acaba de comprar uma " . $item5['name'] . " por " . $item5['price'] . " de ouro.";
 			echo "<br/><a href=\"stones.php\">Voltar.</a>";
 
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 	}
 
@@ -412,8 +408,8 @@ include("checkwork.php");
 
 
 
-if (($_GET['pedra']) and ($_GET['type'] == 'mature') and (!$_POST['maturar'])) {
-		$query = $db->execute("select * from `items` where `id`=? and `player_id`=?", array($_GET['pedra'], $player->id));
+if ($_GET['pedra'] && $_GET['type'] == 'mature' && !$_POST['maturar']) {
+		$query = $db->execute("select * from `items` where `id`=? and `player_id`=?", [$_GET['pedra'], $player->id]);
 		if ($query->recordcount() == 0)
 		{
 		
@@ -421,7 +417,7 @@ if (($_GET['pedra']) and ($_GET['type'] == 'mature') and (!$_POST['maturar'])) {
 		echo "<i>Você não pode usar esta pedra.<br/></i>\n";
 		echo '<a href="stones.php">voltar.</a>';
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -433,7 +429,7 @@ if (($_GET['pedra']) and ($_GET['type'] == 'mature') and (!$_POST['maturar'])) {
 		echo "<i>Este item não é uma pedra.<br/></i>\n";
 		echo '<a href="stones.php">voltar.</a>';
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -442,7 +438,7 @@ if (($_GET['pedra']) and ($_GET['type'] == 'mature') and (!$_POST['maturar'])) {
 		echo "Selecione um item para tentar maturar. Seu item deverá ser +9.<br/>";
 		echo "<b>Atenção:</b> Lembre-se que seu item tem 30% de chance de quebrar durante o processo.<br/><br/>";
 
-		$queoppa = $db->execute("select items.id, items.item_bonus, items.item_id, items.mark, blueprint_items.name from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and items.item_bonus=9 and items.mark='f' and blueprint_items.type!='addon' and blueprint_items.type!='stone' and blueprint_items.type!='potion' order by blueprint_items.type asc", array($player->id));
+		$queoppa = $db->execute("select items.id, items.item_bonus, items.item_id, items.mark, blueprint_items.name from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and items.item_bonus=9 and items.mark='f' and blueprint_items.type!='addon' and blueprint_items.type!='stone' and blueprint_items.type!='potion' order by blueprint_items.type asc", [$player->id]);
   		if ($queoppa->recordcount() == 0) {
 			echo "<b>Você não possui itens disponíveis para maturar.</b>";
 		}else{
@@ -454,14 +450,14 @@ if (($_GET['pedra']) and ($_GET['type'] == 'mature') and (!$_POST['maturar'])) {
 		echo "</select> <input type=\"submit\" name=\"maturar\" value=\"Maturar\"></form>";
 		}
 
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
 }
 
-if (($_GET['pedra']) and ($_GET['type'] == 'status') and (!$_POST['usar'])) {
-		$query = $db->execute("select * from `items` where `id`=? and `player_id`=?", array($_GET['pedra'], $player->id));
+if ($_GET['pedra'] && $_GET['type'] == 'status' && !$_POST['usar']) {
+		$query = $db->execute("select * from `items` where `id`=? and `player_id`=?", [$_GET['pedra'], $player->id]);
 		if ($query->recordcount() == 0)
 		{
 		
@@ -469,18 +465,18 @@ if (($_GET['pedra']) and ($_GET['type'] == 'status') and (!$_POST['usar'])) {
 		echo "<i>Você não pode usar esta pedra.<br/></i>\n";
 		echo '<a href="stones.php">voltar.</a>';
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
 		$potion = $query->fetchrow();
 
-    		if (($potion['item_id'] != 144) and ($potion['item_id'] != 145) and ($potion['item_id'] != 146) and ($potion['item_id'] != 147)){
+    		if ($potion['item_id'] != 144 && $potion['item_id'] != 145 && $potion['item_id'] != 146 && $potion['item_id'] != 147){
 		echo "<fieldset><legend><b>Erro</b></legend>\n";
 		echo "<i>Este item não é uma pedra.<br/></i>\n";
 		echo '<a href="stones.php">voltar.</a>';
 		echo "</fieldset>\n";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -488,7 +484,7 @@ if (($_GET['pedra']) and ($_GET['type'] == 'status') and (!$_POST['usar'])) {
 		echo "Selecione um item para tentar adicionar 5 status de força. Você pode usar esta pedra apenas uma vez por item.<br/>";
 		echo "<b>Atenção:</b> Lembre-se que seu item tem 30% de chance de quebrar durante o processo.<br/><br/>";
 
-		$queoppa = $db->execute("select items.id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.item_id, items.mark, blueprint_items.name from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and items.for<5 and items.mark='f' and blueprint_items.type!='addon' and blueprint_items.type!='stone' and blueprint_items.type!='potion' order by blueprint_items.type asc", array($player->id));
+		$queoppa = $db->execute("select items.id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.item_id, items.mark, blueprint_items.name from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and items.for<5 and items.mark='f' and blueprint_items.type!='addon' and blueprint_items.type!='stone' and blueprint_items.type!='potion' order by blueprint_items.type asc", [$player->id]);
   		if ($queoppa->recordcount() == 0) {
 			echo "<b>Você não possui itens disponíveis.</b>";
 		}else{
@@ -500,7 +496,7 @@ if (($_GET['pedra']) and ($_GET['type'] == 'status') and (!$_POST['usar'])) {
 		echo "</select><input type=\"hidden\" name=\"usar\" value=\"confirm\"><input type=\"submit\" name=\"force1\" value=\"Usar pedra de Força\"></form>";
 		}
 
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -508,7 +504,7 @@ if (($_GET['pedra']) and ($_GET['type'] == 'status') and (!$_POST['usar'])) {
 		echo "Selecione um item para tentar adicionar 5 status de vitalidade. Você pode usar esta pedra apenas uma vez por item.<br/>";
 		echo "<b>Atenção:</b> Lembre-se que seu item tem 30% de chance de quebrar durante o processo.<br/><br/>";
 
-		$queoppa = $db->execute("select items.id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.item_id, items.mark, blueprint_items.name from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and items.vit<5 and items.mark='f' and blueprint_items.type!='addon' and blueprint_items.type!='stone' and blueprint_items.type!='potion' order by blueprint_items.type asc", array($player->id));
+		$queoppa = $db->execute("select items.id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.item_id, items.mark, blueprint_items.name from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and items.vit<5 and items.mark='f' and blueprint_items.type!='addon' and blueprint_items.type!='stone' and blueprint_items.type!='potion' order by blueprint_items.type asc", [$player->id]);
   		if ($queoppa->recordcount() == 0) {
 			echo "<b>Você não possui itens disponíveis.</b>";
 		}else{
@@ -520,7 +516,7 @@ if (($_GET['pedra']) and ($_GET['type'] == 'status') and (!$_POST['usar'])) {
 		echo "</select><input type=\"hidden\" name=\"usar\" value=\"confirm\"><input type=\"submit\" name=\"vite1\" value=\"Usar pedra de Vitalidade\"></form>";
 		}
 
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -529,7 +525,7 @@ if (($_GET['pedra']) and ($_GET['type'] == 'status') and (!$_POST['usar'])) {
 		echo "Selecione um item para tentar adicionar 5 status de agilidade. Você pode usar esta pedra apenas uma vez por item.<br/>";
 		echo "<b>Atenção:</b> Lembre-se que seu item tem 30% de chance de quebrar durante o processo.<br/><br/>";
 
-		$queoppa = $db->execute("select items.id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.item_id, items.mark, blueprint_items.name from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and items.agi<5 and items.mark='f' and blueprint_items.type!='addon' and blueprint_items.type!='stone' and blueprint_items.type!='potion' order by blueprint_items.type asc", array($player->id));
+		$queoppa = $db->execute("select items.id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.item_id, items.mark, blueprint_items.name from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and items.agi<5 and items.mark='f' and blueprint_items.type!='addon' and blueprint_items.type!='stone' and blueprint_items.type!='potion' order by blueprint_items.type asc", [$player->id]);
   		if ($queoppa->recordcount() == 0) {
 			echo "<b>Você não possui itens disponíveis.</b>";
 		}else{
@@ -541,7 +537,7 @@ if (($_GET['pedra']) and ($_GET['type'] == 'status') and (!$_POST['usar'])) {
 		echo "</select><input type=\"hidden\" name=\"usar\" value=\"confirm\"><input type=\"submit\" name=\"agile1\" value=\"Usar pedra de Agilidade\"></form>";
 		}
 
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -549,7 +545,7 @@ if (($_GET['pedra']) and ($_GET['type'] == 'status') and (!$_POST['usar'])) {
 		echo "Selecione um item para tentar adicionar 5 status de agilidade. Você pode usar esta pedra apenas uma vez por item.<br/>";
 		echo "<b>Atenção:</b> Lembre-se que seu item tem 30% de chance de quebrar durante o processo.<br/><br/>";
 
-		$queoppa = $db->execute("select items.id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.item_id, items.mark, blueprint_items.name from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and items.res<5 and items.mark='f' and blueprint_items.type!='addon' and blueprint_items.type!='stone' and blueprint_items.type!='potion' order by blueprint_items.type asc", array($player->id));
+		$queoppa = $db->execute("select items.id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.item_id, items.mark, blueprint_items.name from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and items.res<5 and items.mark='f' and blueprint_items.type!='addon' and blueprint_items.type!='stone' and blueprint_items.type!='potion' order by blueprint_items.type asc", [$player->id]);
   		if ($queoppa->recordcount() == 0) {
 			echo "<b>Você não possui itens disponíveis.</b>";
 		}else{
@@ -561,7 +557,7 @@ if (($_GET['pedra']) and ($_GET['type'] == 'status') and (!$_POST['usar'])) {
 		echo "</select><input type=\"hidden\" name=\"usar\" value=\"confirm\"><input type=\"submit\" name=\"resiste1\" value=\"Usar pedra de Resistencia\"></form>";
 		}
 
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 		}
 
@@ -594,7 +590,7 @@ if (($_GET['pedra']) and ($_GET['type'] == 'status') and (!$_POST['usar'])) {
 
 echo "<b>Suas pedras:</b>";
 echo "<br />";
-$query = $db->execute("select items.id, items.item_id, blueprint_items.type, blueprint_items.name, blueprint_items.description, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='stone' and items.mark='f' order by blueprint_items.name asc", array($player->id));
+$query = $db->execute("select items.id, items.item_id, blueprint_items.type, blueprint_items.name, blueprint_items.description, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='stone' and items.mark='f' order by blueprint_items.name asc", [$player->id]);
 if ($query->recordcount() == 0)
 {
 	echo "Você não tem pedras.";
@@ -611,19 +607,19 @@ else
 		echo "</td><td width=\"80%\">";
 		echo $item['description'] . "\n<br />";
 		echo "</td><td width=\"15%\">";
-		if ($item['item_id'] == 141){
-		$tipo = "mature";
-		}else if ($item['item_id'] == 142){
-		$tipo = "energy";
-		}else if ($item['item_id'] == 144){
-		$tipo = "status";
-		}else if ($item['item_id'] == 145){
-		$tipo = "status";
-		}else if ($item['item_id'] == 146){
-		$tipo = "status";
-		}else if ($item['item_id'] == 147){
-		$tipo = "status";
-		}
+		if ($item['item_id'] == 141) {
+      $tipo = "mature";
+  } elseif ($item['item_id'] == 142) {
+      $tipo = "energy";
+  } elseif ($item['item_id'] == 144) {
+      $tipo = "status";
+  } elseif ($item['item_id'] == 145) {
+      $tipo = "status";
+  } elseif ($item['item_id'] == 146) {
+      $tipo = "status";
+  } elseif ($item['item_id'] == 147) {
+      $tipo = "status";
+  }
 		echo "<a href=\"stones.php?pedra=" . $item['id'] . "&type=" . $tipo . "\">Usar</a><br/><a href=\"stones.php?pedra=" . $item['id'] . "&sellid=" . $item['item_id'] . "&act=sell\">Vender</a>";
 		echo "</td></tr>\n";
 		echo "</table>";
@@ -631,5 +627,5 @@ else
 	}
 }
 
-include("templates/private_footer.php");
+include(__DIR__ . "/templates/private_footer.php");
 ?>

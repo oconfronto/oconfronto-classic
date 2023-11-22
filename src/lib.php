@@ -8,8 +8,8 @@
 
 session_start();
 
-include("config.php");
-include("functions.php");
-include("autocron.php");
+include(__DIR__ . "/config.php");
+include(__DIR__ . "/functions.php");
+include(__DIR__ . "/autocron.php");
 
 ?>

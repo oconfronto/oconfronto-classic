@@ -2,16 +2,16 @@
 echo "<table id=\"table1\" align=\"center\">";
 echo "<tbody><tr>";
 
-$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='amulet' and items.status='equipped'", array($player->id));
+$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='amulet' and items.status='equipped'", [$player->id]);
 if ($showitenx->recordcount() == 0)
 {
 	echo "<td class=\"mark amulet itembg1\"></td>";
 }else{
 	$showeditexs = $showitenx->fetchrow();
 
-	if (($showeditexs['item_bonus'] > 2) and ($showeditexs['item_bonus'] < 6)){
+	if ($showeditexs['item_bonus'] > 2 && $showeditexs['item_bonus'] < 6){
 		$colorbg = "itembg2";
-	}elseif (($showeditexs['item_bonus'] > 5) and ($showeditexs['item_bonus'] < 9)){
+	}elseif ($showeditexs['item_bonus'] > 5 && $showeditexs['item_bonus'] < 9){
 		$colorbg = "itembg3";
 	}elseif ($showeditexs['item_bonus'] == 9){
 		$colorbg = "itembg4";
@@ -62,16 +62,16 @@ if ($showitenx->recordcount() == 0)
 }
 
 
-$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='helmet' and items.status='equipped'", array($player->id));
+$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='helmet' and items.status='equipped'", [$player->id]);
 if ($showitenx->recordcount() == 0)
 {
 	echo "<td class=\"mark helmet itembg1\"></td>";
 }else{
 	$showeditexs = $showitenx->fetchrow();
 
-	if (($showeditexs['item_bonus'] > 2) and ($showeditexs['item_bonus'] < 6)){
+	if ($showeditexs['item_bonus'] > 2 && $showeditexs['item_bonus'] < 6){
 		$colorbg = "itembg2";
-	}elseif (($showeditexs['item_bonus'] > 5) and ($showeditexs['item_bonus'] < 9)){
+	}elseif ($showeditexs['item_bonus'] > 5 && $showeditexs['item_bonus'] < 9){
 		$colorbg = "itembg3";
 	}elseif ($showeditexs['item_bonus'] == 9){
 		$colorbg = "itembg4";
@@ -126,16 +126,16 @@ if ($showitenx->recordcount() == 0)
 echo "</tr><tr>";
 
 
-$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='weapon' and items.status='equipped'", array($player->id));
+$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='weapon' and items.status='equipped'", [$player->id]);
 if ($showitenx->recordcount() == 0)
 {
 	echo "<td class=\"mark weapon itembg1\"></td>";
 }else{
 	$showeditexs = $showitenx->fetchrow();
 
-	if (($showeditexs['item_bonus'] > 2) and ($showeditexs['item_bonus'] < 6)){
+	if ($showeditexs['item_bonus'] > 2 && $showeditexs['item_bonus'] < 6){
 		$colorbg = "itembg2";
-	}elseif (($showeditexs['item_bonus'] > 5) and ($showeditexs['item_bonus'] < 9)){
+	}elseif ($showeditexs['item_bonus'] > 5 && $showeditexs['item_bonus'] < 9){
 		$colorbg = "itembg3";
 	}elseif ($showeditexs['item_bonus'] == 9){
 		$colorbg = "itembg4";
@@ -186,16 +186,16 @@ if ($showitenx->recordcount() == 0)
 }
 
 
-$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='armor' and items.status='equipped'", array($player->id));
+$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='armor' and items.status='equipped'", [$player->id]);
 if ($showitenx->recordcount() == 0)
 {
 	echo "<td class=\"mark armor itembg1\"></td>";
 }else{
 	$showeditexs = $showitenx->fetchrow();
 
-	if (($showeditexs['item_bonus'] > 2) and ($showeditexs['item_bonus'] < 6)){
+	if ($showeditexs['item_bonus'] > 2 && $showeditexs['item_bonus'] < 6){
 		$colorbg = "itembg2";
-	}elseif (($showeditexs['item_bonus'] > 5) and ($showeditexs['item_bonus'] < 9)){
+	}elseif ($showeditexs['item_bonus'] > 5 && $showeditexs['item_bonus'] < 9){
 		$colorbg = "itembg3";
 	}elseif ($showeditexs['item_bonus'] == 9){
 		$colorbg = "itembg4";
@@ -246,16 +246,16 @@ if ($showitenx->recordcount() == 0)
 }
 
 
-$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='shield' and items.status='equipped'", array($player->id));
+$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='shield' and items.status='equipped'", [$player->id]);
 if ($showitenx->recordcount() == 0)
 {
 	echo "<td class=\"mark shield itembg1\"></td>";
 }else{
 	$showeditexs = $showitenx->fetchrow();
 
-	if (($showeditexs['item_bonus'] > 2) and ($showeditexs['item_bonus'] < 6)){
+	if ($showeditexs['item_bonus'] > 2 && $showeditexs['item_bonus'] < 6){
 		$colorbg = "itembg2";
-	}elseif (($showeditexs['item_bonus'] > 5) and ($showeditexs['item_bonus'] < 9)){
+	}elseif ($showeditexs['item_bonus'] > 5 && $showeditexs['item_bonus'] < 9){
 		$colorbg = "itembg3";
 	}elseif ($showeditexs['item_bonus'] == 9){
 		$colorbg = "itembg4";
@@ -310,16 +310,16 @@ echo "</tr><tr>";
 	echo "<td class=\"mark none\">&nbsp;</td>";
 
 
-$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='legs' and items.status='equipped'", array($player->id));
+$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='legs' and items.status='equipped'", [$player->id]);
 if ($showitenx->recordcount() == 0)
 {
 	echo "<td class=\"mark legs itembg1\"></td>";
 }else{
 	$showeditexs = $showitenx->fetchrow();
 
-	if (($showeditexs['item_bonus'] > 2) and ($showeditexs['item_bonus'] < 6)){
+	if ($showeditexs['item_bonus'] > 2 && $showeditexs['item_bonus'] < 6){
 		$colorbg = "itembg2";
-	}elseif (($showeditexs['item_bonus'] > 5) and ($showeditexs['item_bonus'] < 9)){
+	}elseif ($showeditexs['item_bonus'] > 5 && $showeditexs['item_bonus'] < 9){
 		$colorbg = "itembg3";
 	}elseif ($showeditexs['item_bonus'] == 9){
 		$colorbg = "itembg4";
@@ -370,16 +370,16 @@ if ($showitenx->recordcount() == 0)
 }
 
 
-$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='boots' and items.status='equipped'", array($player->id));
+$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='boots' and items.status='equipped'", [$player->id]);
 if ($showitenx->recordcount() == 0)
 {
 	echo "<td class=\"mark boots itembg1\"></td>";
 }else{
 	$showeditexs = $showitenx->fetchrow();
 
-	if (($showeditexs['item_bonus'] > 2) and ($showeditexs['item_bonus'] < 6)){
+	if ($showeditexs['item_bonus'] > 2 && $showeditexs['item_bonus'] < 6){
 		$colorbg = "itembg2";
-	}elseif (($showeditexs['item_bonus'] > 5) and ($showeditexs['item_bonus'] < 9)){
+	}elseif ($showeditexs['item_bonus'] > 5 && $showeditexs['item_bonus'] < 9){
 		$colorbg = "itembg3";
 	}elseif ($showeditexs['item_bonus'] == 9){
 		$colorbg = "itembg4";

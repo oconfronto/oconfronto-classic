@@ -7,17 +7,17 @@
 /*    http://www.bbgamezone.com/     */
 /*************************************/
 
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Administração do Clã");
 $player = check_user($secret_key, $db);
-include("checkbattle.php");
-include("checkguild.php");
+include(__DIR__ . "/checkbattle.php");
+include(__DIR__ . "/checkguild.php");
 
 $error = 0;
 $username = ($_GET['username']);
 
 //Populates $guild variable
-$guildquery = $db->execute("select * from `guilds` where `id`=?", array($player->guild));
+$guildquery = $db->execute("select * from `guilds` where `id`=?", [$player->guild]);
 
 if ($guildquery->recordcount() == 0) {
     header("Location: home.php");
@@ -25,10 +25,10 @@ if ($guildquery->recordcount() == 0) {
     $guild = $guildquery->fetchrow();
 }
 
-include("templates/private_header.php");
+include(__DIR__ . "/templates/private_header.php");
 
 //Guild Leader Admin check
-if (($player->username != $guild['leader']) and ($player->username != $guild['vice'])) {
+if ($player->username != $guild['leader'] && $player->username != $guild['vice']) {
     echo "Você não pode acessar esta página. <a href=\"home.php\">Voltar</a>.";
 } elseif ($guild['members'] >= ($guild['maxmembers'])) {
     echo "Seu clã já está grande demais! (max. " . $guild['maxmembers'] . " membros).<br/><a href=\"guild_admin.php\">Voltar</a>.";
@@ -40,14 +40,14 @@ if (isset($_GET['username']) && ($_GET['submit'])) {
 	$member = $query->fetchrow();
 	
     if ($query->recordcount() == 0) {
-    	$errmsg .= "<center><b>Este usuário não existe!</b></center>";
-    	$error = 1;
-   	} else if ($member['serv'] != $guild['serv']) {
-   		$errmsg .= "<center><b>Este usuário pertence a outro servidor.</b></center>";
-   		$error = 1;
-   	} else if ($member['guild'] != NULL) {
-   		$errmsg .= "<center><b>Você não pode convidar um usuário que está em outro clã!</b></center>";
-   		$error = 1;
+        $errmsg .= "<center><b>Este usuário não existe!</b></center>";
+        $error = 1;
+    } elseif ($member['serv'] != $guild['serv']) {
+        $errmsg .= "<center><b>Este usuário pertence a outro servidor.</b></center>";
+        $error = 1;
+    } elseif ($member['guild'] != NULL) {
+        $errmsg .= "<center><b>Você não pode convidar um usuário que está em outro clã!</b></center>";
+        $error = 1;
     } else {	//Insert user invite into guild_invites table
     			$insert['player_id'] = $member['id'];
     			$insert['guild_id'] = $guild['id'];
@@ -79,5 +79,5 @@ if (isset($_GET['username']) && ($_GET['submit'])) {
 <a href="guild_admin.php">Voltar</a>.
 <?php
 }
-include("templates/private_footer.php");
+include(__DIR__ . "/templates/private_footer.php");
 ?>

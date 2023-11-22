@@ -1,8 +1,8 @@
 <?php
-	include("lib.php");
+	include(__DIR__ . "/lib.php");
 	define("PAGENAME", "Regras");
 	$player = check_user($secret_key, $db);
-	include("templates/private_header.php");
+	include(__DIR__ . "/templates/private_header.php");
 ?>
 <fieldset>
 <legend><b>Regras</b></legend>
@@ -38,5 +38,5 @@ Estas regras se aplicam a todas as partes de "O Confronto".<br><br>
 
 </fieldset>
 <?php
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 ?>

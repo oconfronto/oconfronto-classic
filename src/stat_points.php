@@ -6,24 +6,19 @@
 /*    http://www.ezrpgproject.com/   */
 /*************************************/
 
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Pontos de status");
 $player = check_user($secret_key, $db);
-include("checkbattle.php");
-include("checkhp.php");
-include("checkwork.php");
+include(__DIR__ . "/checkbattle.php");
+include(__DIR__ . "/checkhp.php");
+include(__DIR__ . "/checkwork.php");
 
-if ($player->voc == 'archer')
-{
-$antigaforca = "Pontaria";
-}
-else if ($player->voc == 'knight')
-{
-$antigaforca = "Força";
-}
-else if ($player->voc == 'mage')
-{
-$antigaforca = "Magia";
+if ($player->voc == 'archer') {
+    $antigaforca = "Pontaria";
+} elseif ($player->voc == 'knight') {
+    $antigaforca = "Força";
+} elseif ($player->voc == 'mage') {
+    $antigaforca = "Magia";
 }
 
 	if ($_POST['add'])
@@ -31,76 +26,76 @@ $antigaforca = "Magia";
 		$error = 0;
 
 		if (!is_numeric($_POST['for'])) {
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "O valor " . $_POST['for'] . " não é válido! <a href=\"stat_points.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		$error = 1;
 		exit;
 		}
 
 		if (!is_numeric($_POST['vit'])) {
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "O valor " . $_POST['vit'] . " não é válido! <a href=\"stat_points.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		$error = 1;
 		exit;
 		}
 
 		if (!is_numeric($_POST['agi'])) {
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "O valor " . $_POST['agi'] . " não é válido! <a href=\"stat_points.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		$error = 1;
 		exit;
 		}
 
 		if (!is_numeric($_POST['res'])) {
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "O valor " . $_POST['res'] . " não é válido! <a href=\"stat_points.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		$error = 1;
 		exit;
 		}
 
 		if ($_POST['for'] < 0){
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "Você precisa adicionar quantias maiores que 0! <a href=\"stat_points.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		$error = 1;
 		exit;
 		}
 
 		if ($_POST['vit'] < 0){
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "Você precisa adicionar quantias maiores que 0! <a href=\"stat_points.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		$error = 1;
 		exit;
 		}
 
 
 		if ($_POST['agi'] < 0){
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "Você precisa adicionar quantias maiores que 0! <a href=\"stat_points.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		$error = 1;
 		exit;
 		}
 
 		if ($_POST['res'] < 0){
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "Você precisa adicionar quantias maiores que 0! <a href=\"stat_points.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		$error = 1;
 		exit;
 		}
 
 
 
-		if (($_POST['for'] < 0) and ($_POST['vit'] < 0) and ($_POST['agi'] < 0) and ($_POST['res'] < 0)){
-		include("templates/private_header.php");
+		if ($_POST['for'] < 0 && $_POST['vit'] < 0 && $_POST['agi'] < 0 && $_POST['res'] < 0){
+		include(__DIR__ . "/templates/private_header.php");
 		echo "Você precisa adicionar quantias maiores que 0! <a href=\"stat_points.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		$error = 1;
 		exit;
 		}
@@ -108,9 +103,9 @@ $antigaforca = "Magia";
 
 
 		if ($total > $player->stat_points){
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "Você não possui pontos de status suficientes! <a href=\"stat_points.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		$error = 1;
 		exit;
 		}
@@ -123,49 +118,41 @@ $antigaforca = "Magia";
 		$total = ceil($total1 + $total2 + $total3 + $total4);
 
 		if ($total > $player->stat_points){
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "Você não possui pontos de status suficientes! <a href=\"stat_points.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		$error = 1;
 		exit;
 		}
-
-		
-		if ($error == 0){
-		include("templates/private_header.php");
-			if ($_POST['for'] > 0){
-			$query = $db->execute("update `players` set `stat_points`=?, `strength`=? where `id`=?", array($player->stat_points - ceil($_POST['for']), $player->strength + ceil($_POST['for']), $player->id));
+  include(__DIR__ . "/templates/private_header.php");
+  if ($_POST['for'] > 0){
+			$query = $db->execute("update `players` set `stat_points`=?, `strength`=? where `id`=?", [$player->stat_points - ceil($_POST['for']), $player->strength + ceil($_POST['for']), $player->id]);
 			$player = check_user($secret_key, $db); //Get new stats
 			echo "<b>Você aumentou sua " . $antigaforca . "! Agora está em " . $player->strength . ".</b><br />";
 			}
-
-			if ($_POST['vit'] > 0){
+  if ($_POST['vit'] > 0){
 			$addinghp = ceil($_POST['vit'] * 25);
-			$query = $db->execute("update `players` set `stat_points`=?, `vitality`=?, `hp`=?, `maxhp`=? where `id`=?", array($player->stat_points - ceil($_POST['vit']), $player->vitality + ceil($_POST['vit']),  $player->hp + $addinghp, $player->maxhp + $addinghp, $player->id));
+			$query = $db->execute("update `players` set `stat_points`=?, `vitality`=?, `hp`=?, `maxhp`=? where `id`=?", [$player->stat_points - ceil($_POST['vit']), $player->vitality + ceil($_POST['vit']), $player->hp + $addinghp, $player->maxhp + $addinghp, $player->id]);
 			$player = check_user($secret_key, $db); //Get new stats
 			echo "<b>Você aumentou sua vitalidade! Agora está em " . $player->vitality . ".</b><br />";
 			}
-
-			if ($_POST['agi'] > 0){
-			$query = $db->execute("update `players` set `stat_points`=?, `agility`=? where `id`=?", array($player->stat_points - ceil($_POST['agi']), $player->agility + ceil($_POST['agi']), $player->id));
+  if ($_POST['agi'] > 0){
+			$query = $db->execute("update `players` set `stat_points`=?, `agility`=? where `id`=?", [$player->stat_points - ceil($_POST['agi']), $player->agility + ceil($_POST['agi']), $player->id]);
 			$player = check_user($secret_key, $db); //Get new stats
 			echo "<b>Você aumentou sua agilidade! Agora está em " . $player->agility . ".</b><br />";
 			}
-
-			if ($_POST['res'] > 0){
-			$query = $db->execute("update `players` set `stat_points`=?, `resistance`=? where `id`=?", array($player->stat_points - ceil($_POST['res']), $player->resistance + ceil($_POST['res']), $player->id));
+  if ($_POST['res'] > 0){
+			$query = $db->execute("update `players` set `stat_points`=?, `resistance`=? where `id`=?", [$player->stat_points - ceil($_POST['res']), $player->resistance + ceil($_POST['res']), $player->id]);
 			$player = check_user($secret_key, $db); //Get new stats
 			echo "<b>Você aumentou sua resistência! Agora está em " . $player->resistance . ".</b><br />";
 			}
-
-			echo "<a href=\"stat_points.php\">Voltar</a>.";
-			include("templates/private_footer.php");
-			exit;
-		}
+  echo "<a href=\"stat_points.php\">Voltar</a>.";
+  include(__DIR__ . "/templates/private_footer.php");
+  exit;
 
 	}
 
-include("templates/private_header.php");
+include(__DIR__ . "/templates/private_header.php");
 
 echo $msg;
 
@@ -195,5 +182,5 @@ else
 </fieldset>
 <?php
 }
-include("templates/private_footer.php");
+include(__DIR__ . "/templates/private_footer.php");
 ?>

@@ -1,7 +1,7 @@
 <table align="center">
 <tr>
 <td width="40"><?php
-$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='amulet' and items.status='equipped'", array($player->id));
+$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='amulet' and items.status='equipped'", [$player->id]);
 
 if ($showitenx->recordcount() == 0)
 {
@@ -42,9 +42,9 @@ else
 		}
 
 
-		if (($showeditexs['item_bonus'] > 2) and ($showeditexs['item_bonus'] < 6)){
+		if ($showeditexs['item_bonus'] > 2 && $showeditexs['item_bonus'] < 6){
 		echo "<div class=\"itembg2\" align=\"center\">";
-		}elseif (($showeditexs['item_bonus'] > 5) and ($showeditexs['item_bonus'] < 9)){
+		}elseif ($showeditexs['item_bonus'] > 5 && $showeditexs['item_bonus'] < 9){
 		echo "<div class=\"itembg3\" align=\"center\">";
 		}elseif ($showeditexs['item_bonus'] == 9){
 		echo "<div class=\"itembg4\" align=\"center\">";
@@ -65,7 +65,7 @@ else
 echo "</div>";
 ?></td>
 <td width="40"><?php
-$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='helmet' and items.status='equipped'", array($player->id));
+$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='helmet' and items.status='equipped'", [$player->id]);
 if ($showitenx->recordcount() == 0)
 {
 	echo "<div class=\"itembg1\" align=\"center\">";
@@ -105,9 +105,9 @@ else
 		}
 
 
-		if (($showeditexs['item_bonus'] > 2) and ($showeditexs['item_bonus'] < 6)){
+		if ($showeditexs['item_bonus'] > 2 && $showeditexs['item_bonus'] < 6){
 		echo "<div class=\"itembg2\" align=\"center\">";
-		}elseif (($showeditexs['item_bonus'] > 5) and ($showeditexs['item_bonus'] < 9)){
+		}elseif ($showeditexs['item_bonus'] > 5 && $showeditexs['item_bonus'] < 9){
 		echo "<div class=\"itembg3\" align=\"center\">";
 		}elseif ($showeditexs['item_bonus'] == 9){
 		echo "<div class=\"itembg4\" align=\"center\">";
@@ -130,7 +130,7 @@ echo "</div>";
 <td width="40"><a href="inventory.php"><img src="images/bag.gif" border="0"></a></td></tr>
 <tr>
 <td width="40"><?php
-$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='weapon' and items.status='equipped'", array($player->id));
+$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='weapon' and items.status='equipped'", [$player->id]);
 if ($showitenx->recordcount() == 0)
 {
 	echo "<div class=\"itembg1\" align=\"center\">";
@@ -170,9 +170,9 @@ else
 		}
 
 
-		if (($showeditexs['item_bonus'] > 2) and ($showeditexs['item_bonus'] < 6)){
+		if ($showeditexs['item_bonus'] > 2 && $showeditexs['item_bonus'] < 6){
 		echo "<div class=\"itembg2\" align=\"center\">";
-		}elseif (($showeditexs['item_bonus'] > 5) and ($showeditexs['item_bonus'] < 9)){
+		}elseif ($showeditexs['item_bonus'] > 5 && $showeditexs['item_bonus'] < 9){
 		echo "<div class=\"itembg3\" align=\"center\">";
 		}elseif ($showeditexs['item_bonus'] == 9){
 		echo "<div class=\"itembg4\" align=\"center\">";
@@ -193,7 +193,7 @@ else
 echo "</div>";
 ?></td>
 <td width="40"><?php
-$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='armor' and items.status='equipped'", array($player->id));
+$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='armor' and items.status='equipped'", [$player->id]);
 if ($showitenx->recordcount() == 0)
 {
 	echo "<div class=\"itembg1\" align=\"center\">";
@@ -233,9 +233,9 @@ else
 		}
 
 
-		if (($showeditexs['item_bonus'] > 2) and ($showeditexs['item_bonus'] < 6)){
+		if ($showeditexs['item_bonus'] > 2 && $showeditexs['item_bonus'] < 6){
 		echo "<div class=\"itembg2\" align=\"center\">";
-		}elseif (($showeditexs['item_bonus'] > 5) and ($showeditexs['item_bonus'] < 9)){
+		}elseif ($showeditexs['item_bonus'] > 5 && $showeditexs['item_bonus'] < 9){
 		echo "<div class=\"itembg3\" align=\"center\">";
 		}elseif ($showeditexs['item_bonus'] == 9){
 		echo "<div class=\"itembg4\" align=\"center\">";
@@ -256,7 +256,7 @@ else
 echo "</div>";
 ?></td>
 <td width="40"><?php
-$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='shield' and items.status='equipped'", array($player->id));
+$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='shield' and items.status='equipped'", [$player->id]);
 if ($showitenx->recordcount() == 0)
 {
 	echo "<div class=\"itembg1\" align=\"center\">";
@@ -296,9 +296,9 @@ else
 		}
 
 
-		if (($showeditexs['item_bonus'] > 2) and ($showeditexs['item_bonus'] < 6)){
+		if ($showeditexs['item_bonus'] > 2 && $showeditexs['item_bonus'] < 6){
 		echo "<div class=\"itembg2\" align=\"center\">";
-		}elseif (($showeditexs['item_bonus'] > 5) and ($showeditexs['item_bonus'] < 9)){
+		}elseif ($showeditexs['item_bonus'] > 5 && $showeditexs['item_bonus'] < 9){
 		echo "<div class=\"itembg3\" align=\"center\">";
 		}elseif ($showeditexs['item_bonus'] == 9){
 		echo "<div class=\"itembg4\" align=\"center\">";
@@ -320,17 +320,13 @@ echo "</div>";
 ?></td></tr>
 <tr>
 <td width="40"><?php
-if ($player->promoted == 'r')
-{
-	echo "<div class=\"itembg1\" align=\"center\">";
-	echo "<img src=\"images/itens/jewring.gif\"/>";
-}
-else if (($player->promoted == 's') or ($player->promoted == 'p'))
-{
-	echo "<div class=\"itembg5\" align=\"center\">";
-	echo "<img src=\"images/itens/newjewring.gif\"/>";
-}
-else
+if ($player->promoted == 'r') {
+    echo "<div class=\"itembg1\" align=\"center\">";
+    echo "<img src=\"images/itens/jewring.gif\"/>";
+} elseif ($player->promoted == 's' || $player->promoted == 'p') {
+    echo "<div class=\"itembg5\" align=\"center\">";
+    echo "<img src=\"images/itens/newjewring.gif\"/>";
+} else
 {
 	echo "<div class=\"itembg1\" align=\"center\">";
 	echo "&nbsp;";
@@ -338,7 +334,7 @@ else
 echo "</div>";
 ?></td>
 <td width="40"><?php
-$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='legs' and items.status='equipped'", array($player->id));
+$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='legs' and items.status='equipped'", [$player->id]);
 if ($showitenx->recordcount() == 0)
 {
 	echo "<div class=\"itembg1\" align=\"center\">";
@@ -378,9 +374,9 @@ else
 		}
 
 
-		if (($showeditexs['item_bonus'] > 2) and ($showeditexs['item_bonus'] < 6)){
+		if ($showeditexs['item_bonus'] > 2 && $showeditexs['item_bonus'] < 6){
 		echo "<div class=\"itembg2\" align=\"center\">";
-		}elseif (($showeditexs['item_bonus'] > 5) and ($showeditexs['item_bonus'] < 9)){
+		}elseif ($showeditexs['item_bonus'] > 5 && $showeditexs['item_bonus'] < 9){
 		echo "<div class=\"itembg3\" align=\"center\">";
 		}elseif ($showeditexs['item_bonus'] == 9){
 		echo "<div class=\"itembg4\" align=\"center\">";
@@ -401,7 +397,7 @@ else
 echo "</div>";
 ?></td>
 <td width="40"><?php
-$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='boots' and items.status='equipped'", array($player->id));
+$showitenx = $db->execute("select items.id, items.item_id, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='boots' and items.status='equipped'", [$player->id]);
 if ($showitenx->recordcount() == 0)
 {
 	echo "<div class=\"itembg1\" align=\"center\">";
@@ -441,9 +437,9 @@ else
 		}
 
 
-		if (($showeditexs['item_bonus'] > 2) and ($showeditexs['item_bonus'] < 6)){
+		if ($showeditexs['item_bonus'] > 2 && $showeditexs['item_bonus'] < 6){
 		echo "<div class=\"itembg2\" align=\"center\">";
-		}elseif (($showeditexs['item_bonus'] > 5) and ($showeditexs['item_bonus'] < 9)){
+		}elseif ($showeditexs['item_bonus'] > 5 && $showeditexs['item_bonus'] < 9){
 		echo "<div class=\"itembg3\" align=\"center\">";
 		}elseif ($showeditexs['item_bonus'] == 9){
 		echo "<div class=\"itembg4\" align=\"center\">";

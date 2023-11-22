@@ -6,11 +6,11 @@
 /*    http://www.ezrpgproject.com/   */
 /*************************************/
 
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Perfil");
 $player = check_user($secret_key, $db);
 
-include('bbcode.php');
+include(__DIR__ . '/bbcode.php');
 $bbcode = new bbcode;
 
 //Check for user ID
@@ -20,7 +20,7 @@ if (!$_GET['id'])
 }
 else
 {
-	$query = $db->execute("select * from `players` where `username`=?", array($_GET['id']));
+	$query = $db->execute("select * from `players` where `username`=?", [$_GET['id']]);
 	if ($query->recordcount() == 0)
 	{
 		header("Location: members.php");
@@ -31,7 +31,7 @@ else
 	}
 }
 
-include("templates/private_header.php");
+include(__DIR__ . "/templates/private_header.php");
 ?>
 <script type="text/javascript" src="js/simpletabs_1.3.js"></script>
 <?php
@@ -49,7 +49,7 @@ if ($profile['gm_rank'] > 50) {
 		echo "</a> | ";
 		}
 	echo "</fieldset>";
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 	exit;
 }
 
@@ -69,7 +69,7 @@ if ($profile['ban'] > time()) {
 	echo "<br/><br/>";
 	echo "<fieldset>";
 	echo "<legend><b>Comentários da administração</b></legend>";
-	$admincomments = $db->execute("select `msg` from `bans` where `player_id`=?", array($profile['id']));
+	$admincomments = $db->execute("select `msg` from `bans` where `player_id`=?", [$profile['id']]);
  	if ($admincomments->recordcount() == 0) {
 	echo "Sem comentários da administração.";
 	}else{
@@ -77,7 +77,7 @@ if ($profile['ban'] > time()) {
 	echo $mensagemdoamn['msg'];
 	}
 	echo "</fieldset>";
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 	exit;
 }
 
@@ -109,7 +109,7 @@ echo "</div>";
 	echo "<table width=\"120px\" height=\"120px\" align=\"center\"><tr><td>";
 	echo "<div style=\"position: relative;\">";
 	echo "<img src=\"" . $profile['avatar'] . "\" width=\"120px\" height=\"120px\" style=\"position: absolute; top: 1; left: 1;\" alt=\"" . $profile['username'] . "\" border=\"1\">";
-	$checkranknosite = $db->execute("select `time` from `online` where `player_id`=?", array($profile['id']));
+	$checkranknosite = $db->execute("select `time` from `online` where `player_id`=?", [$profile['id']]);
 	if ($checkranknosite->recordcount() > 0) {
 	echo "<img src=\"images/online2.gif\" width=\"120px\" height=\"120px\" style=\"position: absolute; top: 1; left: 1;\" alt=\"" . $profile['username'] . "\" border=\"1\">";
 	}
@@ -136,8 +136,9 @@ $dados = mysql_query($sql);
 $i = 1;
 while($linha = mysql_fetch_array($dados))
 {
-        if($linha['id'] == $profile['id'])
-        echo "$i";
+        if ($linha['id'] == $profile['id']) {
+            echo "$i";
+        }
         $i++;
 }
 echo "º";
@@ -146,37 +147,37 @@ echo "º";
 <tr>
 <td><b>Vocação:</b></td>
 <td><?php
-if ($profile['voc'] == 'archer' and $profile['promoted'] == 'f'){
-echo "Caçador";
-} else if ($profile['voc'] == 'knight' and $profile['promoted'] == 'f'){
-echo "Espadachim";
-} else if ($profile['voc'] == 'mage' and $profile['promoted'] == 'f'){
-echo "Bruxo";
-} else if (($profile['voc'] == 'archer') and ($profile['promoted'] == 't' or $profile['promoted'] == 's' or $profile['promoted'] == 'r')){
-echo "Arqueiro";
-} else if (($profile['voc'] == 'knight') and ($profile['promoted'] == 't' or $profile['promoted'] == 's' or $profile['promoted'] == 'r')){
-echo "Guerreiro";
-} else if (($profile['voc'] == 'mage') and ($profile['promoted'] == 't' or $profile['promoted'] == 's' or $profile['promoted'] == 'r')){
-echo "Mago";
-} else if ($profile['voc'] == 'archer' and $profile['promoted'] == 'p'){
-echo "Arqueiro Royal";
-} else if ($profile['voc'] == 'knight' and $profile['promoted'] == 'p'){
-echo "Cavaleiro";
-} else if ($profile['voc'] == 'mage' and $profile['promoted'] == 'p'){
-echo "Arquimago";
+if ($profile['voc'] == 'archer' && $profile['promoted'] == 'f') {
+    echo "Caçador";
+} elseif ($profile['voc'] == 'knight' && $profile['promoted'] == 'f') {
+    echo "Espadachim";
+} elseif ($profile['voc'] == 'mage' && $profile['promoted'] == 'f') {
+    echo "Bruxo";
+} elseif ($profile['voc'] == 'archer' && ($profile['promoted'] == 't' || $profile['promoted'] == 's' || $profile['promoted'] == 'r')) {
+    echo "Arqueiro";
+} elseif ($profile['voc'] == 'knight' && ($profile['promoted'] == 't' || $profile['promoted'] == 's' || $profile['promoted'] == 'r')) {
+    echo "Guerreiro";
+} elseif ($profile['voc'] == 'mage' && ($profile['promoted'] == 't' || $profile['promoted'] == 's' || $profile['promoted'] == 'r')) {
+    echo "Mago";
+} elseif ($profile['voc'] == 'archer' && $profile['promoted'] == 'p') {
+    echo "Arqueiro Royal";
+} elseif ($profile['voc'] == 'knight' && $profile['promoted'] == 'p') {
+    echo "Cavaleiro";
+} elseif ($profile['voc'] == 'mage' && $profile['promoted'] == 'p') {
+    echo "Arquimago";
 }
 ?></td>
 </tr>
 <tr>
 <td><b>Clã:</b></td>
 <td><?php
-if ($profile['guild'] == NULL or $profile['guild'] == '')
+if ($profile['guild'] == NULL || $profile['guild'] == '')
 {
 echo "[Nenhum]";
 }
 else
 {
-$profilenomecla = $db->GetOne("select `name` from `guilds` where `id`=?", array($profile['guild']));
+$profilenomecla = $db->GetOne("select `name` from `guilds` where `id`=?", [$profile['guild']]);
 echo "<b>[</b><a href=\"guild_profile.php?id=" . $profile['guild'] . "\">" . $profilenomecla . "</a><b>]</b>";
 }
 ?></td>
@@ -194,7 +195,7 @@ echo "<b>[</b><a href=\"guild_profile.php?id=" . $profile['guild'] . "\">" . $pr
 <td><b>Idade no jogo:</b></td>
 <?php
 $diff = time() - $profile['registered'];
-$age = intval(($diff / 3600) / 24);
+$age = (int) (($diff / 3600) / 24);
 ?>
 <td><?=$age?> dias</td>
 </tr>
@@ -202,19 +203,19 @@ $age = intval(($diff / 3600) / 24);
 <td><b>Última atividade:</b></td>
 <?php
 		$valortempo = time() -  $profile['last_active'];
-		if ($valortempo < 60){
-		$valortempo2 = $valortempo;
-		$auxiliar2 = "segundo(s) atrás.";
-		}else if($valortempo < 3600){
-		$valortempo2 = floor($valortempo / 60);
-		$auxiliar2 = "minuto(s) atrás.";
-		}else if($valortempo < 86400){
-		$valortempo2 = floor($valortempo / 3600);
-		$auxiliar2 = "hora(s) atrás.";
-		}else if($valortempo > 86400){
-		$valortempo2 = floor($valortempo / 86400);
-		$auxiliar2 = "dia(s) atrás.";
-		}
+		if ($valortempo < 60) {
+      $valortempo2 = $valortempo;
+      $auxiliar2 = "segundo(s) atrás.";
+  } elseif ($valortempo < 3600) {
+      $valortempo2 = floor($valortempo / 60);
+      $auxiliar2 = "minuto(s) atrás.";
+  } elseif ($valortempo < 86400) {
+      $valortempo2 = floor($valortempo / 3600);
+      $auxiliar2 = "hora(s) atrás.";
+  } elseif ($valortempo > 86400) {
+      $valortempo2 = floor($valortempo / 86400);
+      $auxiliar2 = "dia(s) atrás.";
+  }
 echo "<td>" . $valortempo2 . " " . $auxiliar2 . "</td>";
 ?>
 </tr>
@@ -249,7 +250,7 @@ if ($player->gm_rank < 50){
 	echo "<a href=\"gm/edit_member.php?id=" . $profile['id'] . "\">Editar</a> | <a href=\"gm/ban_member.php?act=ban&id=" . $profile['id'] . "\">Banir</a>";
 }
 
-if (($player->gm_rank > 2) and ($profile['username'] != 0) and ($profile['username'] > 99)){
+if ($player->gm_rank > 2 && $profile['username'] != 0 && $profile['username'] > 99){
 	echo " | <a href=\"forum_unban.php?player=" . $profile['id'] . "\">Desbanir do Fórum</a>";
 }
 ?>
@@ -274,7 +275,7 @@ if (($player->gm_rank > 2) and ($profile['username'] != 0) and ($profile['userna
 	}
 ?>
 <tr><td><b>Nome real:</b></td><td><?php
-$nname = $db->GetOne("select `name` from `accounts` where `id`=?", array($profile['acc_id']));
+$nname = $db->GetOne("select `name` from `accounts` where `id`=?", [$profile['acc_id']]);
 
 if ($nname != NULL)
 {
@@ -284,7 +285,7 @@ echo "Não Informado";
 }
 ?></td></tr>
 <tr><td><b>Sexo:</b></td><td><?php
-$sex = $db->GetOne("select `sex` from `accounts` where `id`=?", array($profile['acc_id']));
+$sex = $db->GetOne("select `sex` from `accounts` where `id`=?", [$profile['acc_id']]);
 
 if ($sex == 'm')
 {
@@ -297,9 +298,9 @@ echo "Não Informado";
 ?></td></tr>
 <tr><td><b>Email:</b></td><td><?php
 
-		$checkshowmmaiele = $db->execute("select * from `other` where `value`=? and `player_id`=?", array(showmail, $player->acc_id));
+		$checkshowmmaiele = $db->execute("select * from `other` where `value`=? and `player_id`=?", [\SHOWMAIL, $player->acc_id]);
 		if ($checkshowmmaiele->recordcount() > 0) {
-		$profilemail = $db->GetOne("select `email` from `accounts` where `id`=?", array($player->acc_id));
+		$profilemail = $db->GetOne("select `email` from `accounts` where `id`=?", [$player->acc_id]);
 		echo $profilemail;
 		}else{
 		echo "Email Oculto";
@@ -311,7 +312,7 @@ echo "Não Informado";
 
 <div id="tabber13_div_2" class="simpleTabsContent">
 <?php
-$medalha = $db->execute("select * from `medalhas` where `player_id`=?", array($profile['id']));
+$medalha = $db->execute("select * from `medalhas` where `player_id`=?", [$profile['id']]);
 if ($medalha->recordcount() == 0) {
 	echo "<br/><center><b>" . $profile['username'] . " não tem medalhas.</b></center><br/>";
 }else{
@@ -331,7 +332,7 @@ echo "</table>";
 <div id="tabber13_div_3" class="simpleTabsContent">
 <?php
 //Select all members ordered by level (highest first, members table also doubles as rankings table)
-$querwwq = $db->execute("select `fname` from `friends` where `uid`=? order by `fname` desc", array($profile['id']));
+$querwwq = $db->execute("select `fname` from `friends` where `uid`=? order by `fname` desc", [$profile['id']]);
 if ($querwwq->recordcount() == 0)
 {
 	echo "<br/><center><b>" . $profile['username'] . " não tem amigos.</b></center><br/>";
@@ -363,5 +364,5 @@ while($friend = $querwwq->fetchrow())
 </div>
 
 <?php
-include("templates/private_footer.php");
+include(__DIR__ . "/templates/private_footer.php");
 ?>

@@ -1,10 +1,10 @@
 <?php
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Principal");
 $player = check_user($secret_key, $db);
 
-include("checkforum.php");
-include("templates/private_header.php");
+include(__DIR__ . "/checkforum.php");
+include(__DIR__ . "/templates/private_header.php");
 $tbl_name="forum_answer"; // Table name
 
 // Get value of id that sent from hidden field
@@ -13,24 +13,24 @@ $id=$_POST['id'];
 if (!$_POST['a_answer']) {
 		echo "<fieldset><legend><b>Erro</b></legend>Você precisa preencher todos os campos!<BR>";
 		echo "<a href='view_topic.php?id=".$id."'>Voltar</a></fieldset>";
-            include("templates/private_footer.php");
+            include(__DIR__ . "/templates/private_footer.php");
             exit;
 }
 
-$fecxhado = $db->GetOne("select `closed` from `forum_question` where `id`=?", array($id));
+$fecxhado = $db->GetOne("select `closed` from `forum_question` where `id`=?", [$id]);
 if ($fecxhado['closed'] == 't'){
 		echo "<fieldset><legend><b>Erro</b></legend>Este tópico está fechado.<BR>";
 		echo "<a href='view_topic.php?id=".$id."'>Voltar</a></fieldset>";
-            include("templates/private_footer.php");
+            include(__DIR__ . "/templates/private_footer.php");
             exit;
 }
 
-$categoryae = $db->GetOne("select `category` from `forum_question` where `id`=?", array($id));
-$servae = $db->GetOne("select `serv` from `forum_question` where `id`=?", array($id));
-if ((($categoryae == 'gangues') or ($categoryae == 'trade')) and ($player->serv != $servae)){
+$categoryae = $db->GetOne("select `category` from `forum_question` where `id`=?", [$id]);
+$servae = $db->GetOne("select `serv` from `forum_question` where `id`=?", [$id]);
+if (($categoryae == 'gangues' || $categoryae == 'trade') && $player->serv != $servae){
 		echo "<fieldset><legend><b>Erro</b></legend>Você não pode postar aqui.<BR>";
 		echo "<a href='select_forum.php'>Voltar</a></fieldset>";
-            include("templates/private_footer.php");
+            include(__DIR__ . "/templates/private_footer.php");
             exit;
 }
 
@@ -40,21 +40,16 @@ $result=mysql_query($sql);
 $rows=mysql_fetch_array($result);
 
 // add + 1 to highest answer number and keep it in variable name "$Max_id". if there no answer yet set it = 1
-if ($rows) {
-$Max_id = $rows['Maxa_id']+1;
-}
-else {
-$Max_id = 1;
-}
+$Max_id = $rows ? $rows['Maxa_id']+1 : 1;
 
 
 // get values that sent from form
 $a_answer=$_POST['a_answer'];
 
-$notavelreply=strip_tags($a_answer);
+$notavelreply=strip_tags((string) $a_answer);
 $texto=nl2br($notavelreply);
 
-$listaExtensao = array('JPG' => 1, 'jpg' => 2, 'PNG' => 3, 'png' => 4, 'BMP' => 5, 'bmp' => 6, 'GIF' => 7, 'gif' => 8);
+$listaExtensao = ['JPG' => 1, 'jpg' => 2, 'PNG' => 3, 'png' => 4, 'BMP' => 5, 'bmp' => 6, 'GIF' => 7, 'gif' => 8];
 $aux = " " . $texto . "";
 
 
@@ -91,8 +86,8 @@ $datetime=date("d/m/y H:i:s");
 
 // Insert answer
 $sql2="INSERT INTO $tbl_name(question_id, a_id, a_user_id, a_answer, a_datetime)VALUES('$id', '$Max_id', '$player->id', '$mostraimg', '$time')";
-$sql4 = $db->execute("update `forum_question` set `last_post`=?, `last_post_date`=? where `id`=?", array(time(), $datetime, $id));
-$sql5 = $db->execute("update `players` set `posts`=`posts`+1 where `id`=?", array($player->id));
+$sql4 = $db->execute("update `forum_question` set `last_post`=?, `last_post_date`=? where `id`=?", [time(), $datetime, $id]);
+$sql5 = $db->execute("update `players` set `posts`=`posts`+1 where `id`=?", [$player->id]);
 $result2=mysql_query($sql2);
 
 if($result2){
@@ -113,5 +108,5 @@ echo "<a href=select_forum.php>Voltar</a></fieldset>";
 mysql_close();
 ?>
 <?php
-include("templates/private_footer.php");
+include(__DIR__ . "/templates/private_footer.php");
 ?>

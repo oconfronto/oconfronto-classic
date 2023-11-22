@@ -47,7 +47,7 @@ define("RECAPTCHA_VERIFY_SERVER", gethostbyname('api-verify.recaptcha.net'));
 function _recaptcha_qsencode ($data) {
         $req = "";
         foreach ( $data as $key => $value )
-                $req .= $key . '=' . urlencode( stripslashes($value) ) . '&';
+                $req .= $key . '=' . urlencode( stripslashes((string) $value) ) . '&';
 
         // Cut the last '&'
         $req=substr($req,0,strlen($req)-1);
@@ -135,8 +135,8 @@ function recaptcha_get_html ($pubkey, $error = null, $use_ssl = false)
  * A ReCaptchaResponse is returned from recaptcha_check_answer()
  */
 class ReCaptchaResponse {
-        var $is_valid;
-        var $error;
+        public $is_valid;
+        public $error;
 }
 
 
@@ -149,7 +149,7 @@ class ReCaptchaResponse {
   * @param array $extra_params an array of extra variables to post to the server
   * @return ReCaptchaResponse
   */
-function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $extra_params = array())
+function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $extra_params = [])
 {
 	if ($privkey == null || $privkey == '') {
 		die ("To use reCAPTCHA you must get an API key from <a href='http://recaptcha.net/api/getkey'>http://recaptcha.net/api/getkey</a>");
@@ -170,15 +170,10 @@ function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $ex
         }
 
         $response = _recaptcha_http_post (RECAPTCHA_VERIFY_SERVER, "/verify",
-                                          array (
-                                                 'privatekey' => $privkey,
-                                                 'remoteip' => $remoteip,
-                                                 'challenge' => $challenge,
-                                                 'response' => $response
-                                                 ) + $extra_params
+                                          ['privatekey' => $privkey, 'remoteip' => $remoteip, 'challenge' => $challenge, 'response' => $response] + $extra_params
                                           );
 
-        $answers = explode ("\n", $response [1]);
+        $answers = explode ("\n", (string) $response [1]);
         $recaptcha_response = new ReCaptchaResponse();
 
         if (trim ($answers [0]) == 'true') {
@@ -200,13 +195,13 @@ function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $ex
  * @param string $appname The name of your application
  */
 function recaptcha_get_signup_url ($domain = null, $appname = null) {
-	return "http://recaptcha.net/api/getkey?" .  _recaptcha_qsencode (array ('domain' => $domain, 'app' => $appname));
+	return "http://recaptcha.net/api/getkey?" .  _recaptcha_qsencode (['domain' => $domain, 'app' => $appname]);
 }
 
 function _recaptcha_aes_pad($val) {
 	$block_size = 16;
-	$numpad = $block_size - (strlen ($val) % $block_size);
-	return str_pad($val, strlen ($val) + $numpad, chr($numpad));
+	$numpad = $block_size - (strlen ((string) $val) % $block_size);
+	return str_pad((string) $val, strlen ((string) $val) + $numpad, chr($numpad));
 }
 
 /* Mailhide related code */
@@ -223,7 +218,7 @@ function _recaptcha_aes_encrypt($val,$ky) {
 
 
 function _recaptcha_mailhide_urlbase64 ($x) {
-	return strtr(base64_encode ($x), '+/', '-_');
+	return strtr(base64_encode ((string) $x), '+/', '-_');
 }
 
 /* gets the reCAPTCHA Mailhide url for a given email, public key and private key */
@@ -246,7 +241,7 @@ function recaptcha_mailhide_url($pubkey, $privkey, $email) {
  * the email is then displayed as john...@example.com
  */
 function _recaptcha_mailhide_email_parts ($email) {
-	$arr = preg_split("/@/", $email );
+	$arr = preg_split("/@/", (string) $email );
 
 	if (strlen ($arr[0]) <= 4) {
 		$arr[0] = substr ($arr[0], 0, 1);
@@ -268,8 +263,8 @@ function recaptcha_mailhide_html($pubkey, $privkey, $email) {
 	$emailparts = _recaptcha_mailhide_email_parts ($email);
 	$url = recaptcha_mailhide_url ($pubkey, $privkey, $email);
 
-	return htmlentities($emailparts[0]) . "<a href='" . htmlentities ($url) .
-		"' onclick=\"window.open('" . htmlentities ($url) . "', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;\" title=\"Reveal this e-mail address\">...</a>@" . htmlentities ($emailparts [1]);
+	return htmlentities((string) $emailparts[0]) . "<a href='" . htmlentities ((string) $url) .
+		"' onclick=\"window.open('" . htmlentities ((string) $url) . "', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;\" title=\"Reveal this e-mail address\">...</a>@" . htmlentities ((string) $emailparts [1]);
 
 }
 

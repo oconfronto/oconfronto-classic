@@ -1,13 +1,13 @@
 <?php
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Trabalhar");
 $player = check_user($secret_key, $db);
 
-include("checkbattle.php");
-include("checkhp.php");
+include(__DIR__ . "/checkbattle.php");
+include(__DIR__ . "/checkhp.php");
 
 $totaltime = 0;
-$counthours = $db->execute("select `worktime` from `work` where `start`>? and `player_id`=? and `status`!='a'", array(time() + 604800, $player->id));
+$counthours = $db->execute("select `worktime` from `work` where `start`>? and `player_id`=? and `status`!='a'", [time() + 604800, $player->id]);
 while($hours = $counthours->fetchrow())
 {
 	$totaltime += $totaltime + $hours['worktime'];
@@ -54,74 +54,73 @@ if ($player->level >= 180){
 	$needlvl = 40;
 	$ganha = 20;
 }
+if ($_GET['act'] == \CANCEL) {
+    include(__DIR__ . "/templates/private_header.php");
+    echo "<fieldset>";
+    echo "<legend><b>Trabalho</b></legend>";
+    echo "Tem certeza que deseja abandonar seu trabalho? Se abandona-lo, não ganhará nada. ";
+    echo "<a href=\"work.php?act=remove\">Desejo abandonar o trabalho</a>.";
+    echo "</fieldset><br/><a href=\"home.php\">Principal</a>.";
+    include(__DIR__ . "/templates/private_footer.php");
+    exit;
+}
 
 
-	if ($_GET['act'] == cancel){	
-		include("templates/private_header.php");
-		echo "<fieldset>";
-		echo "<legend><b>Trabalho</b></legend>";
-		echo "Tem certeza que deseja abandonar seu trabalho? Se abandona-lo, não ganhará nada. ";
-		echo "<a href=\"work.php?act=remove\">Desejo abandonar o trabalho</a>.";
-		echo "</fieldset><br/><a href=\"home.php\">Principal</a>.";
-		include("templates/private_footer.php");
-		exit;
-	}
-
-	elseif ($_GET['act'] == remove){
-		$query = $db->execute("update `work` set `status`='a' where `player_id`=? and `status`='t'", array($player->id));
-		include("templates/private_header.php");
-		echo "<fieldset>";
-		echo "<legend><b>Trabalho</b></legend>";
-		echo "Você abandonou seu trabalho.";
-		echo "</fieldset><br/><a href=\"home.php\">Principal</a>.";
-		include("templates/private_footer.php");
-		exit;
-	}
+	if ($_GET['act'] == \REMOVE) {
+     $query = $db->execute("update `work` set `status`='a' where `player_id`=? and `status`='t'", [$player->id]);
+     include(__DIR__ . "/templates/private_header.php");
+     echo "<fieldset>";
+     echo "<legend><b>Trabalho</b></legend>";
+     echo "Você abandonou seu trabalho.";
+     echo "</fieldset><br/><a href=\"home.php\">Principal</a>.";
+     include(__DIR__ . "/templates/private_footer.php");
+     exit;
+ }
 
 
-include("checkwork.php");
+include(__DIR__ . "/checkwork.php");
 
 if (($_POST['time']) && ($_POST['submit']))  {
 
 
-if ((!is_numeric($_POST['time'])) or ($_POST['time'] > 12)) {
-	include("templates/private_header.php");
+if (!is_numeric($_POST['time']) || $_POST['time'] > 12) {
+	include(__DIR__ . "/templates/private_header.php");
 	echo "<fieldset>";
 	echo "<legend><b>Trabalhar</b></legend>";
 	echo "Um erro desconhecido ocorreu!";
 	echo "</fieldset><br /><a href=\"work.php\">Voltar</a>.";
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 	exit;
 }
 
-if ((($player->level < 80) and ($_POST['time'] > 8)) or (($player->level < 100) and ($_POST['time'] > 9)) or (($player->level < 120) and ($_POST['time'] > 10)) or (($player->level < 140) and ($_POST['time'] > 11))){
-	include("templates/private_header.php");
+if ($player->level < 80 && $_POST['time'] > 8 || $player->level < 100 && $_POST['time'] > 9 || $player->level < 120 && $_POST['time'] > 10 || $player->level < 140 && $_POST['time'] > 11){
+	include(__DIR__ . "/templates/private_header.php");
 	echo "<fieldset>";
 	echo "<legend><b>Trabalhar</b></legend>";
 	echo "Você não pode trabalhar por tanto tempo.";
 	echo "</fieldset><br /><a href=\"work.php\">Voltar</a>.";
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 	exit;
 }
 
 
-	if (($player->tour == t) and ($setting->tournament != 'f')) {
-		include("templates/private_header.php");
+	if ($player->tour == \T && $setting->tournament != 'f') {
+		include(__DIR__ . "/templates/private_header.php");
 		echo "<fieldset>";
 		echo "<legend><b>Trabalhar</b></legend>";
 		echo "Você não pode trabalhar enquanto participa ou está inscrito em um torneio.";
 		echo "</fieldset><br /><a href=\"work.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 	}
 
 	if (($totaltime + $_POST['time']) > 72) {
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "<fieldset>";
 		echo "<legend><b>Trabalhar</b></legend>";
 		echo "Você anda trabalhando demais. O máximo permido por semana é de 72 horas.<br/>Você ainda pode trabalhar por " . (72 - $totaltime) . "h esta semana.";
 		echo "</fieldset><br /><a href=\"work.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 	}
 
@@ -133,16 +132,16 @@ if ((($player->level < 80) and ($_POST['time'] > 8)) or (($player->level < 100) 
 			$insert['gold'] = $ganha;
 			$query = $db->autoexecute('work', $insert, 'INSERT');
 
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "<fieldset>";
 		echo "<legend><b>Trabalhar</b></legend>";
 		echo "Você começou a trabalhar como <b>" . $profic . "</b>, com o salário de <b>" . $ganha . " por hora</b>.<br/>Restam <b>" . $_POST['time'] . " hora(s)</b> para terminar seu trabalho.";
 		echo "</fieldset><br /><a href=\"home.php\">Principal</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		exit;
 }
 
-include("templates/private_header.php");
+include(__DIR__ . "/templates/private_header.php");
 
 if ($player->level < 40){
 echo "<div style=\"background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">";
@@ -209,25 +208,25 @@ echo "<br />";
 
 echo "<table width=\"100%\">";
 echo "<tr><td align=\"center\" bgcolor=\"#E1CBA4\"><b>Últimos Trabalhos</b></td></tr>";
-$query1 = $db->execute("select * from `work` where `player_id`=? and `status`!='t' order by `start` desc limit 10", array($player->id));
+$query1 = $db->execute("select * from `work` where `player_id`=? and `status`!='t' order by `start` desc limit 10", [$player->id]);
 if ($query1->recordcount() > 0)
 {
 	while ($log1 = $query1->fetchrow())
 	{
 		$valortempo = time() - $log1['start'];
-		if ($valortempo < 60){
-		$valortempo2 = $valortempo;
-		$auxiliar2 = "segundo(s) atrás.";
-		}else if($valortempo < 3600){
-		$valortempo2 = floor($valortempo / 60);
-		$auxiliar2 = "minuto(s) atrás.";
-		}else if($valortempo < 86400){
-		$valortempo2 = floor($valortempo / 3600);
-		$auxiliar2 = "hora(s) atrás.";
-		}else if($valortempo > 86400){
-		$valortempo2 = floor($valortempo / 86400);
-		$auxiliar2 = "dia(s) atrás.";
-		}
+		if ($valortempo < 60) {
+      $valortempo2 = $valortempo;
+      $auxiliar2 = "segundo(s) atrás.";
+  } elseif ($valortempo < 3600) {
+      $valortempo2 = floor($valortempo / 60);
+      $auxiliar2 = "minuto(s) atrás.";
+  } elseif ($valortempo < 86400) {
+      $valortempo2 = floor($valortempo / 3600);
+      $auxiliar2 = "hora(s) atrás.";
+  } elseif ($valortempo > 86400) {
+      $valortempo2 = floor($valortempo / 86400);
+      $auxiliar2 = "dia(s) atrás.";
+  }
 
 		echo "<tr>";
 		if ($log1['status'] == 'a'){
@@ -246,5 +245,5 @@ else
 }
 echo "</table>";
 
-include("templates/private_footer.php");
+include(__DIR__ . "/templates/private_footer.php");
 ?>

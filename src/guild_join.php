@@ -6,25 +6,25 @@
 /*    http://www.bbgamezone.com/     */
 /*************************************/
 
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Entrar no Clã");
 $player = check_user($secret_key, $db);
-include("checkbattle.php");
-include("checkguild.php");
+include(__DIR__ . "/checkbattle.php");
+include(__DIR__ . "/checkguild.php");
 
 //Check for user ID
 if (!$_GET['id']) {
 	header("Location: guild_listing.php");
 } else {
 	//Populates $guild variable
-	$query = $db->execute("select * from  guilds  where  id =?", array($_GET['id']));
+	$query = $db->execute("select * from  guilds  where  id =?", [$_GET['id']]);
 	if ($query->recordcount() == 0) {
 		header("Location: guild_listing.php");
 	} else {
 		$guild = $query->fetchrow();
 	}
 	
-	include("templates/private_header.php");
+	include(__DIR__ . "/templates/private_header.php");
 	//Checks if player is in a guild or cannot afford the guild price
 	if ($player->guild != NULL) {
 		echo "Você já está em um clã!<br/>";
@@ -35,10 +35,10 @@ if (!$_GET['id']) {
 	} else {
 		$mayjoin = true;
 		if ($db->execute("show tables like 'guild_invites'")->recordcount() > 0) { // if guild invites mod is installed ...
-			$checkquery = $db->execute("select count(*) inv_count from guild_invites where player_id =? and guild_id =?", array($player->id, $guild['id']));	
+			$checkquery = $db->execute("select count(*) inv_count from guild_invites where player_id =? and guild_id =?", [$player->id, $guild['id']]);	
 			$check = $checkquery->fetchrow();
 			if ($check['inv_count'] > 0) {
-				$db->execute("delete from guild_invites where guild_id=? and player_id=?", array($guild['id'], $player->id));	
+				$db->execute("delete from guild_invites where guild_id=? and player_id=?", [$guild['id'], $player->id]);	
 			} else {
 				echo "Você não foi convidado por este clã.<br/>";
 				echo "<a href=\"home.php\">Principal</a>.";
@@ -46,13 +46,13 @@ if (!$_GET['id']) {
 			}
 		}
 		if ($mayjoin == true) {
-			$db->execute("update players set  gold=?, guild=? where id=?", array($player->gold - $guild['price'], $guild['id'], $player->id));
-			$db->execute("update guilds set members=?, gold=? where id=?", array($guild['members'] + 1, $guild['gold'] + $guild['price'], $guild['id']));
+			$db->execute("update players set  gold=?, guild=? where id=?", [$player->gold - $guild['price'], $guild['id'], $player->id]);
+			$db->execute("update guilds set members=?, gold=? where id=?", [$guild['members'] + 1, $guild['gold'] + $guild['price'], $guild['id']]);
 			echo "Obrigado por participar do clã: <b>" . $guild['name'] . "</b>!<br/>";
 			echo "<a href=\"home.php\">Principal</a>.";
 		}
 	}
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 }
 
 ?>

@@ -10,7 +10,7 @@
 <meta name="GOOGLEBOT" content="index,follow" />
 <meta name="revisit-after" content="3 Days" />
 <?php
-		$checknocur000 = $db->execute("select * from `other` where `value`=? and `player_id`=?", array(cursor, $acc->id));
+		$checknocur000 = $db->execute("select * from `other` where `value`=? and `player_id`=?", [\CURSOR, $acc->id]);
 		if ($checknocur000->recordcount() > 0) {
 		echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/acc_style_2.css\" />";
 		}else{

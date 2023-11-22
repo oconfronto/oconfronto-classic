@@ -2,10 +2,10 @@
 //error_reporting(E_ALL);
 
 
-include("lib.php");
+include(__DIR__ . "/lib.php");
 $player = check_user($secret_key, $db);
 
-include('barclass.php');
+include(__DIR__ . '/barclass.php');
 
 $bar = new barGen();	// Load the class
 $bar->setWidth(150);	// Set the width

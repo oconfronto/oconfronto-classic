@@ -1,20 +1,20 @@
 <?php
-	include("lib.php");
+	include(__DIR__ . "/lib.php");
 	define("PAGENAME", "Invent�rio");
 	$player = check_user($secret_key, $db);
-	include("checkbattle.php");
-	include("checkhp.php");
-	include("checkwork.php");
+	include(__DIR__ . "/checkbattle.php");
+	include(__DIR__ . "/checkhp.php");
+	include(__DIR__ . "/checkwork.php");
 
 	$fieldnumber = 1;
 	$newline = 0;
 
-	include("includes/items/gift.php");
-	include("includes/items/goldbar.php");
-	include("includes/actions/transfer-potions.php");
-	include("includes/actions/transfer-items.php");
+	include(__DIR__ . "/includes/items/gift.php");
+	include(__DIR__ . "/includes/items/goldbar.php");
+	include(__DIR__ . "/includes/actions/transfer-potions.php");
+	include(__DIR__ . "/includes/actions/transfer-items.php");
 
-	include("templates/private_header.php");
+	include(__DIR__ . "/templates/private_header.php");
 
 echo "<center><b>Inventario</b></center>";
 echo "<br/>";
@@ -23,7 +23,7 @@ echo "<br/>";
 			echo "<div id=\"drag\">";
 				echo "<div id=\"left\">";
 
-				include("showit2.php");
+				include(__DIR__ . "/showit2.php");
 
 			echo "<table>";
 				echo "<tr><td class=\"sell\">Vender</td></tr>";
@@ -31,7 +31,7 @@ echo "<br/>";
 			echo "</table>";
 			
 
-$backpackquery = $db->execute("select items.id, items.tile, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where items.player_id=? and items.status='unequipped' and items.item_id=blueprint_items.id and blueprint_items.type!='potion' and blueprint_items.type!='stone' and items.mark='f' order by items.tile asc limit 49", array($player->id));
+$backpackquery = $db->execute("select items.id, items.tile, items.item_bonus, items.for, items.vit, items.agi, items.res, items.status, blueprint_items.name, blueprint_items.effectiveness, blueprint_items.img, blueprint_items.type from `items`, `blueprint_items` where items.player_id=? and items.status='unequipped' and items.item_id=blueprint_items.id and blueprint_items.type!='potion' and blueprint_items.type!='stone' and items.mark='f' order by items.tile asc limit 49", [$player->id]);
 
 if ($backpackquery && is_object($backpackquery)) {
     echo "<center><font size=\"1px\"><b>Capacidade:</b> 49</font><br/>";
@@ -57,9 +57,9 @@ while($bag = $backpackquery->fetchrow())
 
 
 
-	if (($bag['item_bonus'] > 2) and ($bag['item_bonus'] < 6)){
+	if ($bag['item_bonus'] > 2 && $bag['item_bonus'] < 6){
 		$colorbg = "itembg2";
-	}elseif (($bag['item_bonus'] > 5) and ($bag['item_bonus'] < 9)){
+	}elseif ($bag['item_bonus'] > 5 && $bag['item_bonus'] < 9){
 		$colorbg = "itembg3";
 	}elseif ($bag['item_bonus'] == 9){
 		$colorbg = "itembg4";
@@ -117,8 +117,8 @@ echo "<img src=\"images/itens/" . $bag['img'] . "\" border=\"0\">";
 echo "</div>";
 echo "</td>";
 
-				$fieldnumber = $fieldnumber + 1;
-					$newline = $newline + 1;
+				$fieldnumber += 1;
+					$newline += 1;
 					if ($newline == 7){
 						echo "</tr><tr>";
 						$newline = 0;
@@ -129,10 +129,10 @@ $total = $backpackquery->recordcount();
 	while($total < 49){
 	echo "<td class=\"itembg1 " . $fieldnumber . "\">&nbsp;</td>";
 
-		$fieldnumber = $fieldnumber + 1;
-		$total = $total + 1;
+		$fieldnumber += 1;
+		$total += 1;
 
-		$newline = $newline + 1;
+		$newline += 1;
 		if ($newline == 7){
 			echo "</tr><tr>";
 			$newline = 0;
@@ -155,16 +155,16 @@ echo "</div>";
 echo "<br />";
 
 
-$query = $db->execute("select `id` from `items` where `player_id`=? and `item_id`=136 and `mark`='f' order by rand()", array($player->id));
+$query = $db->execute("select `id` from `items` where `player_id`=? and `item_id`=136 and `mark`='f' order by rand()", [$player->id]);
 $numerodepocoes = $query->recordcount();
 
-$query2 = $db->execute("select `id` from `items` where `player_id`=? and `item_id`=137 and `mark`='f' order by rand()", array($player->id));
+$query2 = $db->execute("select `id` from `items` where `player_id`=? and `item_id`=137 and `mark`='f' order by rand()", [$player->id]);
 $numerodepocoes2 = $query2->recordcount();
 
-$query3 = $db->execute("select `id` from `items` where `player_id`=? and `item_id`=148 and `mark`='f' order by rand()", array($player->id));
+$query3 = $db->execute("select `id` from `items` where `player_id`=? and `item_id`=148 and `mark`='f' order by rand()", [$player->id]);
 $numerodepocoes3 = $query3->recordcount();
 
-$query4 = $db->execute("select `id` from `items` where `player_id`=? and `item_id`=150 and `mark`='f' order by rand()", array($player->id));
+$query4 = $db->execute("select `id` from `items` where `player_id`=? and `item_id`=150 and `mark`='f' order by rand()", [$player->id]);
 $numerodepocoes4 = $query4->recordcount();
 
 echo "<fieldset>";
@@ -199,7 +199,7 @@ echo "<br>";
 echo "<fieldset>";
 echo "<legend><b>Enviar Itens</b></legend>";
 
-$verifikeuser = $db->execute("select `id` from `quests` where `quest_id`=4 and `quest_status`=90 and `player_id`=?", array($player->id));
+$verifikeuser = $db->execute("select `id` from `quests` where `quest_id`=4 and `quest_status`=90 and `player_id`=?", [$player->id]);
 
 if ($player->level < $setting->activate_level)
 {
@@ -209,7 +209,7 @@ if ($player->level < $setting->activate_level)
 	if ($player->level > 39) {
 		echo"<center><font size=\"1\"><a href=\"quest2.php\"><b>Clique aqui para fazer a miss�o.</b></a></font></center>";
 	}
-	}elseif ($player->transpass == f){
+	}elseif ($player->transpass == \F){
 	echo "<form method=\"POST\" action=\"transferpass.php\">";
 	echo "<table><tr><td width=\"35%\"><b>Escolha uma senha para enviar ouro e itens:</b></td><td width=\"65%\"><font size=\"1\"><b>Senha:</b></font> <input type=\"password\" name=\"pass\" size=\"15\"/><br/><font size=\"1\"><b>Confirme:</b></font> <input type=\"password\" name=\"pass2\" size=\"15\"/> <input type=\"submit\" name=\"submit\" value=\"Definir Senha\"></td></tr></table><br/><font size=\"1\">Lembre-se desta senha, ela sempre ser� usada para fazer transfer�ncias banc�rias. Se voc� perdela n�o poder� recupera-la.</font>";
 	echo "</form>";
@@ -220,7 +220,7 @@ echo "<form method=\"POST\" action=\"inventory.php\">";
 echo "<tr><td width=\"40%\">Usu�rio:</td><td><input type=\"text\" name=\"username\" size=\"20\"/></td></tr>";
 echo "<tr><td width=\"40%\">Item:</td><td>";
 
-$queoppa = $db->execute("select items.id, items.item_bonus, items.item_id, items.mark, blueprint_items.name from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type!='stone' and blueprint_items.type!='potion' and items.mark='f' order by blueprint_items.type, blueprint_items.name asc", array($player->id));
+$queoppa = $db->execute("select items.id, items.item_bonus, items.item_id, items.mark, blueprint_items.name from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type!='stone' and blueprint_items.type!='potion' and items.mark='f' order by blueprint_items.type, blueprint_items.name asc", [$player->id]);
     if ($queoppa->recordcount() == 0) {
 echo "<b>Voc� n�o possui itens.</b>";
 }else{
@@ -248,5 +248,5 @@ echo "<center><font size=\"1\"><a href=\"#\" onclick=\"javascript:window.open('l
 
 echo "</div>";
 
-include("templates/private_footer.php");
+include(__DIR__ . "/templates/private_footer.php");
 ?>

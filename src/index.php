@@ -6,17 +6,17 @@
 /*    http://www.ezrpgproject.com/   */
 /*************************************/
 
-include("lib.php");
-include('bbcode.php');
+include(__DIR__ . "/lib.php");
+include(__DIR__ . '/bbcode.php');
 $bbcode = new bbcode;
 define("PAGENAME", "Principal");
 
-if (($_SESSION['accid'] > 0) and ($_SESSION['hash'])){
+if (isset($_SESSION['accid']) && isset($_SESSION['hash']) && $_SESSION['accid'] > 0 && $_SESSION['hash']) {
 
 		$check = sha1($_SESSION['accid'] . $_SERVER['REMOTE_ADDR'] . $secret_key);
 		if ($check == $_SESSION['hash'])
 		{
-			$rematual = $db->GetOne("select `remember` from `accounts` where `id`=?", array($_SESSION['accid']));
+			$rematual = $db->GetOne("select `remember` from `accounts` where `id`=?", [$_SESSION['accid']]);
 			if ($rematual == 't'){
 			header("Location: characters.php");
 			exit;
@@ -30,9 +30,9 @@ $error = 0; //Error count
 $errormsg = "<font color=\"red\">"; //Error message to be displayed in case of error (modified below depending on error)
 
 
-if ($_POST['login'])
+if (isset($_POST['login']))
 {
-	$tentativas = $db->GetOne("select `tries` from `ip` where `ip`=?", array($ip));
+	$tentativas = $db->GetOne("select `tries` from `ip` where `ip`=?", [$ip]);
 
 	if (!$_POST['username'])
 	{
@@ -48,50 +48,47 @@ if ($_POST['login'])
 	{
 		$errormsg .= "Voc?errou sua senha 10 vezes seguidas. Aguarde 30 minutos para poder tentar novamente.";
 		$error = 1;
-	}
-
-	else if ($error == 0)
-	{
-		$query = $db->execute("select `id`, `conta` from `accounts` where `conta`=? and `password`=?", array($_POST['username'], sha1($_POST['password'])));
-		if ($query->recordcount() == 0)
-		{
-			$restantes = ceil(10 - $tentativas);
-			$errormsg .= "Conta ou senha incorreta! (" . $restantes . " tentativas restantes).";
-
-			$bloqueiaip = $db->execute("select `tries` from `ip` where `ip`=?", array($ip));
-			if ($bloqueiaip->recordcount() == 0) {
-			$insert['ip'] = $ip;
-			$insert['tries'] = 1;
-			$insert['time'] = time();
-			$query = $db->autoexecute('ip', $insert, 'INSERT');
-			}elseif ($bloqueiaip->recordcount() > 0) {
-			$query = $db->execute("update `ip` set `tries`=`tries`+1 where `ip`=?", array($ip));
-			}
-
-			$error = 1;
-			
-			//Clear user's session data
-			session_unset();
-			session_destroy();
-		}
-		else
-		{
-		
-			$acc = $query->fetchrow();
-			
-				$query = $db->execute("update `accounts` set `last_ip`=? where `id`=?", array($ip, $acc['id']));
-
-				$hash = sha1($acc['id'] . $ip . $secret_key);
-				$_SESSION['accid'] = $acc['id'];
-				$_SESSION['hash'] = $hash;
-				header("Location: characters.php");
-		}
-	}
+	} elseif ($error === 0) {
+     $query = $db->execute("select `id`, `conta` from `accounts` where `conta`=? and `password`=?", [$_POST['username'], sha1((string) $_POST['password'])]);
+     if ($query->recordcount() == 0)
+   		{
+   			$restantes = ceil(10 - $tentativas);
+   			$errormsg .= "Conta ou senha incorreta! (" . $restantes . " tentativas restantes).";
+   
+   			$bloqueiaip = $db->execute("select `tries` from `ip` where `ip`=?", [$ip]);
+   			if ($bloqueiaip->recordcount() == 0) {
+   			$insert['ip'] = $ip;
+   			$insert['tries'] = 1;
+   			$insert['time'] = time();
+   			$query = $db->autoexecute('ip', $insert, 'INSERT');
+   			}elseif ($bloqueiaip->recordcount() > 0) {
+   			$query = $db->execute("update `ip` set `tries`=`tries`+1 where `ip`=?", [$ip]);
+   			}
+   
+   			$error = 1;
+   			
+   			//Clear user's session data
+   			session_unset();
+   			session_destroy();
+   		}
+   		else
+   		{
+   		
+   			$acc = $query->fetchrow();
+   			
+   				$query = $db->execute("update `accounts` set `last_ip`=? where `id`=?", [$ip, $acc['id']]);
+   
+   				$hash = sha1($acc['id'] . $ip . $secret_key);
+   				$_SESSION['accid'] = $acc['id'];
+   				$_SESSION['hash'] = $hash;
+   				header("Location: characters.php");
+   		}
+ }
 
 }$errormsg .= "</font>";
 
 
-include("templates/header.php");
+include(__DIR__ . "/templates/header.php");
 ?>
 <script type="text/javascript" src="js/inventariojquery.js"></script>
 <script type="text/javascript" src="js/inventario.js"></script>
@@ -107,7 +104,7 @@ include("templates/header.php");
 <font size="1"><a href="forgot.php">Esqueceu a senha?</a> <?php echo ($error==1)?$errormsg:""?></font>
 </form>
 <table width="100%">
-<tr><td align="center" bgcolor="#E1CBA4"><b>Ùltimas Noticias</b></td></tr>
+<tr><td align="center" bgcolor="#E1CBA4"><b>ï¿½ltimas Noticias</b></td></tr>
 
 <?php
 $noticiaid = 1;
@@ -115,7 +112,7 @@ $query55 = $db->execute("select `topic`, `detail`, `user_id`, `datetime` from `f
 
 while($news = $query55->fetchrow())
 {
-$query = $db->execute("select `username` from `players` where `id`=?", array($news['user_id']));
+$query = $db->execute("select `username` from `players` where `id`=?", [$news['user_id']]);
 $user = $query->fetchrow();
 
 
@@ -125,7 +122,7 @@ $user = $query->fetchrow();
 		echo "<tr><td bgcolor=\"#f2e1ce\"><div style=\"display: none;\" id=\"news" . $noticiaid . "\">";
 		$noticia = $news['detail'];
 		echo $bbcode->parse($noticia);
-		echo "<br/><b><font size=\"1\">Notícia publicada por " . $user['username'] . " em " . $news['datetime'] . ".</font></b></td></tr></div>";
+		echo "<br/><b><font size=\"1\">Notï¿½cia publicada por " . $user['username'] . " em " . $news['datetime'] . ".</font></b></td></tr></div>";
 		$noticiaid ++;
 }
 
@@ -136,5 +133,5 @@ echo "<td><center><a href=\"http://www.freedomain.co.nr/\" target=\"_blank\"><im
 echo "</tr></table>";
 
 
-include("templates/footer.php");
+include(__DIR__ . "/templates/footer.php");
 ?>

@@ -6,30 +6,30 @@
 /*    http://www.bbgamezone.com/     */
 /*************************************/
 
-include("lib.php");
-include('bbcode.php');
+include(__DIR__ . "/lib.php");
+include(__DIR__ . '/bbcode.php');
 $bbcode = new bbcode;
 define("PAGENAME", "Clã");
 $player = check_user($secret_key, $db);
-include("checkbattle.php");
+include(__DIR__ . "/checkbattle.php");
 
 $guildonline = 0;
 
-include("checkguild.php");
+include(__DIR__ . "/checkguild.php");
 
 
 if ($player->hp <= 0)
 {
-	include("templates/private_header.php");
+	include(__DIR__ . "/templates/private_header.php");
 	echo "<fieldset>";
 	echo "<legend><b>Você está morto!</b></legend>\n";
 	echo "Vá ao <a href=\"hospt.php\">hospital</a> ou espere 30 minutos.";
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 	exit;
 }
 
 //Populates $guild variable
-$query = $db->execute("select * from `guilds` where `id`=?", array($player->guild));
+$query = $db->execute("select * from `guilds` where `id`=?", [$player->guild]);
 
 if ($query->recordcount() == 0) {
     header("Location: home.php");
@@ -37,7 +37,7 @@ if ($query->recordcount() == 0) {
     $guild = $query->fetchrow();
 }
 
-include("templates/private_header.php");
+include(__DIR__ . "/templates/private_header.php");
 
 ?>
 
@@ -66,7 +66,7 @@ $checkonne = $db->execute("select `player_id` from `online`");
 
 while($online = $checkonne->fetchrow())
 {
-$getname = $db->execute("select `username` from `players` where `id`=? and `guild`=? order by `username` asc", array($online['player_id'], $guild['id']));
+$getname = $db->execute("select `username` from `players` where `id`=? and `guild`=? order by `username` asc", [$online['player_id'], $guild['id']]);
 $member = $getname->fetchrow();
 
 	echo "<a href=\"profile.php?id=" . $member['username'] . "\">";
@@ -75,7 +75,7 @@ $member = $getname->fetchrow();
 	echo ($member['username'] == $player->username)?"</b>":"";
 	echo "</a> | ";
 
-	$guildonline = $guildonline + 1;
+	$guildonline += 1;
 }
 	echo "<b>Total:</b> " . $guildonline . "";
 ?>
@@ -83,7 +83,7 @@ $member = $getname->fetchrow();
 <p /><p />
 <form>
 <center>
-<?php if(($player->username == $guild['leader']) or ($player->username == $guild['vice'])){
+<?php if($player->username == $guild['leader'] || $player->username == $guild['vice']){
 	echo "<input type=\"button\" VALUE=\"Administração\" ONCLICK=\"window.location.href='guild_admin.php'\">&nbsp;";
 }
 ?>
@@ -94,22 +94,22 @@ $member = $getname->fetchrow();
 <legend><b>Pagamento do Clã</b></legend>
 <?php
 		$valortempo = $guild['pagopor'] - time();
-		if ($valortempo < 60){
-		$valortempo2 = $valortempo;
-		$auxiliar2 = "segundo(s)";
-		}else if($valortempo < 3600){
-		$valortempo2 = floor($valortempo / 60);
-		$auxiliar2 = "minuto(s)";
-		}else if($valortempo < 86400){
-		$valortempo2 = floor($valortempo / 3600);
-		$auxiliar2 = "hora(s)";
-		}else if($valortempo > 86400){
-		$valortempo2 = floor($valortempo / 86400);
-		$auxiliar2 = "dia(s)";
-		}
+		if ($valortempo < 60) {
+      $valortempo2 = $valortempo;
+      $auxiliar2 = "segundo(s)";
+  } elseif ($valortempo < 3600) {
+      $valortempo2 = floor($valortempo / 60);
+      $auxiliar2 = "minuto(s)";
+  } elseif ($valortempo < 86400) {
+      $valortempo2 = floor($valortempo / 3600);
+      $auxiliar2 = "hora(s)";
+  } elseif ($valortempo > 86400) {
+      $valortempo2 = floor($valortempo / 86400);
+      $auxiliar2 = "dia(s)";
+  }
 ?>
 <center><b>Clã pago por:</b> <?=$valortempo2;?> <?=$auxiliar2;?>.<br>Este clã será deletado se o tempo acabar e os lideres não pagarem mais.</center>
 </fieldset>
 
-<?php include("templates/private_footer.php");
+<?php include(__DIR__ . "/templates/private_footer.php");
 ?>

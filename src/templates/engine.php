@@ -1,12 +1,12 @@
 <?php
-include("lib.php");
+include(__DIR__ . "/lib.php");
 $ipp = $_SERVER['REMOTE_ADDR'];
 
 if ($_SESSION['userid'] > 0)
 {
 $player = check_user($secret_key, $db);
 
-$checknosite = $db->execute("select `time` from `online` where `ip`=?", array($ipp));
+$checknosite = $db->execute("select `time` from `online` where `ip`=?", [$ipp]);
 
 if ($checknosite->recordcount() < 1) {
 	$insert['player_id'] = $player->id;
@@ -16,28 +16,28 @@ if ($checknosite->recordcount() < 1) {
 	$insert['serv'] = $player->serv;
 	$insertchecknosite = $db->autoexecute('online', $insert, 'INSERT');
 } else {
-	$updatechecknosite1 = $db->execute("update `online` set `time`=? where `player_id`=?", array(time(), $player->id));
-	$updatechecknosite2 = $db->execute("update `login` set `time`=? where `friendid`=?", array(time(), $player->id));
+	$updatechecknosite1 = $db->execute("update `online` set `time`=? where `player_id`=?", [time(), $player->id]);
+	$updatechecknosite2 = $db->execute("update `login` set `time`=? where `friendid`=?", [time(), $player->id]);
 }
 
-$deletechecknosite1 = $db->execute("delete from `online` where `time`<?", array((time() - 20)));
-$deletechecknosite2 = $db->execute("delete from `login` where `time`<?", array((time() - 20)));
+$deletechecknosite1 = $db->execute("delete from `online` where `time`<?", [(time() - 20)]);
+$deletechecknosite2 = $db->execute("delete from `login` where `time`<?", [(time() - 20)]);
 
-$mailcount = $db->execute("select `id` from `mail` where `to`=? and `status`='unread'", array($player->id));
+$mailcount = $db->execute("select `id` from `mail` where `to`=? and `status`='unread'", [$player->id]);
 if ($mailcount->recordcount() > 0){
 	echo "<div style=\"background-color:#FFFDE0; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\" align=\"center\">";
 	echo "<p>Voc&ecirc; tem " . $mailcount->recordcount() . " <a href=\"mail.php\">mensagem(s)</a> n&atilde;o lida(s)!</p>";
 	echo "</div>";
 }
 
-$queryloginfriend = $db->execute("select `fname` from `friends` where `uid`=?", array($player->id));
+$queryloginfriend = $db->execute("select `fname` from `friends` where `uid`=?", [$player->id]);
 
 while($loginfriend = $queryloginfriend->fetchrow())
 {
-	$frienddeide = $db->GetOne("select `id` from `players` where `username`=?", array($loginfriend['fname']));
-	$veruserfrindlogin1 = $db->execute("select `ip` from `online` where `player_id`=?", array($frienddeide));
-	$veruserfrindlogin2 = $db->execute("select `time` from `login` where `friendid`=? and `myid`=?", array($frienddeide, $player->id));
-   	if (($veruserfrindlogin1->recordcount() == 1) and ($veruserfrindlogin2->recordcount() == 0)){
+	$frienddeide = $db->GetOne("select `id` from `players` where `username`=?", [$loginfriend['fname']]);
+	$veruserfrindlogin1 = $db->execute("select `ip` from `online` where `player_id`=?", [$frienddeide]);
+	$veruserfrindlogin2 = $db->execute("select `time` from `login` where `friendid`=? and `myid`=?", [$frienddeide, $player->id]);
+   	if ($veruserfrindlogin1->recordcount() == 1 && $veruserfrindlogin2->recordcount() == 0){
 		$insert['myid'] = $player->id;
 		$insert['friendid'] = $frienddeide;
 		$insert['time'] = time();
@@ -49,35 +49,27 @@ while($loginfriend = $queryloginfriend->fetchrow())
 	}
 }
 
-$queryduelos = $db->execute("select * from `duels` where (`owner`=? or `rival`=?)", array($player->id, $player->id));
+$queryduelos = $db->execute("select * from `duels` where (`owner`=? or `rival`=?)", [$player->id, $player->id]);
 
 while($duinfo = $queryduelos->fetchrow())
 {
-	$owname = $db->GetOne("select `username` from `players` where `id`=?", array($duinfo['owner']));
-	$riname = $db->GetOne("select `username` from `players` where `id`=?", array($duinfo['rival']));
+	$owname = $db->GetOne("select `username` from `players` where `id`=?", [$duinfo['owner']]);
+	$riname = $db->GetOne("select `username` from `players` where `id`=?", [$duinfo['rival']]);
 
-	$rivalonline = $db->execute("select * from `online` where `player_id`=? and `serv`=?", array($duinfo['rival'], $player->serv));
-	if ($rivalonline->recordcount() > 0){
-	$rionline = 1;
-	}else{
-	$rionline = 0;
-	}
+	$rivalonline = $db->execute("select * from `online` where `player_id`=? and `serv`=?", [$duinfo['rival'], $player->serv]);
+	$rionline = $rivalonline->recordcount() > 0 ? 1 : 0;
 
-	$owneronline = $db->execute("select * from `online` where `player_id`=? and `serv`=?", array($duinfo['owner'], $player->serv));
-	if ($owneronline->recordcount() > 0){
-	$owonline = 1;
-	}else{
-	$owonline = 0;
-	}
+	$owneronline = $db->execute("select * from `online` where `player_id`=? and `serv`=?", [$duinfo['owner'], $player->serv]);
+	$owonline = $owneronline->recordcount() > 0 ? 1 : 0;
 
-	if (($duinfo['owner'] == $player->id) and ($rionline == 1)){
+	if ($duinfo['owner'] == $player->id && $rionline == 1){
 		echo "<div style=\"background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">";
 		echo "<center><a href=\"profile.php?id=" . $riname . "\">" . $riname . "</a> está online. Aguardando <a href=\"profile.php?id=" . $riname . "\">" . $riname . "</a> aceitar a proposta de duelo.</center><br/>";
 		echo "<center><a href=\"duel.php?accept=" . $duinfo['id'] . "\">Cancelar proposta.</a></center><br/>";
 		echo "</div>";
 	}
 
-	if (($duinfo['rival'] == $player->id) and ($owonline == 1)){
+	if ($duinfo['rival'] == $player->id && $owonline == 1){
 		echo "<div style=\"background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">";
 		echo "<center><a href=\"profile.php?id=" . $owname . "\">" . $owname . "</a> está online. Aguardando <a href=\"profile.php?id=" . $owname . "\">" . $owname . "</a> aceitar a proposta de duelo.</center><br/>";
 		echo "<center><a href=\"duel.php?info=" . $duinfo['id'] . "\">Detalhes do duelo.</a></center><br/>";
@@ -87,7 +79,7 @@ while($duinfo = $queryduelos->fetchrow())
 
 
 }else{
-$deletechecknosite = $db->execute("delete from `online` where `ip`=?", array($ipp));
+$deletechecknosite = $db->execute("delete from `online` where `ip`=?", [$ipp]);
 echo "<div style=\"background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">";
 echo "<center><b>Conex&atilde;o perdida com o servidor.</b></center>";
 echo "</div>";

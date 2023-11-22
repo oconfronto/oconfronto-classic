@@ -1,10 +1,10 @@
 <?php
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Mercado");
 $player = check_user($secret_key, $db);
-include("checkbattle.php");
-include("checkhp.php");
-include("checkwork.php");
+include(__DIR__ . "/checkbattle.php");
+include(__DIR__ . "/checkhp.php");
+include(__DIR__ . "/checkwork.php");
 
 $order=$_GET['order'];
 
@@ -30,40 +30,40 @@ switch($_GET['act'])
 {
 	case "remove":
 		if (!$_GET['item']){
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "Um erro desconhecido ocorreu.<br/><a href=\"market.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		break;
 		}
 
-		$verifik = $db->execute("select market.seller, blueprint_items.name, items.item_bonus, items.mark from `market`, `blueprint_items`, `items` where market.ite_id=blueprint_items.id and market.market_id=items.id and market.market_id=?", array($_GET['item']));
+		$verifik = $db->execute("select market.seller, blueprint_items.name, items.item_bonus, items.mark from `market`, `blueprint_items`, `items` where market.ite_id=blueprint_items.id and market.market_id=items.id and market.market_id=?", [$_GET['item']]);
 		if ($verifik->recordcount() == 0)
 		{
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "Um erro desconhecido ocorreu.<br/><a href=\"market.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		break;
 		}
 
 		$item = $verifik->fetchrow();
 
 		if ($item['seller'] != $player->username){
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "Você não pode remover este item do mercado.<br/><a href=\"market.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		break;
 		}
 
 		if (!$_GET['confirm']){
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "Tem certeza que seseja remover seu item do mercado? (" . $item['name'] . ")<br/><a href=\"market.php?act=remove&item=" . $_GET['item'] . "&confirm=yes\">Sim</a> | <a href=\"market.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		}else{
-		$mark_sold=$db->execute("update `items` set `mark`='f' where `id`=?", array($_GET['item']));
-		$query_delete=$db->execute("delete from `market` where `market_id`=?", array($_GET['item']));
-		include("templates/private_header.php");
+		$mark_sold=$db->execute("update `items` set `mark`='f' where `id`=?", [$_GET['item']]);
+		$query_delete=$db->execute("delete from `market` where `market_id`=?", [$_GET['item']]);
+		include(__DIR__ . "/templates/private_header.php");
 		echo "Você removeu seu item do mercado<br/><a href=\"market.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		}
 	break;
 
@@ -84,27 +84,23 @@ switch($_GET['act'])
 		$query .= "market.ite_id=blueprint_items.id and market.market_id=items.id and blueprint_items.type='amulet' and market.serv='$player->serv' order by $orderby $abc";
 		
 		//Construct values array for adoDB
-		$values = array();
-		if ($_GET['fromprice'])
-		{
-			array_push($values, intval($_GET['fromprice']));
-		}
-		if ($_GET['toprice'])
-		{
-			array_push($values, intval($_GET['toprice']));
-		}
-		if ($_GET['fromeffect'])
-		{
-			array_push($values, intval($_GET['fromeffect']));
-		}
-		if ($_GET['toeffect'])
-		{
-			array_push($values, intval($_GET['toeffect']));
-		}
+		$values = [];
+		if ($_GET['fromprice']) {
+      $values[] = (int) $_GET['fromprice'];
+  }
+		if ($_GET['toprice']) {
+      $values[] = (int) $_GET['toprice'];
+  }
+		if ($_GET['fromeffect']) {
+      $values[] = (int) $_GET['fromeffect'];
+  }
+		if ($_GET['toeffect']) {
+      $values[] = (int) $_GET['toeffect'];
+  }
 
 		$query = $db->execute($query, $values); //Search!
 		
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		
 		echo "<fieldset>";
 		echo "<legend><b>Mercado</b></legend>\n";
@@ -127,10 +123,10 @@ switch($_GET['act'])
 		echo "</select></td>\n</tr>\n";
 		echo "<tr>\n<td></td>";
 		echo "<tr>\n<td width=\"40%\">Preço:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes($_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes($_GET['toprice']) . "\"/></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes((string) $_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes((string) $_GET['toprice']) . "\"/></td>\n";
 		echo "</td>\n</tr>";
 		echo "<tr>\n<td width=\"40%\">Ataque/Defesa:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes($_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes($_GET['toeffect']) . "\" /></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes((string) $_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes((string) $_GET['toeffect']) . "\" /></td>\n";
 		echo "</td>\n</tr>";
 		echo "<td><input type=\"submit\" value=\"Procurar\" /></td>\n</tr>";
 		echo "</table>";
@@ -159,76 +155,56 @@ switch($_GET['act'])
 			while ($item = $query->fetchrow())
 			{
 				echo "<tr>\n";
-				if ($item['item_bonus'] > 0){
-				$bonus1 = " +" . $item['item_bonus'] . "";
-				}else{
-				$bonus1 = "";
-				}
-				if ($item['for'] > 0){
-				$bonus2 = " <font color=\"gray\">+" . $item['for'] . "F</font>";
-				}else{
-				$bonus2 = "";
-				}
-				if ($item['vit'] > 0){
-				$bonus3 = " <font color=\"green\">+" . $item['vit'] . "V</font>";
-				}else{
-				$bonus3 = "";
-				}
-				if ($item['agi'] > 0){
-				$bonus4 = " <font color=\"blue\">+" . $item['agi'] . "A</font>";
-				}else{
-				$bonus4 = "";
-				}
-				if ($item['res'] > 0){
-				$bonus5 = " <font color=\"red\">+" . $item['res'] . "R</font>";
-				}else{
-				$bonus5 = "";
-				}
+				$bonus1 = $item['item_bonus'] > 0 ? " +" . $item['item_bonus'] . "" : "";
+				$bonus2 = $item['for'] > 0 ? " <font color=\"gray\">+" . $item['for'] . "F</font>" : "";
+				$bonus3 = $item['vit'] > 0 ? " <font color=\"green\">+" . $item['vit'] . "V</font>" : "";
+				$bonus4 = $item['agi'] > 0 ? " <font color=\"blue\">+" . $item['agi'] . "A</font>" : "";
+				$bonus5 = $item['res'] > 0 ? " <font color=\"red\">+" . $item['res'] . "R</font>" : "";
 				echo "<td>" . $item['name'] . " <font size=\"1\">" . $bonus1 . "" . $bonus2 . "" . $bonus3 . "" . $bonus4 . "" . $bonus5 . "</font></td>";
 				echo "<td>" . ($item['effectiveness'] + ($item['item_bonus'] * 2)) . "</td>";
 				echo "<td>" . $item['price'] . "</td>";
 				echo "<td>";
-				if ($item['voc'] == 1 and $item['needpromo'] == 'f')
+				if ($item['voc'] == 1 && $item['needpromo'] == 'f')
 				{
 				echo "Caçador";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 'f')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 'f')
 				{
 				echo "Espadachim";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 'f')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 'f')
 				{
 				echo "Bruxo";
 				}
-				elseif ($item['voc'] == 1 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 1 && $item['needpromo'] == 't')
 				{
 				echo "Arqueiro";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 't')
 				{
 				echo "Guerreiro";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 't')
 				{
 				echo "Mago";
 				}
-				elseif ($item['voc'] == 0 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 0 && $item['needpromo'] == 't')
 				{
 				echo "Vocações superiores";
 				}
-				elseif ($item['voc'] == 1 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 1 && $item['needpromo'] == 'p')
 				{
 				echo "Arqueiro Royal";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 'p')
 				{
 				echo "Cavaleiro";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 'p')
 				{
 				echo "Arquimago";
 				}
-				elseif ($item['voc'] == 0 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 0 && $item['needpromo'] == 'p')
 				{
 				echo "Vocações supremas";
 				}else{
@@ -249,7 +225,7 @@ switch($_GET['act'])
 
 		echo "<br/><div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><center><a href=\"market_sell.php\"><b>Vender Itens</b></a></center></div>";
 		
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		break;
 
 
@@ -270,27 +246,23 @@ switch($_GET['act'])
 		$query .= "market.ite_id=blueprint_items.id and market.market_id=items.id and blueprint_items.type='weapon' and market.serv='$player->serv' order by $orderby $abc";
 		
 		//Construct values array for adoDB
-		$values = array();
-		if ($_GET['fromprice'])
-		{
-			array_push($values, intval($_GET['fromprice']));
-		}
-		if ($_GET['toprice'])
-		{
-			array_push($values, intval($_GET['toprice']));
-		}
-		if ($_GET['fromeffect'])
-		{
-			array_push($values, intval($_GET['fromeffect']));
-		}
-		if ($_GET['toeffect'])
-		{
-			array_push($values, intval($_GET['toeffect']));
-		}
+		$values = [];
+		if ($_GET['fromprice']) {
+      $values[] = (int) $_GET['fromprice'];
+  }
+		if ($_GET['toprice']) {
+      $values[] = (int) $_GET['toprice'];
+  }
+		if ($_GET['fromeffect']) {
+      $values[] = (int) $_GET['fromeffect'];
+  }
+		if ($_GET['toeffect']) {
+      $values[] = (int) $_GET['toeffect'];
+  }
 
 		$query = $db->execute($query, $values); //Search!
 		
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		
 		echo "<fieldset>";
 		echo "<legend><b>Mercado</b></legend>\n";
@@ -313,10 +285,10 @@ switch($_GET['act'])
 		echo "</select></td>\n</tr>\n";
 		echo "<tr>\n<td></td>";
 		echo "<tr>\n<td width=\"40%\">Preço:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes($_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes($_GET['toprice']) . "\"/></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes((string) $_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes((string) $_GET['toprice']) . "\"/></td>\n";
 		echo "</td>\n</tr>";
 		echo "<tr>\n<td width=\"40%\">Ataque/Defesa:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes($_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes($_GET['toeffect']) . "\" /></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes((string) $_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes((string) $_GET['toeffect']) . "\" /></td>\n";
 		echo "</td>\n</tr>";
 		echo "<td><input type=\"submit\" value=\"Procurar\" /></td>\n</tr>";
 		echo "</table>";
@@ -345,76 +317,56 @@ switch($_GET['act'])
 			while ($item = $query->fetchrow())
 			{
 				echo "<tr>\n";
-				if ($item['item_bonus'] > 0){
-				$bonus1 = " +" . $item['item_bonus'] . "";
-				}else{
-				$bonus1 = "";
-				}
-				if ($item['for'] > 0){
-				$bonus2 = " <font color=\"gray\">+" . $item['for'] . "F</font>";
-				}else{
-				$bonus2 = "";
-				}
-				if ($item['vit'] > 0){
-				$bonus3 = " <font color=\"green\">+" . $item['vit'] . "V</font>";
-				}else{
-				$bonus3 = "";
-				}
-				if ($item['agi'] > 0){
-				$bonus4 = " <font color=\"blue\">+" . $item['agi'] . "A</font>";
-				}else{
-				$bonus4 = "";
-				}
-				if ($item['res'] > 0){
-				$bonus5 = " <font color=\"red\">+" . $item['res'] . "R</font>";
-				}else{
-				$bonus5 = "";
-				}
+				$bonus1 = $item['item_bonus'] > 0 ? " +" . $item['item_bonus'] . "" : "";
+				$bonus2 = $item['for'] > 0 ? " <font color=\"gray\">+" . $item['for'] . "F</font>" : "";
+				$bonus3 = $item['vit'] > 0 ? " <font color=\"green\">+" . $item['vit'] . "V</font>" : "";
+				$bonus4 = $item['agi'] > 0 ? " <font color=\"blue\">+" . $item['agi'] . "A</font>" : "";
+				$bonus5 = $item['res'] > 0 ? " <font color=\"red\">+" . $item['res'] . "R</font>" : "";
 				echo "<td>" . $item['name'] . " <font size=\"1\">" . $bonus1 . "" . $bonus2 . "" . $bonus3 . "" . $bonus4 . "" . $bonus5 . "</font></td>";
 				echo "<td>" . ($item['effectiveness'] + ($item['item_bonus'] * 2)) . "</td>";
 				echo "<td>" . $item['price'] . "</td>";
 				echo "<td>";
-				if ($item['voc'] == 1 and $item['needpromo'] == 'f')
+				if ($item['voc'] == 1 && $item['needpromo'] == 'f')
 				{
 				echo "Caçador";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 'f')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 'f')
 				{
 				echo "Espadachim";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 'f')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 'f')
 				{
 				echo "Bruxo";
 				}
-				elseif ($item['voc'] == 1 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 1 && $item['needpromo'] == 't')
 				{
 				echo "Arqueiro";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 't')
 				{
 				echo "Guerreiro";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 't')
 				{
 				echo "Mago";
 				}
-				elseif ($item['voc'] == 0 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 0 && $item['needpromo'] == 't')
 				{
 				echo "Vocações superiores";
 				}
-				elseif ($item['voc'] == 1 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 1 && $item['needpromo'] == 'p')
 				{
 				echo "Arqueiro Royal";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 'p')
 				{
 				echo "Cavaleiro";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 'p')
 				{
 				echo "Arquimago";
 				}
-				elseif ($item['voc'] == 0 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 0 && $item['needpromo'] == 'p')
 				{
 				echo "Vocações supremas";
 				}else{
@@ -435,7 +387,7 @@ switch($_GET['act'])
 
 		echo "<br/><div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><center><a href=\"market_sell.php\"><b>Vender Itens</b></a></center></div>";
 		
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		break;
 
 
@@ -455,27 +407,23 @@ switch($_GET['act'])
 		$query .= "market.ite_id=blueprint_items.id and market.market_id=items.id and blueprint_items.type='armor' and market.serv='$player->serv' order by $orderby $abc";
 		
 		//Construct values array for adoDB
-		$values = array();
-		if ($_GET['fromprice'])
-		{
-			array_push($values, intval($_GET['fromprice']));
-		}
-		if ($_GET['toprice'])
-		{
-			array_push($values, intval($_GET['toprice']));
-		}
-		if ($_GET['fromeffect'])
-		{
-			array_push($values, intval($_GET['fromeffect']));
-		}
-		if ($_GET['toeffect'])
-		{
-			array_push($values, intval($_GET['toeffect']));
-		}
+		$values = [];
+		if ($_GET['fromprice']) {
+      $values[] = (int) $_GET['fromprice'];
+  }
+		if ($_GET['toprice']) {
+      $values[] = (int) $_GET['toprice'];
+  }
+		if ($_GET['fromeffect']) {
+      $values[] = (int) $_GET['fromeffect'];
+  }
+		if ($_GET['toeffect']) {
+      $values[] = (int) $_GET['toeffect'];
+  }
 
 		$query = $db->execute($query, $values); //Search!
 		
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		
 		echo "<fieldset>";
 		echo "<legend><b>Mercado</b></legend>\n";
@@ -498,10 +446,10 @@ switch($_GET['act'])
 		echo "</select></td>\n</tr>\n";
 		echo "<tr>\n<td></td>";
 		echo "<tr>\n<td width=\"40%\">Preço:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes($_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes($_GET['toprice']) . "\"/></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes((string) $_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes((string) $_GET['toprice']) . "\"/></td>\n";
 		echo "</td>\n</tr>";
 		echo "<tr>\n<td width=\"40%\">Ataque/Defesa:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes($_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes($_GET['toeffect']) . "\" /></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes((string) $_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes((string) $_GET['toeffect']) . "\" /></td>\n";
 		echo "</td>\n</tr>";
 		echo "<td><input type=\"submit\" value=\"Procurar\" /></td>\n</tr>";
 		echo "</table>";
@@ -530,76 +478,56 @@ switch($_GET['act'])
 			while ($item = $query->fetchrow())
 			{
 				echo "<tr>\n";
-				if ($item['item_bonus'] > 0){
-				$bonus1 = " +" . $item['item_bonus'] . "";
-				}else{
-				$bonus1 = "";
-				}
-				if ($item['for'] > 0){
-				$bonus2 = " <font color=\"gray\">+" . $item['for'] . "F</font>";
-				}else{
-				$bonus2 = "";
-				}
-				if ($item['vit'] > 0){
-				$bonus3 = " <font color=\"green\">+" . $item['vit'] . "V</font>";
-				}else{
-				$bonus3 = "";
-				}
-				if ($item['agi'] > 0){
-				$bonus4 = " <font color=\"blue\">+" . $item['agi'] . "A</font>";
-				}else{
-				$bonus4 = "";
-				}
-				if ($item['res'] > 0){
-				$bonus5 = " <font color=\"red\">+" . $item['res'] . "R</font>";
-				}else{
-				$bonus5 = "";
-				}
+				$bonus1 = $item['item_bonus'] > 0 ? " +" . $item['item_bonus'] . "" : "";
+				$bonus2 = $item['for'] > 0 ? " <font color=\"gray\">+" . $item['for'] . "F</font>" : "";
+				$bonus3 = $item['vit'] > 0 ? " <font color=\"green\">+" . $item['vit'] . "V</font>" : "";
+				$bonus4 = $item['agi'] > 0 ? " <font color=\"blue\">+" . $item['agi'] . "A</font>" : "";
+				$bonus5 = $item['res'] > 0 ? " <font color=\"red\">+" . $item['res'] . "R</font>" : "";
 				echo "<td>" . $item['name'] . " <font size=\"1\">" . $bonus1 . "" . $bonus2 . "" . $bonus3 . "" . $bonus4 . "" . $bonus5 . "</font></td>";
 				echo "<td>" . ($item['effectiveness'] + ($item['item_bonus'] * 2)) . "</td>";
 				echo "<td>" . $item['price'] . "</td>";
 				echo "<td>";
-				if ($item['voc'] == 1 and $item['needpromo'] == 'f')
+				if ($item['voc'] == 1 && $item['needpromo'] == 'f')
 				{
 				echo "Caçador";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 'f')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 'f')
 				{
 				echo "Espadachim";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 'f')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 'f')
 				{
 				echo "Bruxo";
 				}
-				elseif ($item['voc'] == 1 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 1 && $item['needpromo'] == 't')
 				{
 				echo "Arqueiro";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 't')
 				{
 				echo "Guerreiro";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 't')
 				{
 				echo "Mago";
 				}
-				elseif ($item['voc'] == 0 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 0 && $item['needpromo'] == 't')
 				{
 				echo "Vocações superiores";
 				}
-				elseif ($item['voc'] == 1 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 1 && $item['needpromo'] == 'p')
 				{
 				echo "Arqueiro Royal";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 'p')
 				{
 				echo "Cavaleiro";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 'p')
 				{
 				echo "Arquimago";
 				}
-				elseif ($item['voc'] == 0 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 0 && $item['needpromo'] == 'p')
 				{
 				echo "Vocações supremas";
 				}else{
@@ -620,7 +548,7 @@ switch($_GET['act'])
 
 		echo "<br/><div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><center><a href=\"market_sell.php\"><b>Vender Itens</b></a></center></div>";
 		
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		break;
 
 
@@ -640,27 +568,23 @@ switch($_GET['act'])
 		$query .= "market.ite_id=blueprint_items.id and market.market_id=items.id and blueprint_items.type='boots' and market.serv='$player->serv' order by $orderby $abc";
 		
 		//Construct values array for adoDB
-		$values = array();
-		if ($_GET['fromprice'])
-		{
-			array_push($values, intval($_GET['fromprice']));
-		}
-		if ($_GET['toprice'])
-		{
-			array_push($values, intval($_GET['toprice']));
-		}
-		if ($_GET['fromeffect'])
-		{
-			array_push($values, intval($_GET['fromeffect']));
-		}
-		if ($_GET['toeffect'])
-		{
-			array_push($values, intval($_GET['toeffect']));
-		}
+		$values = [];
+		if ($_GET['fromprice']) {
+      $values[] = (int) $_GET['fromprice'];
+  }
+		if ($_GET['toprice']) {
+      $values[] = (int) $_GET['toprice'];
+  }
+		if ($_GET['fromeffect']) {
+      $values[] = (int) $_GET['fromeffect'];
+  }
+		if ($_GET['toeffect']) {
+      $values[] = (int) $_GET['toeffect'];
+  }
 
 		$query = $db->execute($query, $values); //Search!
 		
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		
 		echo "<fieldset>";
 		echo "<legend><b>Mercado</b></legend>\n";
@@ -683,10 +607,10 @@ switch($_GET['act'])
 		echo "</select></td>\n</tr>\n";
 		echo "<tr>\n<td></td>";
 		echo "<tr>\n<td width=\"40%\">Preço:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes($_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes($_GET['toprice']) . "\"/></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes((string) $_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes((string) $_GET['toprice']) . "\"/></td>\n";
 		echo "</td>\n</tr>";
 		echo "<tr>\n<td width=\"40%\">Ataque/Defesa:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes($_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes($_GET['toeffect']) . "\" /></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes((string) $_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes((string) $_GET['toeffect']) . "\" /></td>\n";
 		echo "</td>\n</tr>";
 		echo "<td><input type=\"submit\" value=\"Procurar\" /></td>\n</tr>";
 		echo "</table>";
@@ -715,76 +639,56 @@ switch($_GET['act'])
 			while ($item = $query->fetchrow())
 			{
 				echo "<tr>\n";
-				if ($item['item_bonus'] > 0){
-				$bonus1 = " +" . $item['item_bonus'] . "";
-				}else{
-				$bonus1 = "";
-				}
-				if ($item['for'] > 0){
-				$bonus2 = " <font color=\"gray\">+" . $item['for'] . "F</font>";
-				}else{
-				$bonus2 = "";
-				}
-				if ($item['vit'] > 0){
-				$bonus3 = " <font color=\"green\">+" . $item['vit'] . "V</font>";
-				}else{
-				$bonus3 = "";
-				}
-				if ($item['agi'] > 0){
-				$bonus4 = " <font color=\"blue\">+" . $item['agi'] . "A</font>";
-				}else{
-				$bonus4 = "";
-				}
-				if ($item['res'] > 0){
-				$bonus5 = " <font color=\"red\">+" . $item['res'] . "R</font>";
-				}else{
-				$bonus5 = "";
-				}
+				$bonus1 = $item['item_bonus'] > 0 ? " +" . $item['item_bonus'] . "" : "";
+				$bonus2 = $item['for'] > 0 ? " <font color=\"gray\">+" . $item['for'] . "F</font>" : "";
+				$bonus3 = $item['vit'] > 0 ? " <font color=\"green\">+" . $item['vit'] . "V</font>" : "";
+				$bonus4 = $item['agi'] > 0 ? " <font color=\"blue\">+" . $item['agi'] . "A</font>" : "";
+				$bonus5 = $item['res'] > 0 ? " <font color=\"red\">+" . $item['res'] . "R</font>" : "";
 				echo "<td>" . $item['name'] . " <font size=\"1\">" . $bonus1 . "" . $bonus2 . "" . $bonus3 . "" . $bonus4 . "" . $bonus5 . "</font></td>";
 				echo "<td>" . ($item['effectiveness'] + ($item['item_bonus'] * 2)) . "</td>";
 				echo "<td>" . $item['price'] . "</td>";
 				echo "<td>";
-				if ($item['voc'] == 1 and $item['needpromo'] == 'f')
+				if ($item['voc'] == 1 && $item['needpromo'] == 'f')
 				{
 				echo "Caçador";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 'f')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 'f')
 				{
 				echo "Espadachim";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 'f')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 'f')
 				{
 				echo "Bruxo";
 				}
-				elseif ($item['voc'] == 1 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 1 && $item['needpromo'] == 't')
 				{
 				echo "Arqueiro";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 't')
 				{
 				echo "Guerreiro";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 't')
 				{
 				echo "Mago";
 				}
-				elseif ($item['voc'] == 0 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 0 && $item['needpromo'] == 't')
 				{
 				echo "Vocações superiores";
 				}
-				elseif ($item['voc'] == 1 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 1 && $item['needpromo'] == 'p')
 				{
 				echo "Arqueiro Royal";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 'p')
 				{
 				echo "Cavaleiro";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 'p')
 				{
 				echo "Arquimago";
 				}
-				elseif ($item['voc'] == 0 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 0 && $item['needpromo'] == 'p')
 				{
 				echo "Vocações supremas";
 				}else{
@@ -805,7 +709,7 @@ switch($_GET['act'])
 
 		echo "<br/><div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><center><a href=\"market_sell.php\"><b>Vender Itens</b></a></center></div>";
 		
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		break;
 
 	case "legs":
@@ -824,27 +728,23 @@ switch($_GET['act'])
 		$query .= "market.ite_id=blueprint_items.id and market.market_id=items.id and blueprint_items.type='legs' and market.serv='$player->serv' order by $orderby $abc";
 		
 		//Construct values array for adoDB
-		$values = array();
-		if ($_GET['fromprice'])
-		{
-			array_push($values, intval($_GET['fromprice']));
-		}
-		if ($_GET['toprice'])
-		{
-			array_push($values, intval($_GET['toprice']));
-		}
-		if ($_GET['fromeffect'])
-		{
-			array_push($values, intval($_GET['fromeffect']));
-		}
-		if ($_GET['toeffect'])
-		{
-			array_push($values, intval($_GET['toeffect']));
-		}
+		$values = [];
+		if ($_GET['fromprice']) {
+      $values[] = (int) $_GET['fromprice'];
+  }
+		if ($_GET['toprice']) {
+      $values[] = (int) $_GET['toprice'];
+  }
+		if ($_GET['fromeffect']) {
+      $values[] = (int) $_GET['fromeffect'];
+  }
+		if ($_GET['toeffect']) {
+      $values[] = (int) $_GET['toeffect'];
+  }
 
 		$query = $db->execute($query, $values); //Search!
 		
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		
 		echo "<fieldset>";
 		echo "<legend><b>Mercado</b></legend>\n";
@@ -867,10 +767,10 @@ switch($_GET['act'])
 		echo "</select></td>\n</tr>\n";
 		echo "<tr>\n<td></td>";
 		echo "<tr>\n<td width=\"40%\">Preço:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes($_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes($_GET['toprice']) . "\"/></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes((string) $_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes((string) $_GET['toprice']) . "\"/></td>\n";
 		echo "</td>\n</tr>";
 		echo "<tr>\n<td width=\"40%\">Ataque/Defesa:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes($_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes($_GET['toeffect']) . "\" /></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes((string) $_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes((string) $_GET['toeffect']) . "\" /></td>\n";
 		echo "</td>\n</tr>";
 		echo "<td><input type=\"submit\" value=\"Procurar\" /></td>\n</tr>";
 		echo "</table>";
@@ -901,82 +801,62 @@ switch($_GET['act'])
 				if (time() > $item['expira']){
 				$logmsg = "Parece que ninguém se interessou pelo seu/sua " . $item['name'] . ".<br/>Ela ficou 2 semanas no mercado, e agora foi removida do mercado.";
 				addlog($player->id, $logmsg, $db);
-				$query = $db->execute("update `items` set `mark`='f', `status`='unequipped' where `id`=?",array($item['market_id']));
-				$query = $db->execute("delete from `market` where `market_id`=?", array($item['market_id']));
+				$query = $db->execute("update `items` set `mark`='f', `status`='unequipped' where `id`=?",[$item['market_id']]);
+				$query = $db->execute("delete from `market` where `market_id`=?", [$item['market_id']]);
 				}else{
 
 				echo "<tr>\n";
-				if ($item['item_bonus'] > 0){
-				$bonus1 = " +" . $item['item_bonus'] . "";
-				}else{
-				$bonus1 = "";
-				}
-				if ($item['for'] > 0){
-				$bonus2 = " <font color=\"gray\">+" . $item['for'] . "F</font>";
-				}else{
-				$bonus2 = "";
-				}
-				if ($item['vit'] > 0){
-				$bonus3 = " <font color=\"green\">+" . $item['vit'] . "V</font>";
-				}else{
-				$bonus3 = "";
-				}
-				if ($item['agi'] > 0){
-				$bonus4 = " <font color=\"blue\">+" . $item['agi'] . "A</font>";
-				}else{
-				$bonus4 = "";
-				}
-				if ($item['res'] > 0){
-				$bonus5 = " <font color=\"red\">+" . $item['res'] . "R</font>";
-				}else{
-				$bonus5 = "";
-				}
+				$bonus1 = $item['item_bonus'] > 0 ? " +" . $item['item_bonus'] . "" : "";
+				$bonus2 = $item['for'] > 0 ? " <font color=\"gray\">+" . $item['for'] . "F</font>" : "";
+				$bonus3 = $item['vit'] > 0 ? " <font color=\"green\">+" . $item['vit'] . "V</font>" : "";
+				$bonus4 = $item['agi'] > 0 ? " <font color=\"blue\">+" . $item['agi'] . "A</font>" : "";
+				$bonus5 = $item['res'] > 0 ? " <font color=\"red\">+" . $item['res'] . "R</font>" : "";
 
 				echo "<td>" . $item['name'] . " <font size=\"1\">" . $bonus1 . "" . $bonus2 . "" . $bonus3 . "" . $bonus4 . "" . $bonus5 . "</font></td>";
 				echo "<td>" . ($item['effectiveness'] + ($item['item_bonus'] * 2)) . "</td>";
 				echo "<td>" . $item['price'] . "</td>";
 				echo "<td>";
-				if ($item['voc'] == 1 and $item['needpromo'] == 'f')
+				if ($item['voc'] == 1 && $item['needpromo'] == 'f')
 				{
 				echo "Caçador";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 'f')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 'f')
 				{
 				echo "Espadachim";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 'f')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 'f')
 				{
 				echo "Bruxo";
 				}
-				elseif ($item['voc'] == 1 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 1 && $item['needpromo'] == 't')
 				{
 				echo "Arqueiro";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 't')
 				{
 				echo "Guerreiro";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 't')
 				{
 				echo "Mago";
 				}
-				elseif ($item['voc'] == 0 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 0 && $item['needpromo'] == 't')
 				{
 				echo "Vocações superiores";
 				}
-				elseif ($item['voc'] == 1 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 1 && $item['needpromo'] == 'p')
 				{
 				echo "Arqueiro Royal";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 'p')
 				{
 				echo "Cavaleiro";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 'p')
 				{
 				echo "Arquimago";
 				}
-				elseif ($item['voc'] == 0 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 0 && $item['needpromo'] == 'p')
 				{
 				echo "Vocações supremas";
 				}else{
@@ -998,7 +878,7 @@ switch($_GET['act'])
 
 		echo "<br/><div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><center><a href=\"market_sell.php\"><b>Vender Itens</b></a></center></div>";
 		
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		break;
 	
 
@@ -1019,27 +899,23 @@ switch($_GET['act'])
 		$query .= "market.ite_id=blueprint_items.id and market.market_id=items.id and blueprint_items.type='helmet' and market.serv='$player->serv' order by $orderby $abc";
 		
 		//Construct values array for adoDB
-		$values = array();
-		if ($_GET['fromprice'])
-		{
-			array_push($values, intval($_GET['fromprice']));
-		}
-		if ($_GET['toprice'])
-		{
-			array_push($values, intval($_GET['toprice']));
-		}
-		if ($_GET['fromeffect'])
-		{
-			array_push($values, intval($_GET['fromeffect']));
-		}
-		if ($_GET['toeffect'])
-		{
-			array_push($values, intval($_GET['toeffect']));
-		}
+		$values = [];
+		if ($_GET['fromprice']) {
+      $values[] = (int) $_GET['fromprice'];
+  }
+		if ($_GET['toprice']) {
+      $values[] = (int) $_GET['toprice'];
+  }
+		if ($_GET['fromeffect']) {
+      $values[] = (int) $_GET['fromeffect'];
+  }
+		if ($_GET['toeffect']) {
+      $values[] = (int) $_GET['toeffect'];
+  }
 
 		$query = $db->execute($query, $values); //Search!
 		
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		
 		echo "<fieldset>";
 		echo "<legend><b>Mercado</b></legend>\n";
@@ -1062,10 +938,10 @@ switch($_GET['act'])
 		echo "</select></td>\n</tr>\n";
 		echo "<tr>\n<td></td>";
 		echo "<tr>\n<td width=\"40%\">Preço:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes($_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes($_GET['toprice']) . "\"/></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes((string) $_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes((string) $_GET['toprice']) . "\"/></td>\n";
 		echo "</td>\n</tr>";
 		echo "<tr>\n<td width=\"40%\">Ataque/Defesa:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes($_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes($_GET['toeffect']) . "\" /></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes((string) $_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes((string) $_GET['toeffect']) . "\" /></td>\n";
 		echo "</td>\n</tr>";
 		echo "<td><input type=\"submit\" value=\"Procurar\" /></td>\n</tr>";
 		echo "</table>";
@@ -1094,76 +970,56 @@ switch($_GET['act'])
 			while ($item = $query->fetchrow())
 			{
 				echo "<tr>\n";
-				if ($item['item_bonus'] > 0){
-				$bonus1 = " +" . $item['item_bonus'] . "";
-				}else{
-				$bonus1 = "";
-				}
-				if ($item['for'] > 0){
-				$bonus2 = " <font color=\"gray\">+" . $item['for'] . "F</font>";
-				}else{
-				$bonus2 = "";
-				}
-				if ($item['vit'] > 0){
-				$bonus3 = " <font color=\"green\">+" . $item['vit'] . "V</font>";
-				}else{
-				$bonus3 = "";
-				}
-				if ($item['agi'] > 0){
-				$bonus4 = " <font color=\"blue\">+" . $item['agi'] . "A</font>";
-				}else{
-				$bonus4 = "";
-				}
-				if ($item['res'] > 0){
-				$bonus5 = " <font color=\"red\">+" . $item['res'] . "R</font>";
-				}else{
-				$bonus5 = "";
-				}
+				$bonus1 = $item['item_bonus'] > 0 ? " +" . $item['item_bonus'] . "" : "";
+				$bonus2 = $item['for'] > 0 ? " <font color=\"gray\">+" . $item['for'] . "F</font>" : "";
+				$bonus3 = $item['vit'] > 0 ? " <font color=\"green\">+" . $item['vit'] . "V</font>" : "";
+				$bonus4 = $item['agi'] > 0 ? " <font color=\"blue\">+" . $item['agi'] . "A</font>" : "";
+				$bonus5 = $item['res'] > 0 ? " <font color=\"red\">+" . $item['res'] . "R</font>" : "";
 				echo "<td>" . $item['name'] . " <font size=\"1\">" . $bonus1 . "" . $bonus2 . "" . $bonus3 . "" . $bonus4 . "" . $bonus5 . "</font></td>";
 				echo "<td>" . ($item['effectiveness'] + ($item['item_bonus'] * 2)) . "</td>";
 				echo "<td>" . $item['price'] . "</td>";
 				echo "<td>";
-				if ($item['voc'] == 1 and $item['needpromo'] == 'f')
+				if ($item['voc'] == 1 && $item['needpromo'] == 'f')
 				{
 				echo "Caçador";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 'f')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 'f')
 				{
 				echo "Espadachim";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 'f')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 'f')
 				{
 				echo "Bruxo";
 				}
-				elseif ($item['voc'] == 1 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 1 && $item['needpromo'] == 't')
 				{
 				echo "Arqueiro";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 't')
 				{
 				echo "Guerreiro";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 't')
 				{
 				echo "Mago";
 				}
-				elseif ($item['voc'] == 0 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 0 && $item['needpromo'] == 't')
 				{
 				echo "Vocações superiores";
 				}
-				elseif ($item['voc'] == 1 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 1 && $item['needpromo'] == 'p')
 				{
 				echo "Arqueiro Royal";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 'p')
 				{
 				echo "Cavaleiro";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 'p')
 				{
 				echo "Arquimago";
 				}
-				elseif ($item['voc'] == 0 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 0 && $item['needpromo'] == 'p')
 				{
 				echo "Vocações supremas";
 				}else{
@@ -1184,7 +1040,7 @@ switch($_GET['act'])
 
 		echo "<br/><div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><center><a href=\"market_sell.php\"><b>Vender Itens</b></a></center></div>";
 		
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		break;
 
 
@@ -1204,27 +1060,23 @@ switch($_GET['act'])
 		$query .= "market.ite_id=blueprint_items.id and market.market_id=items.id and blueprint_items.type='shield' and market.serv='$player->serv' order by $orderby $abc";
 		
 		//Construct values array for adoDB
-		$values = array();
-		if ($_GET['fromprice'])
-		{
-			array_push($values, intval($_GET['fromprice']));
-		}
-		if ($_GET['toprice'])
-		{
-			array_push($values, intval($_GET['toprice']));
-		}
-		if ($_GET['fromeffect'])
-		{
-			array_push($values, intval($_GET['fromeffect']));
-		}
-		if ($_GET['toeffect'])
-		{
-			array_push($values, intval($_GET['toeffect']));
-		}
+		$values = [];
+		if ($_GET['fromprice']) {
+      $values[] = (int) $_GET['fromprice'];
+  }
+		if ($_GET['toprice']) {
+      $values[] = (int) $_GET['toprice'];
+  }
+		if ($_GET['fromeffect']) {
+      $values[] = (int) $_GET['fromeffect'];
+  }
+		if ($_GET['toeffect']) {
+      $values[] = (int) $_GET['toeffect'];
+  }
 
 		$query = $db->execute($query, $values); //Search!
 		
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		
 		echo "<fieldset>";
 		echo "<legend><b>Mercado</b></legend>\n";
@@ -1247,10 +1099,10 @@ switch($_GET['act'])
 		echo "</select></td>\n</tr>\n";
 		echo "<tr>\n<td></td>";
 		echo "<tr>\n<td width=\"40%\">Preço:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes($_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes($_GET['toprice']) . "\"/></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes((string) $_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes((string) $_GET['toprice']) . "\"/></td>\n";
 		echo "</td>\n</tr>";
 		echo "<tr>\n<td width=\"40%\">Ataque/Defesa:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes($_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes($_GET['toeffect']) . "\" /></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes((string) $_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes((string) $_GET['toeffect']) . "\" /></td>\n";
 		echo "</td>\n</tr>";
 		echo "<td><input type=\"submit\" value=\"Procurar\" /></td>\n</tr>";
 		echo "</table>";
@@ -1279,76 +1131,56 @@ switch($_GET['act'])
 			while ($item = $query->fetchrow())
 			{
 				echo "<tr>\n";
-				if ($item['item_bonus'] > 0){
-				$bonus1 = " +" . $item['item_bonus'] . "";
-				}else{
-				$bonus1 = "";
-				}
-				if ($item['for'] > 0){
-				$bonus2 = " <font color=\"gray\">+" . $item['for'] . "F</font>";
-				}else{
-				$bonus2 = "";
-				}
-				if ($item['vit'] > 0){
-				$bonus3 = " <font color=\"green\">+" . $item['vit'] . "V</font>";
-				}else{
-				$bonus3 = "";
-				}
-				if ($item['agi'] > 0){
-				$bonus4 = " <font color=\"blue\">+" . $item['agi'] . "A</font>";
-				}else{
-				$bonus4 = "";
-				}
-				if ($item['res'] > 0){
-				$bonus5 = " <font color=\"red\">+" . $item['res'] . "R</font>";
-				}else{
-				$bonus5 = "";
-				}
+				$bonus1 = $item['item_bonus'] > 0 ? " +" . $item['item_bonus'] . "" : "";
+				$bonus2 = $item['for'] > 0 ? " <font color=\"gray\">+" . $item['for'] . "F</font>" : "";
+				$bonus3 = $item['vit'] > 0 ? " <font color=\"green\">+" . $item['vit'] . "V</font>" : "";
+				$bonus4 = $item['agi'] > 0 ? " <font color=\"blue\">+" . $item['agi'] . "A</font>" : "";
+				$bonus5 = $item['res'] > 0 ? " <font color=\"red\">+" . $item['res'] . "R</font>" : "";
 				echo "<td>" . $item['name'] . " <font size=\"1\">" . $bonus1 . "" . $bonus2 . "" . $bonus3 . "" . $bonus4 . "" . $bonus5 . "</font></td>";
 				echo "<td>" . ($item['effectiveness'] + ($item['item_bonus'] * 2)) . "</td>";
 				echo "<td>" . $item['price'] . "</td>";
 				echo "<td>";
-				if ($item['voc'] == 1 and $item['needpromo'] == 'f')
+				if ($item['voc'] == 1 && $item['needpromo'] == 'f')
 				{
 				echo "Caçador";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 'f')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 'f')
 				{
 				echo "Espadachim";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 'f')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 'f')
 				{
 				echo "Bruxo";
 				}
-				elseif ($item['voc'] == 1 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 1 && $item['needpromo'] == 't')
 				{
 				echo "Arqueiro";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 't')
 				{
 				echo "Guerreiro";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 't')
 				{
 				echo "Mago";
 				}
-				elseif ($item['voc'] == 0 and $item['needpromo'] == 't')
+				elseif ($item['voc'] == 0 && $item['needpromo'] == 't')
 				{
 				echo "Vocações superiores";
 				}
-				elseif ($item['voc'] == 1 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 1 && $item['needpromo'] == 'p')
 				{
 				echo "Arqueiro Royal";
 				}
-				elseif ($item['voc'] == 2 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 2 && $item['needpromo'] == 'p')
 				{
 				echo "Cavaleiro";
 				}
-				elseif ($item['voc'] == 3 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 3 && $item['needpromo'] == 'p')
 				{
 				echo "Arquimago";
 				}
-				elseif ($item['voc'] == 0 and $item['needpromo'] == 'p')
+				elseif ($item['voc'] == 0 && $item['needpromo'] == 'p')
 				{
 				echo "Vocações supremas";
 				}else{
@@ -1369,7 +1201,7 @@ switch($_GET['act'])
 
 		echo "<br/><div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><center><a href=\"market_sell.php\"><b>Vender Itens</b></a></center></div>";
 		
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		break;
 
 
@@ -1389,27 +1221,23 @@ switch($_GET['act'])
 		$query .= "market.ite_id=blueprint_items.id and market.market_id=items.id and blueprint_items.type='potion' and market.serv='$player->serv' order by $orderby $abc";
 		
 		//Construct values array for adoDB
-		$values = array();
-		if ($_GET['fromprice'])
-		{
-			array_push($values, intval($_GET['fromprice']));
-		}
-		if ($_GET['toprice'])
-		{
-			array_push($values, intval($_GET['toprice']));
-		}
-		if ($_GET['fromeffect'])
-		{
-			array_push($values, intval($_GET['fromeffect']));
-		}
-		if ($_GET['toeffect'])
-		{
-			array_push($values, intval($_GET['toeffect']));
-		}
+		$values = [];
+		if ($_GET['fromprice']) {
+      $values[] = (int) $_GET['fromprice'];
+  }
+		if ($_GET['toprice']) {
+      $values[] = (int) $_GET['toprice'];
+  }
+		if ($_GET['fromeffect']) {
+      $values[] = (int) $_GET['fromeffect'];
+  }
+		if ($_GET['toeffect']) {
+      $values[] = (int) $_GET['toeffect'];
+  }
 
 		$query = $db->execute($query, $values); //Search!
 		
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		
 		echo "<fieldset>";
 		echo "<legend><b>Mercado</b></legend>\n";
@@ -1432,10 +1260,10 @@ switch($_GET['act'])
 		echo "</select></td>\n</tr>\n";
 		echo "<tr>\n<td></td>";
 		echo "<tr>\n<td width=\"40%\">Preço:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes($_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes($_GET['toprice']) . "\"/></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes((string) $_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes((string) $_GET['toprice']) . "\"/></td>\n";
 		echo "</td>\n</tr>";
 		echo "<tr>\n<td width=\"40%\">Ataque/Defesa:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes($_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes($_GET['toeffect']) . "\" /></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes((string) $_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes((string) $_GET['toeffect']) . "\" /></td>\n";
 		echo "</td>\n</tr>";
 		echo "<td><input type=\"submit\" value=\"Procurar\" /></td>\n</tr>";
 		echo "</table>";
@@ -1479,7 +1307,7 @@ switch($_GET['act'])
 
 		echo "<br/><div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><center><a href=\"market_sell.php\"><b>Vender Itens</b></a></center></div>";
 		
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		break;
 	
 	case "addon":
@@ -1498,27 +1326,23 @@ switch($_GET['act'])
 		$query .= "market.ite_id=blueprint_items.id and market.market_id=items.id and blueprint_items.type='addon' and market.serv='$player->serv' order by $orderby $abc";
 		
 		//Construct values array for adoDB
-		$values = array();
-		if ($_GET['fromprice'])
-		{
-			array_push($values, intval($_GET['fromprice']));
-		}
-		if ($_GET['toprice'])
-		{
-			array_push($values, intval($_GET['toprice']));
-		}
-		if ($_GET['fromeffect'])
-		{
-			array_push($values, intval($_GET['fromeffect']));
-		}
-		if ($_GET['toeffect'])
-		{
-			array_push($values, intval($_GET['toeffect']));
-		}
+		$values = [];
+		if ($_GET['fromprice']) {
+      $values[] = (int) $_GET['fromprice'];
+  }
+		if ($_GET['toprice']) {
+      $values[] = (int) $_GET['toprice'];
+  }
+		if ($_GET['fromeffect']) {
+      $values[] = (int) $_GET['fromeffect'];
+  }
+		if ($_GET['toeffect']) {
+      $values[] = (int) $_GET['toeffect'];
+  }
 
 		$query = $db->execute($query, $values); //Search!
 		
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		
 		echo "<fieldset>";
 		echo "<legend><b>Mercado</b></legend>\n";
@@ -1541,10 +1365,10 @@ switch($_GET['act'])
 		echo "</select></td>\n</tr>\n";
 		echo "<tr>\n<td></td>";
 		echo "<tr>\n<td width=\"40%\">Preço:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes($_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes($_GET['toprice']) . "\"/></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes((string) $_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes((string) $_GET['toprice']) . "\"/></td>\n";
 		echo "</td>\n</tr>";
 		echo "<tr>\n<td width=\"40%\">Ataque/Defesa:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes($_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes($_GET['toeffect']) . "\" /></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes((string) $_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes((string) $_GET['toeffect']) . "\" /></td>\n";
 		echo "</td>\n</tr>";
 		echo "<td><input type=\"submit\" value=\"Procurar\" /></td>\n</tr>";
 		echo "</table>";
@@ -1588,12 +1412,12 @@ switch($_GET['act'])
 
 		echo "<br/><div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><center><a href=\"market_sell.php\"><b>Vender Itens</b></a></center></div>";
 		
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		break;
 
 	default:
 		//Show search form
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "<fieldset>";
 		echo "<legend><b>Mercado</b></legend>\n";
 		echo "<i>Aqui você pode comprar itens dos outros jogadores.</i><br /><br />\n";
@@ -1615,10 +1439,10 @@ switch($_GET['act'])
 		echo "</select></td>\n</tr>\n";
 		echo "<tr>\n<td></td>";
 		echo "<tr>\n<td width=\"40%\">Preço:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes($_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes($_GET['toprice']) . "\"/></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromprice\" size=\"5\" value=\"" . stripslashes((string) $_GET['fromprice']) . "\"/> à <input type=\"text\" name=\"toprice\" size=\"8\" value=\"" . stripslashes((string) $_GET['toprice']) . "\"/></td>\n";
 		echo "</td>\n</tr>";
 		echo "<tr>\n<td width=\"40%\">Ataque/Defesa:</td>\n";
-		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes($_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes($_GET['toeffect']) . "\" /></td>\n";
+		echo "<td width=\"60%\"><input type=\"text\" name=\"fromeffect\" size=\"4\" value=\"" . stripslashes((string) $_GET['fromeffect']) . "\" /> à <input type=\"text\" name=\"toeffect\" size=\"5\" value=\"" . stripslashes((string) $_GET['toeffect']) . "\" /></td>\n";
 		echo "</td>\n</tr>";
 		echo "<td><input type=\"submit\" value=\"Procurar\" /></td>\n</tr>";
 		echo "</table>";
@@ -1627,6 +1451,6 @@ switch($_GET['act'])
 
 		echo "<br/><div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><center><a href=\"market_sell.php\"><b>Vender Itens</b></a></center></div>";
 
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		break;
 }

@@ -1,15 +1,15 @@
 <?php
-	include("lib.php");
+	include(__DIR__ . "/lib.php");
 	define("PAGENAME", "Enviar Imagens");
 	$player = check_user($secret_key, $db);
-	include("checkwork.php");
-	include("templates/private_header.php");
+	include(__DIR__ . "/checkwork.php");
+	include(__DIR__ . "/templates/private_header.php");
 
 	
-if ($setting->allow_upload != t)
+if ($setting->allow_upload != \T)
 {
 echo "O envio de imagens está desativado no momento. <a href=\"home.php\">Voltar</a>.";
-include("templates/private_footer.php");
+include(__DIR__ . "/templates/private_footer.php");
 exit;
 }
 ?>
@@ -24,13 +24,13 @@ exit;
 
 if ($_POST['upload'])
 {
-$erro = $config = array();
+$erro = $config = [];
 
 // Prepara a variável do arquivo
-$arquivo = isset($_FILES["foto"]) ? $_FILES["foto"] : FALSE;
+$arquivo = $_FILES["foto"] ?? FALSE;
 
 // Tamanho máximo do arquivo (em bytes)
-$config["tamanho"] = 1800000;
+$config["tamanho"] = 1_800_000;
 // Largura máxima (pixels)
 $config["largura"] = 1024;
 // Altura máxima (pixels)
@@ -40,7 +40,7 @@ $config["altura"] = 1024;
 if($arquivo)
 {
 // Verifica se o mime-type do arquivo é de imagem
-if(!eregi("^image\/(pjpeg|jpeg|gif|bmp)$", $arquivo["type"]))
+if(!preg_match('#^image\/(pjpeg|jpeg|gif|bmp)$#mi', (string) $arquivo["type"]))
 {
 $erro[] = "<span style=\"color: white; border: solid 1px ; background: red;\">Arquivo em formato inválido!</span><br/>- A imagem deve ser jpg, jpeg, bmp ou gif.";
 }
@@ -69,7 +69,7 @@ $erro[] = "Altura da imagem não deve ultrapassar " . $config["altura"] . " pixel
 }
 
 // Imprime as mensagens de erro
-if(sizeof($erro))
+if($erro !== [])
 {
 foreach($erro as $err)
 {
@@ -81,7 +81,7 @@ echo " - " . $err . "<BR>";
 else
 {
 // Pega extensão do arquivo
-preg_match("/\.(gif|bmp|png|jpg|jpeg){1}$/i", $arquivo["name"], $ext);
+preg_match("/\.(gif|bmp|png|jpg|jpeg){1}$/i", (string) $arquivo["name"], $ext);
 
 
 // Gera um nome único para a imagem
@@ -100,5 +100,5 @@ echo "<b>Endereço:</b> <font size=\"1\">http://www.oconfronto.kinghost.net/imgs/
 }
 
 
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 ?>

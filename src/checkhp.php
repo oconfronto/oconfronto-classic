@@ -1,24 +1,24 @@
 <?php
 if ($player->ban > time()){
 $newlast = (time() - 210);
-$query = $db->execute("update `players` set `last_active`=? where `id`=?", array($newlast, $player->id));
+$query = $db->execute("update `players` set `last_active`=? where `id`=?", [$newlast, $player->id]);
 session_unset();
 session_destroy();
 echo "Você foi banido. As vezes usuários são banidos automaticamente por algum erro em suas contas. Se você acha que foi banido injustamente, ou se tiver algum erro para reportar, crie outra conta e entre em contato com o [GOD]. Assim seu banimento poderá ser removido.";
-include("templates/private_footer.php");
+include(__DIR__ . "/templates/private_footer.php");
 exit;
 }
 
 
-if ($player->hp <= 0 and $player->deadtime > time())
+if ($player->hp <= 0 && $player->deadtime > time())
 {
-	$query = $db->execute("update `players` set `lutando`=0 where `id`=?", array($player->id));
-	$query = $db->execute("delete from `bixos` where `player_id`=?", array($player->id));
+	$query = $db->execute("update `players` set `lutando`=0 where `id`=?", [$player->id]);
+	$query = $db->execute("delete from `bixos` where `player_id`=?", [$player->id]);
 	unset($_SESSION['ataques']);
 
 	$time = ($player->deadtime - time());
 	$time_remaining = ceil($time / 60);	
-	include("templates/private_header.php");
+	include(__DIR__ . "/templates/private_header.php");
 	echo "<fieldset>";
 	echo "<legend><b>Você está morto!</b></legend>\n";
 	echo "<center>Você irá ressucitar em " . $time_remaining . " minuto(s).</center>";
@@ -83,16 +83,16 @@ function CountDownCOUNTER()
 
 echo "<br><br>";
 
-$query = $db->execute("select `id` from `items` where `player_id`=? and `item_id`=136 and `mark`='f' order by rand()", array($player->id));
+$query = $db->execute("select `id` from `items` where `player_id`=? and `item_id`=136 and `mark`='f' order by rand()", [$player->id]);
 $numerodepocoes = $query->recordcount();
 
-$query2 = $db->execute("select `id` from `items` where `player_id`=? and `item_id`=137 and `mark`='f' order by rand()", array($player->id));
+$query2 = $db->execute("select `id` from `items` where `player_id`=? and `item_id`=137 and `mark`='f' order by rand()", [$player->id]);
 $numerodepocoes2 = $query2->recordcount();
 
-$query3 = $db->execute("select `id` from `items` where `player_id`=? and `item_id`=148 and `mark`='f' order by rand()", array($player->id));
+$query3 = $db->execute("select `id` from `items` where `player_id`=? and `item_id`=148 and `mark`='f' order by rand()", [$player->id]);
 $numerodepocoes3 = $query3->recordcount();
 
-$query4 = $db->execute("select `id` from `items` where `player_id`=? and `item_id`=150 and `mark`='f' order by rand()", array($player->id));
+$query4 = $db->execute("select `id` from `items` where `player_id`=? and `item_id`=150 and `mark`='f' order by rand()", [$player->id]);
 $numerodepocoes4 = $query4->recordcount();
 
 echo "<fieldset>";
@@ -124,7 +124,7 @@ echo "</td></tr></table></td><td><a href=\"hospt.php?act=sell\">Vender Poções</a
 echo "</fieldset>";
 
 
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 	exit;
 }
 

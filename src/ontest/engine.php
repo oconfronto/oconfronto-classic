@@ -1,8 +1,8 @@
 <?php
-include("../lib.php");
+include(__DIR__ . "/../lib.php");
 $ipp = $_SERVER['REMOTE_ADDR'];
 
-$checknosite = $db->execute("select * from `online` where `ip`=?", array($ipp));
+$checknosite = $db->execute("select * from `online` where `ip`=?", [$ipp]);
 
 //checa se eu já tenho um registro
 if ($checknosite->recordcount() < 1) {

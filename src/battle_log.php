@@ -1,5 +1,5 @@
 <?php
-	include("lib.php");
+	include(__DIR__ . "/lib.php");
 	$player = check_user($secret_key, $db);
 ?>
 <html>
@@ -55,7 +55,7 @@ a:visited {
 		exit;
 		}
 
-		$query = $db->execute("select * from `log_battle` where `id`=? and `player_id`=?", array($_GET['id'], $player->id));
+		$query = $db->execute("select * from `log_battle` where `id`=? and `player_id`=?", [$_GET['id'], $player->id]);
 		if ($query->recordcount() < 1)
 		{
 		echo "Log não encontrado.";

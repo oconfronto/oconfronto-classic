@@ -1,28 +1,28 @@
 <?php
 
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Principal");
 $player = check_user($secret_key, $db);
 
-include("templates/private_header.php");
+include(__DIR__ . "/templates/private_header.php");
 
 $tbl_name="forum_question"; // Table name
 
 if (!$_POST['detail']) {
 		echo "<fieldset><legend><b>Erro</b></legend>Você precisa preencher todos os campos!<BR>";
 		echo "<a href='edit_comment.php'>Voltar</a></fieldset>";
-            include("templates/private_footer.php");
+            include(__DIR__ . "/templates/private_footer.php");
             exit;
 }
 
 
-	$procuramengperfil = $db->execute("select `perfil` from `profile` where `player_id`=?", array($player->id));
+	$procuramengperfil = $db->execute("select `perfil` from `profile` where `player_id`=?", [$player->id]);
 
 $topic=$_POST['detail'];
-$topic2=strip_tags($topic);
+$topic2=strip_tags((string) $topic);
 $texto=nl2br($topic2);
 
-$listaExtensao = array('JPG' => 1, 'jpg' => 2, 'PNG' => 3, 'png' => 4, 'BMP' => 5, 'bmp' => 6, 'GIF' => 7, 'gif' => 8);
+$listaExtensao = ['JPG' => 1, 'jpg' => 2, 'PNG' => 3, 'png' => 4, 'BMP' => 5, 'bmp' => 6, 'GIF' => 7, 'gif' => 8];
 $aux = " " . $texto . "";
 
 
@@ -68,7 +68,7 @@ echo "<a href=\"profile.php?id=" . $player->username . "\">Visualizar perfil</a>
 	}
 	else
 	{
-	$updatethecomment = $db->execute("update `profile` set `perfil`=? where `player_id`=?", array($mostraimg, $player->id));
+	$updatethecomment = $db->execute("update `profile` set `perfil`=? where `player_id`=?", [$mostraimg, $player->id]);
 echo "<fieldset><legend><b>Sucesso</b></legend>Perfil atualizado com sucesso!<BR>";
 echo "<a href=\"profile.php?id=" . $player->username . "\">Visualizar perfil</a></fieldset>";
 	}
@@ -78,5 +78,5 @@ echo "<a href=\"profile.php?id=" . $player->username . "\">Visualizar perfil</a>
 mysql_close();
 ?>
 <?php
-include("templates/private_footer.php");
+include(__DIR__ . "/templates/private_footer.php");
 ?>

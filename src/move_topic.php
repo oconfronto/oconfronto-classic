@@ -1,49 +1,45 @@
 <?php
 
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Fórum");
 $player = check_user($secret_key, $db);
 
-include("templates/private_header.php");
+include(__DIR__ . "/templates/private_header.php");
 
 if (!$_GET['topic'])
 {
 	echo "Um erro desconhecido ocorreu! <a href=\"main_forum.php\">Voltar</a>.";
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 	exit;
 }
 	if ($player->gm_rank > 2){
-	$procuramensagem = $db->execute("select `topic` from `forum_question` where `id`=?", array($_GET['topic']));
+	$procuramensagem = $db->execute("select `topic` from `forum_question` where `id`=?", [$_GET['topic']]);
 	}else{
 	echo "Você não tem permisões para mover este tópico! <a href=\"view_topic.php?id=" . $_GET['topic'] . "\">Voltar</a>.";
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 	exit;
 	}
 
 	if ($procuramensagem->recordcount() == 0)
 	{
 	echo "Um erro desconhecido ocorreu! <a href=\"main_forum.php\">Voltar</a>.";
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 	exit;
-	}else{
-    	$nome = $procuramensagem->fetchrow();
 	}
+ $nome = $procuramensagem->fetchrow();
 
 if(isset($_POST['submit']))
 {
 
-if (!$_POST['detail'])
-{
-	echo "Você precisa preencher todos os campos! <a href=\"move_topic.php?topic=" . $_GET['topic'] . "\">Voltar</a>.";
-	include("templates/private_footer.php");
-	exit;
+if (!$_POST['detail']) {
+    echo "Você precisa preencher todos os campos! <a href=\"move_topic.php?topic=" . $_GET['topic'] . "\">Voltar</a>.";
+    include(__DIR__ . "/templates/private_footer.php");
+    exit;
 }
-
-elseif ($_POST['detail'] == 'none')
-{
-	echo "Você precisa preencher todos os campos! <a href=\"move_topic.php?topic=" . $_GET['topic'] . "\">Voltar</a>.";
-	include("templates/private_footer.php");
-	exit;
+if ($_POST['detail'] == 'none') {
+    echo "Você precisa preencher todos os campos! <a href=\"move_topic.php?topic=" . $_GET['topic'] . "\">Voltar</a>.";
+    include(__DIR__ . "/templates/private_footer.php");
+    exit;
 }
 
 
@@ -70,9 +66,9 @@ $categoria = $_POST['detail'];
 	forumlog($logalert2, $db);
 
 
-$real = $db->execute("update `forum_question` set `category`=? where `id`=?", array($_POST['detail'], $_GET['topic']));
+$real = $db->execute("update `forum_question` set `category`=? where `id`=?", [$_POST['detail'], $_GET['topic']]);
 	echo "Postagem editada com sucesso! <a href=\"view_topic.php?id=" . $_GET['topic'] . "\">Voltar</a>.";
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 	exit;
 }
 
@@ -109,5 +105,5 @@ $real = $db->execute("update `forum_question` set `category`=? where `id`=?", ar
 </tr>
 </table>
 <?php
-include("templates/private_footer.php");
+include(__DIR__ . "/templates/private_footer.php");
 ?>

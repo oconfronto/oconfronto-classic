@@ -1,8 +1,8 @@
 <?php
-	include("lib.php");
+	include(__DIR__ . "/lib.php");
 	define("PAGENAME", "Ganhar Ouro");
 	$player = check_user($secret_key, $db);
-	include("templates/private_header.php");
+	include(__DIR__ . "/templates/private_header.php");
 ?>
 <fieldset>
 <legend><b>Ajudante</b></legend>
@@ -67,5 +67,5 @@ Para convidar seus amigos mande para eles o seguinte link:
 
 
 <?php
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 ?>

@@ -1,61 +1,61 @@
 <?php
 
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Promoção");
 $player = check_user($secret_key, $db);
-include("checkbattle.php");
-include("checkhp.php");
-include("checkwork.php");
+include(__DIR__ . "/checkbattle.php");
+include(__DIR__ . "/checkhp.php");
+include(__DIR__ . "/checkwork.php");
 
 
-	if ($setting->promo == a){
+	if ($setting->promo == \A){
 
 	$query = $db->execute("update `settings` set `value`='ff' where `name`='promo'");
 	$query = $db->execute("update `settings` set `value`=0 where `name`='end_promo'");
 	$query = $db->execute("truncate `promo`");
 
-	include("templates/private_header.php");
+	include(__DIR__ . "/templates/private_header.php");
 	echo "<fieldset><legend><b>Anulada</b></legend>\n";
 	echo "A promoção foi anulada por fraude.";
 	echo "</fieldset>";
 	echo "<br/>";
 	echo "<a href=\"home.php\">Voltar</a>.";
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 	exit;
 	}
 
 
 
-	if ($setting->promo == ff){
-	include("templates/private_header.php");
+	if ($setting->promo == \FF){
+	include(__DIR__ . "/templates/private_header.php");
 	echo "<fieldset><legend><b>Anulada</b></legend>\n";
 	echo "A promoção foi anulada por fraude.";
 	echo "</fieldset>";
 	echo "<br/>";
 	echo "<a href=\"home.php\">Voltar</a>.";
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 	exit;
 	}
 
 
-if ($setting->promo == t)
+if ($setting->promo == \T)
 {
 
 	if (time() > $setting->end_promo){
 
 	$query = $db->execute("update `settings` set `value`='f' where `name`='promo'");
 
-	include("templates/private_header.php");
+	include(__DIR__ . "/templates/private_header.php");
 
 	$wpaodsla = $db->execute("select * from `promo` order by `refs` desc limit 0,1");
 	$ipwpwpwpa = $wpaodsla->fetchrow();
 
-	$query = $db->execute("update `players` set `bank`=? where `id`=?", array($player->bank + $setting->promo_premio, $ipwpwpwpa['player_id']));
+	$query = $db->execute("update `players` set `bank`=? where `id`=?", [$player->bank + $setting->promo_premio, $ipwpwpwpa['player_id']]);
 		$logmsg = "Você ganhou a promoção do jogo e <b>" . $setting->promo_premio . " de ouro</b> foram depositados na sua conta bancária.";
 		addlog($ipwpwpwpa['player_id'], $logmsg, $db);
 		$premiorecebido = "" . $setting->win_id . " de ouro";
 
-	$query = $db->execute("update `settings` set `value`=? where `name`='promo_last_winner'", array($ipwpwpwpa['username']));
+	$query = $db->execute("update `settings` set `value`=? where `name`='promo_last_winner'", [$ipwpwpwpa['username']]);
 	$query = $db->execute("update `settings` set `value`=0 where `name`='end_promo'");
 	$query = $db->execute("truncate `promo`");
 
@@ -75,18 +75,18 @@ if ($setting->promo == t)
 	echo "</fieldset>";
 	echo "<br/>";
 	echo "<a href=\"home.php\">Voltar</a>.";
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 	exit;
 	}
 
 
 	if ($_POST['join'])
 	{
-		$checausuario = $db->execute("select `id` from `promo` where `player_id`=?", array($player->id));
+		$checausuario = $db->execute("select `id` from `promo` where `player_id`=?", [$player->id]);
 		if ($checausuario->recordcount() > 0){
-		include("templates/private_header.php");
+		include(__DIR__ . "/templates/private_header.php");
 		echo "Você já está participando da promoção!<br/><a href=\"promo.php\">Voltar</a>.";
-		include("templates/private_footer.php");
+		include(__DIR__ . "/templates/private_footer.php");
 		$error = 1;
 		exit;
 		}
@@ -97,15 +97,15 @@ if ($setting->promo == t)
 		$insert['username'] = $player->username;
 		$query = $db->autoexecute('promo', $insert, 'INSERT');
 
-			include("templates/private_header.php");
+			include(__DIR__ . "/templates/private_header.php");
 			echo "Agora você está participando da promoção!<br/><font size=\"1\">Convide o máximo de pessoas que conseguir por esse link: <b>http://www.oconfronto.co.nr/?r=" . $player->id . "</b></font><br/><a href=\"promo.php\">Voltar</a>.";
-			include("templates/private_footer.php");
+			include(__DIR__ . "/templates/private_footer.php");
 			exit;
 		}
 
 	}
 
-	include("templates/private_header.php");
+	include(__DIR__ . "/templates/private_header.php");
 
 	echo "<fieldset><legend><b>Promoção</b></legend>\n";
 	echo "<table>";
@@ -166,7 +166,7 @@ if ($setting->promo == t)
 	
 
 
-	$checausuario2 = $db->execute("select `refs` from `promo` where `player_id`=?", array($player->id));
+	$checausuario2 = $db->execute("select `refs` from `promo` where `player_id`=?", [$player->id]);
 	if ($checausuario2->recordcount() > 0){
 	$checausuario3 = $checausuario2->fetchrow();
 	echo " <b>Você já convidou:</b> <font size=\"1\">" . $checausuario3['refs'] . " usuários</font> | <b>Link de referência:</b> <font size=\"1\">http://www.oconfronto.co.nr/?r=" . $player->id . "</font>";
@@ -177,29 +177,26 @@ if ($setting->promo == t)
 	echo "</form>";
 	}
 
-	include("templates/private_footer.php");
+	include(__DIR__ . "/templates/private_footer.php");
 	exit;
 
-	}else{
-	include("templates/private_header.php");
-	echo "<fieldset><legend><b>Não existem promoções no momento</b></legend>\n";
-
-	echo "<table>";
-	echo "<tr>";
-	echo "<td><b>Último ganhador:</b></td>";
-	echo "<td>" . $setting->promo_last_winner . "</td>";
-	echo "</tr>";
-
-	echo "<tr>";
-	echo "<td><b>Prêmio recebido:</b></td>";
-	echo "<td>" . $setting->promo_premio . "</td>";
-	echo "</tr>";
-	echo "</table>";
-	echo "</fieldset>";
-	echo "<br/>";
-	echo "<a href=\"home.php\">Voltar</a>.";
-	include("templates/private_footer.php");
-	exit;
-}
+	}
+include(__DIR__ . "/templates/private_header.php");
+echo "<fieldset><legend><b>Não existem promoções no momento</b></legend>\n";
+echo "<table>";
+echo "<tr>";
+echo "<td><b>Último ganhador:</b></td>";
+echo "<td>" . $setting->promo_last_winner . "</td>";
+echo "</tr>";
+echo "<tr>";
+echo "<td><b>Prêmio recebido:</b></td>";
+echo "<td>" . $setting->promo_premio . "</td>";
+echo "</tr>";
+echo "</table>";
+echo "</fieldset>";
+echo "<br/>";
+echo "<a href=\"home.php\">Voltar</a>.";
+include(__DIR__ . "/templates/private_footer.php");
+exit;
 
 ?>

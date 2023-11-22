@@ -1,30 +1,30 @@
 <?php
 
-include("lib.php");
+include(__DIR__ . "/lib.php");
 define("PAGENAME", "Principal");
 $player = check_user($secret_key, $db);
 
-include("checkforum.php");
-include("templates/private_header.php");
+include(__DIR__ . "/checkforum.php");
+include(__DIR__ . "/templates/private_header.php");
 
-if (!$_POST['detail'] or !$_POST['topic']) {
+if (!$_POST['detail'] || !$_POST['topic']) {
 		echo "<fieldset><legend><b>Erro</b></legend>Você precisa preencher todos os campos!<BR>";
 		echo "<a href=\"#\" onClick='javascript: history.back();'>Voltar</a></fieldset>";
-            include("templates/private_footer.php");
+            include(__DIR__ . "/templates/private_footer.php");
             exit;
 }
 
 if ($_POST['category'] == 'none') {
 		echo "<fieldset><legend><b>Erro</b></legend>Você precisa escolher uma categoria!<BR>";
 		echo "<a href=\"#\" onClick='javascript: history.back();'>Voltar</a></fieldset>";
-            include("templates/private_footer.php");
+            include(__DIR__ . "/templates/private_footer.php");
             exit;
 }
 
-if (($_POST['category'] != 'sugestoes') and ($_POST['category'] != 'gangues') and ($_POST['category'] != 'trade') and ($_POST['category'] != 'duvidas') and ($_POST['category'] != 'outros') and ($_POST['category'] != 'fan') and ($_POST['category'] != 'off') and ($player->gm_rank < 3)) {
+if ($_POST['category'] != 'sugestoes' && $_POST['category'] != 'gangues' && $_POST['category'] != 'trade' && $_POST['category'] != 'duvidas' && $_POST['category'] != 'outros' && $_POST['category'] != 'fan' && $_POST['category'] != 'off' && $player->gm_rank < 3) {
 		echo "<fieldset><legend><b>Erro</b></legend>Você não tem autorização para criar tópicos nesta categoria!<BR>";
 		echo "<a href=\"#\" onClick='javascript: history.back();'>Voltar</a></fieldset>";
-            include("templates/private_footer.php");
+            include(__DIR__ . "/templates/private_footer.php");
             exit;
 }
 
@@ -35,11 +35,11 @@ $category=$_POST['category'];
 $detail=$_POST['detail'];
 $datetime=date("d/m/y H:i:s");
 
-$notavel=strip_tags($detail);
+$notavel=strip_tags((string) $detail);
 $texto=nl2br($notavel);
 
 
-$listaExtensao = array('JPG' => 1, 'jpg' => 2, 'PNG' => 3, 'png' => 4, 'BMP' => 5, 'bmp' => 6, 'GIF' => 7, 'gif' => 8);
+$listaExtensao = ['JPG' => 1, 'jpg' => 2, 'PNG' => 3, 'png' => 4, 'BMP' => 5, 'bmp' => 6, 'GIF' => 7, 'gif' => 8];
 $aux = " " . $texto . "";
 
 
@@ -70,12 +70,7 @@ while(true){
 	$mostraimg = $textoFinal . "" . $aux;
 	$mostraimg = substr($mostraimg, 1);
 
-if (!$_POST['vota'])
-{
-$vota = "f";
-}else{
-$vota = "t";
-}
+$vota = $_POST['vota'] ? "t" : "f";
 
 $time = time();
 
@@ -91,7 +86,7 @@ $time = time();
 	$insert['serv'] = $player->serv;
 	$result = $db->autoexecute('forum_question', $insert, 'INSERT');
 
-$sql5 = $db->execute("update `players` set `posts`=`posts`+1 where `id`=?", array($player->id));
+$sql5 = $db->execute("update `players` set `posts`=`posts`+1 where `id`=?", [$player->id]);
 
 if($result){
 echo "<fieldset><legend><b>Sucesso</b></legend>Tópico postado com sucesso!<BR>";
@@ -104,5 +99,5 @@ echo "<a href=select_forum.php>Voltar</a></fieldset>";
 mysql_close();
 ?>
 <?php
-include("templates/private_footer.php");
+include(__DIR__ . "/templates/private_footer.php");
 ?>

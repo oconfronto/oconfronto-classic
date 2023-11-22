@@ -1,10 +1,10 @@
 <?php
-include("lib.php");
+include(__DIR__ . "/lib.php");
 
 if ($_SESSION['userid'] > 0){
 $player = check_user($secret_key, $db);
-$deletechecknosite1 = $db->execute("delete from `online` where `player_id`=?", array($player->id));
-$deletechecknosite2 = $db->execute("delete from `login` where `friendid`=?", array($player->id));
+$deletechecknosite1 = $db->execute("delete from `online` where `player_id`=?", [$player->id]);
+$deletechecknosite2 = $db->execute("delete from `login` where `friendid`=?", [$player->id]);
 }
 
 session_unset();
