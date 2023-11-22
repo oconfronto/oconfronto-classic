@@ -20,8 +20,8 @@
  * @author Cuiyan (cysoft) <cysoft@php.net>
  */
 
-$ADODB_LANG_ARRAY = array (
-			'LANG'                      => 'cn',
+$ADODB_LANG_ARRAY = array(
+            'LANG'                      => 'cn',
             DB_ERROR                    => '未知错误',
             DB_ERROR_ALREADY_EXISTS     => '已经存在',
             DB_ERROR_CANNOT_CREATE      => '不能创建',
@@ -46,7 +46,7 @@ $ADODB_LANG_ARRAY = array (
             DB_ERROR_CONNECT_FAILED     => '连接失败',
             0	                       => '没有错误', // DB_OK
             DB_ERROR_NEED_MORE_DATA     => '提供的数据不能符合要求',
-            DB_ERROR_EXTENSION_NOT_FOUND=> '扩展没有被发现',
+            DB_ERROR_EXTENSION_NOT_FOUND => '扩展没有被发现',
             DB_ERROR_NOSUCHDB           => '没有相应的数据库',
             DB_ERROR_ACCESS_VIOLATION   => '没有合适的权限'
 );

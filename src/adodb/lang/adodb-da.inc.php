@@ -20,8 +20,8 @@
  * @author Arne Eckmann <bananstat@users.sourceforge.net>
  */
 
-$ADODB_LANG_ARRAY = array (
-  	    'LANG'                      => 'da',
+$ADODB_LANG_ARRAY = array(
+        'LANG'                      => 'da',
             DB_ERROR                    => 'ukendt fejl',
             DB_ERROR_ALREADY_EXISTS     => 'eksisterer allerede',
             DB_ERROR_CANNOT_CREATE      => 'kan ikke oprette',
@@ -46,7 +46,7 @@ $ADODB_LANG_ARRAY = array (
             DB_ERROR_CONNECT_FAILED     => 'tilslutning mislykkedes',
             0	                        => 'ingen fejl', // DB_OK
             DB_ERROR_NEED_MORE_DATA     => 'utilstrækkelige data angivet',
-            DB_ERROR_EXTENSION_NOT_FOUND=> 'udvidelse ikke fundet',
+            DB_ERROR_EXTENSION_NOT_FOUND => 'udvidelse ikke fundet',
             DB_ERROR_NOSUCHDB           => 'database ikke fundet',
             DB_ERROR_ACCESS_VIOLATION   => 'utilstrækkelige rettigheder'
 );

@@ -24,8 +24,8 @@ include(__DIR__ . "/templates/private_header.php");
 <?php
 echo "<option value=\"none\" selected=\"selected\">Selecione</option>";
 if ($player->gm_rank > 2) {
-echo "<option value=\"noticias\">Notícias</option>";
-echo "<option value=\"equipe\">Equipe</option>";
+    echo "<option value=\"noticias\">Notícias</option>";
+    echo "<option value=\"equipe\">Equipe</option>";
 }
 echo "<option value=\"sugestoes\">Sugestões</option>";
 echo "<option value=\"gangues\">Clãs</option>";

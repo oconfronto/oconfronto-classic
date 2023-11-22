@@ -1,4 +1,5 @@
 <?php
+
 //========================================
 //Keywords
 $lang['keyword_links'] = "Links";
@@ -277,4 +278,3 @@ $lang['msg_gui_img'] = "Imagem";
 //---------------------------
 //Stat Points
 $lang['error_no_statpoints2'] = "Sorry sir, but you currently do not have any stat points to spend.<br />Please come back later when you have leveled up.";
-?>

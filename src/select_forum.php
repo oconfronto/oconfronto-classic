@@ -8,23 +8,21 @@ include(__DIR__ . "/checkforum.php");
 include(__DIR__ . "/templates/private_header.php");
 
 $dtopictempo = ceil(time() - 10_368_000);
-	$oldtopicselect = $db->execute("select `id`, `user_id` from `forum_question` where `last_post`<?", [$dtopictempo]);
-	while($dtopic = $oldtopicselect->fetchrow())
-	{
+$oldtopicselect = $db->execute("select `id`, `user_id` from `forum_question` where `last_post`<?", [$dtopictempo]);
+while($dtopic = $oldtopicselect->fetchrow()) {
 
-	$removeposts = $db->execute("select `a_user_id` from `forum_answer` where `question_id`=?", [$dtopic['id']]);
-	while($player = $removeposts->fetchrow())
-	{
-	$query = $db->execute("update `players` set `posts`=`posts`-1 where `id`=?", [$player['a_user_id']]);
-	}
+    $removeposts = $db->execute("select `a_user_id` from `forum_answer` where `question_id`=?", [$dtopic['id']]);
+    while($player = $removeposts->fetchrow()) {
+        $query = $db->execute("update `players` set `posts`=`posts`-1 where `id`=?", [$player['a_user_id']]);
+    }
 
-	$query = $db->execute("update `players` set `posts`=`posts`-1 where `id`=?", [$dtopic['user_id']]);
+    $query = $db->execute("update `players` set `posts`=`posts`-1 where `id`=?", [$dtopic['user_id']]);
 
-        $real = $db->execute("delete from `forum_question` where `id`=?", [$dtopic['id']]);
-        $real = $db->execute("delete from `forum_answer` where `question_id`=?", [$dtopic['id']]);
-        $real = $db->execute("delete from `thumb` where `topic_id`=?", [$dtopic['id']]);
+    $real = $db->execute("delete from `forum_question` where `id`=?", [$dtopic['id']]);
+    $real = $db->execute("delete from `forum_answer` where `question_id`=?", [$dtopic['id']]);
+    $real = $db->execute("delete from `thumb` where `topic_id`=?", [$dtopic['id']]);
 
-	}
+}
 ?>
 
 <style>
@@ -54,9 +52,8 @@ background: #FFFDE0;
 <?php
 $totalreply = 0;
 $cate1 = $db->execute("select `reply` from `forum_question` where `category`=?", [\NOTICIAS]);
-while($selecate1 =$cate1->fetchrow())
-{
-$totalreply += $selecate1['reply'];
+while($selecate1 = $cate1->fetchrow()) {
+    $totalreply += $selecate1['reply'];
 }
 $topicos1 = $cate1->recordcount();
 
@@ -70,9 +67,8 @@ $topicos1 = $cate1->recordcount();
 <?php
 $totalreply2 = 0;
 $cate2 = $db->execute("select `reply` from `forum_question` where `category`=?", [\EQUIPE]);
-while($selecate2 = $cate2->fetchrow())
-{
-$totalreply2 += $selecate2['reply'];
+while($selecate2 = $cate2->fetchrow()) {
+    $totalreply2 += $selecate2['reply'];
 }
 $topicos2 = $cate2->recordcount();
 
@@ -86,9 +82,8 @@ $topicos2 = $cate2->recordcount();
 <?php
 $totalreply3 = 0;
 $cate3 = $db->execute("select `reply` from `forum_question` where `category`=?", [\SUGESTOES]);
-while($selecate3 = $cate3->fetchrow())
-{
-$totalreply3 += $selecate3['reply'];
+while($selecate3 = $cate3->fetchrow()) {
+    $totalreply3 += $selecate3['reply'];
 }
 $topicos3 = $cate3->recordcount();
 
@@ -102,9 +97,8 @@ $topicos3 = $cate3->recordcount();
 <?php
 $totalreply4 = 0;
 $cate4 = $db->execute("select `reply` from `forum_question` where `category`=? and `serv`=?", [\GANGUES, $player->serv]);
-while($selecate4 = $cate4->fetchrow())
-{
-$totalreply4 += $selecate4['reply'];
+while($selecate4 = $cate4->fetchrow()) {
+    $totalreply4 += $selecate4['reply'];
 }
 $topicos4 = $cate4->recordcount();
 
@@ -118,9 +112,8 @@ $topicos4 = $cate4->recordcount();
 <?php
 $totalreply5 = 0;
 $cate5 = $db->execute("select `reply` from `forum_question` where `category`=? and `serv`=?", [\TRADE, $player->serv]);
-while($selecate5 = $cate5->fetchrow())
-{
-$totalreply5 += $selecate5['reply'];
+while($selecate5 = $cate5->fetchrow()) {
+    $totalreply5 += $selecate5['reply'];
 }
 $topicos5 = $cate5->recordcount();
 
@@ -134,9 +127,8 @@ $topicos5 = $cate5->recordcount();
 <?php
 $totalreply6 = 0;
 $cate6 = $db->execute("select `reply` from `forum_question` where `category`=?", [\DUVIDAS]);
-while($selecate6 = $cate6->fetchrow())
-{
-$totalreply6 += $selecate6['reply'];
+while($selecate6 = $cate6->fetchrow()) {
+    $totalreply6 += $selecate6['reply'];
 }
 $topicos6 = $cate6->recordcount();
 
@@ -150,9 +142,8 @@ $topicos6 = $cate6->recordcount();
 <?php
 $totalreply7 = 0;
 $cate7 = $db->execute("select `reply` from `forum_question` where `category`=?", [\FAN]);
-while($selecate7 = $cate7->fetchrow())
-{
-$totalreply7 += $selecate7['reply'];
+while($selecate7 = $cate7->fetchrow()) {
+    $totalreply7 += $selecate7['reply'];
 }
 $topicos7 = $cate7->recordcount();
 
@@ -167,9 +158,8 @@ $topicos7 = $cate7->recordcount();
 <?php
 $totalreply8 = 0;
 $cate8 = $db->execute("select `reply` from `forum_question` where `category`=?", [\OUTROS]);
-while($selecate8 = $cate8->fetchrow())
-{
-$totalreply8 += $selecate8['reply'];
+while($selecate8 = $cate8->fetchrow()) {
+    $totalreply8 += $selecate8['reply'];
 }
 $topicos8 = $cate8->recordcount();
 
@@ -183,9 +173,8 @@ $topicos8 = $cate8->recordcount();
 <?php
 $totalreply9 = 0;
 $cate9 = $db->execute("select `reply` from `forum_question` where `category`=?", [\OFF]);
-while($selecate9 = $cate9->fetchrow())
-{
-$totalreply9 += $selecate9['reply'];
+while($selecate9 = $cate9->fetchrow()) {
+    $totalreply9 += $selecate9['reply'];
 }
 $topicos9 = $cate9->recordcount();
 
@@ -206,12 +195,11 @@ $topicos9 = $cate9->recordcount();
 <?php
 $querymod = $db->execute("select * from `log_forum` order by time desc limit 10");
 if ($querymod->recordcount() == 0) {
-echo "<tr><td class=\"off\" onmouseover=\"this.className='on'\" onmouseout=\"this.className='off'\"><font size=\"1\">Nenhum registro encontrado.</font></td></tr>";
-}else{
-while($mods = $querymod->fetchrow())
-{
-echo "<tr><td class=\"off\" onmouseover=\"this.className='on'\" onmouseout=\"this.className='off'\"><font size=\"1\">" . $mods['msg'] . "</font></td></tr>";
-}
+    echo "<tr><td class=\"off\" onmouseover=\"this.className='on'\" onmouseout=\"this.className='off'\"><font size=\"1\">Nenhum registro encontrado.</font></td></tr>";
+} else {
+    while($mods = $querymod->fetchrow()) {
+        echo "<tr><td class=\"off\" onmouseover=\"this.className='on'\" onmouseout=\"this.className='off'\"><font size=\"1\">" . $mods['msg'] . "</font></td></tr>";
+    }
 }
 ?>
 </table>

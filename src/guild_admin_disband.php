@@ -31,16 +31,15 @@ if ($player->username != $guild['leader']) {
 } elseif ($_GET['act'] == "go") {
     $query4 = $db->execute("select `id` from `players` where `guild`=?", [$guild['id']]);
     while($member = $query4->fetchrow()) {
-  		$logmsg = "A gangue " . $guild['name'] . " foi deletada pelo lider do clã.";
-  		addlog($member['id'], $logmsg, $db);
-  		}
+        $logmsg = "A gangue " . $guild['name'] . " foi deletada pelo lider do clã.";
+        addlog($member['id'], $logmsg, $db);
+    }
     $query = $db->execute("delete from `guilds` where `id`=?", [$player->guild]);
-    $query = $db->execute("update `players` set `guild`=? where `guild`=?", [NULL, $guild['id']]);
+    $query = $db->execute("update `players` set `guild`=? where `guild`=?", [null, $guild['id']]);
     echo "<p />Seu clã foi excluido com sucesso.<p />";
     echo "<a href=\"home.php\">Principal</a><p />";
 } else {
-echo "<p />Você tem certeza que quer excluir o clã: " . $guild['name'] . "?<p />";
-echo "<a href=\"guild_admin_disband.php?act=go\">Desfazer Clã</a><p />";
+    echo "<p />Você tem certeza que quer excluir o clã: " . $guild['name'] . "?<p />";
+    echo "<a href=\"guild_admin_disband.php?act=go\">Desfazer Clã</a><p />";
 }
 include(__DIR__ . "/templates/private_footer.php");
-?>

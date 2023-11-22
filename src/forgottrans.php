@@ -1,4 +1,5 @@
 <?php
+
 include(__DIR__ . "/lib.php");
 define("PAGENAME", "Recuperar senha");
 $acc = check_acc($secret_key, $db);
@@ -7,48 +8,45 @@ include(__DIR__ . "/checkbattle.php");
 
 include(__DIR__ . "/templates/private_header.php");
 
-$soma1 = random_int(1,70);
-$soma2 = random_int(1,10);
+$soma1 = random_int(1, 70);
+$soma2 = random_int(1, 10);
 
-if (isset($_POST['submit']))
-{
-	$getaccount = $db->execute("select `id` from `accounts` where `id`=? and `email`=?", [$player->acc_id, $_POST['email']]);
+if (isset($_POST['submit'])) {
+    $getaccount = $db->execute("select `id` from `accounts` where `id`=? and `email`=?", [$player->acc_id, $_POST['email']]);
 
-if($_POST['email'] != $_POST['email1']){
-print"Os emails digitados são diferentes. <a href='forgottrans.php'>Voltar</a>.";
-include(__DIR__ . "/templates/footer.php");
-exit;
-}
+    if($_POST['email'] != $_POST['email1']) {
+        print"Os emails digitados são diferentes. <a href='forgottrans.php'>Voltar</a>.";
+        include(__DIR__ . "/templates/footer.php");
+        exit;
+    }
 
-if($_POST['email'] != $acc->email){
-print"O email digitado não confere com o email de sua conta. <a href='forgottrans.php'>Voltar</a>.";
-include(__DIR__ . "/templates/footer.php");
-exit;
-}
+    if($_POST['email'] != $acc->email) {
+        print"O email digitado não confere com o email de sua conta. <a href='forgottrans.php'>Voltar</a>.";
+        include(__DIR__ . "/templates/footer.php");
+        exit;
+    }
 
-	if ($_POST['seguranca'] != $_SESSION['v1'] + $_SESSION['v2'])
-	{
-		print"O código de segurança está incorreto. <a href='forgottrans.php'>Voltar</a>.";
-		include(__DIR__ . "/templates/footer.php");
-		exit;
-	}
+    if ($_POST['seguranca'] != $_SESSION['v1'] + $_SESSION['v2']) {
+        print"O código de segurança está incorreto. <a href='forgottrans.php'>Voltar</a>.";
+        include(__DIR__ . "/templates/footer.php");
+        exit;
+    }
 
 
-   if ($getaccount->recordcount() != 1)
-   {
-      print "Nenhuma conta utiliza este email. <a href='forgottrans.php'>Voltar</a>.";
-include(__DIR__ . "/templates/footer.php");
-exit;
-   }
-   $insert['player_id'] = $player->id;
-   $insert['msg'] = "Você solicidou sua senha de transferência por email.";
-   $insert['time'] = time();
-   $query = $db->autoexecute('account_log', $insert, 'INSERT');
-   $headers .= "From: no-reply@oconfronto.kinghost.net";
-   mail("$acc->email","O Confronto - Senha de transferência","Você solicitou sua senha de transfêrencia.\nSua senha de transferência é: " . $player->transpass . ".\n\n -> oconfronto.kinghost.net",$headers);
-   print "Sua senha foi enviada ao seu email. <a href=\"home.php\">Voltar.</a>";
-   include(__DIR__ . "/templates/footer.php");
-   exit; 
+    if ($getaccount->recordcount() != 1) {
+        print "Nenhuma conta utiliza este email. <a href='forgottrans.php'>Voltar</a>.";
+        include(__DIR__ . "/templates/footer.php");
+        exit;
+    }
+    $insert['player_id'] = $player->id;
+    $insert['msg'] = "Você solicidou sua senha de transferência por email.";
+    $insert['time'] = time();
+    $query = $db->autoexecute('account_log', $insert, 'INSERT');
+    $headers .= "From: no-reply@oconfronto.kinghost.net";
+    mail("$acc->email", "O Confronto - Senha de transferência", "Você solicitou sua senha de transfêrencia.\nSua senha de transferência é: " . $player->transpass . ".\n\n -> oconfronto.kinghost.net", $headers);
+    print "Sua senha foi enviada ao seu email. <a href=\"home.php\">Voltar.</a>";
+    include(__DIR__ . "/templates/footer.php");
+    exit;
 
 }
 print "<fieldset><legend><b>Recuperar senha de transferência</b></legend>\n";
@@ -60,6 +58,5 @@ print "<tr><td colspan=\"2\"><font size=\"1\">Digite a soma de <b>" . $soma1 . "
 $_SESSION['v1'] = $soma1;
 $_SESSION['v2'] = $soma2;
 print "</table>";
-  print "</fieldset><br/><input type='submit' name='submit' value='Enviar senha para o Email'></form>";
+print "</fieldset><br/><input type='submit' name='submit' value='Enviar senha para o Email'></form>";
 include(__DIR__ . "/templates/private_footer.php");
-?>

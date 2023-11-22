@@ -1,4 +1,5 @@
 <?php
+
 include 'adodb.inc.php';
 include 'adodb-active-record.inc.php';
 
@@ -15,7 +16,9 @@ ADOdb_Active_Record::SetDatabaseAdapter($db);
 
 $db->Execute("CREATE TEMPORARY TABLE `people2` (`idNumber` int(10) unsigned NOT NULL)");
 //$db->Execute("DELETE FROM `people` WHERE `idNumber` = 3");
-class Person extends ADOdb_Active_Record {}
+class Person extends ADOdb_Active_Record
+{
+}
 
 $person = new Person('people2', ['idNumber']);
 //$person = new Person('people');

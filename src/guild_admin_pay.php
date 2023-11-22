@@ -27,52 +27,52 @@ if ($player->username != $guild['leader'] && $player->username != $guild['vice']
     echo "<a href=\"home.php\">Principal</a><p />";
 } else {
 
-		$valortempo = $guild['pagopor'] - time();
-		if ($valortempo < 60) {
-      $valortempo2 = $valortempo;
-      $auxiliar2 = "segundo(s)";
-  } elseif ($valortempo < 3600) {
-      $valortempo2 = floor($valortempo / 60);
-      $auxiliar2 = "minuto(s)";
-  } elseif ($valortempo < 86400) {
-      $valortempo2 = floor($valortempo / 3600);
-      $auxiliar2 = "hora(s)";
-  } elseif ($valortempo > 86400) {
-      $valortempo2 = floor($valortempo / 86400);
-      $auxiliar2 = "dia(s)";
-  }
+    $valortempo = $guild['pagopor'] - time();
+    if ($valortempo < 60) {
+        $valortempo2 = $valortempo;
+        $auxiliar2 = "segundo(s)";
+    } elseif ($valortempo < 3600) {
+        $valortempo2 = floor($valortempo / 60);
+        $auxiliar2 = "minuto(s)";
+    } elseif ($valortempo < 86400) {
+        $valortempo2 = floor($valortempo / 3600);
+        $auxiliar2 = "hora(s)";
+    } elseif ($valortempo > 86400) {
+        $valortempo2 = floor($valortempo / 86400);
+        $auxiliar2 = "dia(s)";
+    }
 
-if ($_POST['submit']) {
+    if ($_POST['submit']) {
 
-$arredonda = floor($_POST['days']);
-$maximodedias = ($guild['pagopor'] + ($arredonda * 86400)) - time();
-$price2 = ceil($price * $_POST['days']);
+        $arredonda = floor($_POST['days']);
+        $maximodedias = ($guild['pagopor'] + ($arredonda * 86400)) - time();
+        $price2 = ceil($price * $_POST['days']);
 
-	if (!$_POST['days']) {
-     $errmsg .= "Você precisa preencher todos os campos.";
-     $error = 1;
- } elseif (!is_numeric($_POST['days'])) {
-     $errmsg .= "Este número de dias não é válido.";
-     $error = 1;
- } elseif ($arredonda < 1) {
-     $errmsg .= "Este número de dias não é válido.";
-     $error = 1;
- } elseif ($price2 > $guild['gold']) {
-     $errmsg .= "Seu clã não possui ouro suficiente para pagar por " . $arredonda . " dia(s).";
-     $error = 1;
- } elseif($maximodedias > 5_183_999){
-    	$errmsg .= "Você não pode deixar sue clã pago por mais de 60 dias.";
-    	$error = 1;
-   	}
+        if (!$_POST['days']) {
+            $errmsg .= "Você precisa preencher todos os campos.";
+            $error = 1;
+        } elseif (!is_numeric($_POST['days'])) {
+            $errmsg .= "Este número de dias não é válido.";
+            $error = 1;
+        } elseif ($arredonda < 1) {
+            $errmsg .= "Este número de dias não é válido.";
+            $error = 1;
+        } elseif ($price2 > $guild['gold']) {
+            $errmsg .= "Seu clã não possui ouro suficiente para pagar por " . $arredonda . " dia(s).";
+            $error = 1;
+        } elseif($maximodedias > 5_183_999) {
+            $errmsg .= "Você não pode deixar sue clã pago por mais de 60 dias.";
+            $error = 1;
+        }
 
-		if ($error == 0){
-		$tempoadicional = $guild['pagopor'] + ($arredonda * 86400);
-		$query = $db->execute("update `guilds` set `gold`=?, `pagopor`=? where `id`=?", [$guild['gold'] - $price2, $tempoadicional, $guild['id']]);
-		$msg .= "Seu clã acaba de ser pago por mais " . $arredonda . " dia(s).";
-		}
-}
+        if ($error == 0) {
+            $tempoadicional = $guild['pagopor'] + ($arredonda * 86400);
+            $query = $db->execute("update `guilds` set `gold`=?, `pagopor`=? where `id`=?", [$guild['gold'] - $price2, $tempoadicional, $guild['id']]);
+            $msg .= "Seu clã acaba de ser pago por mais " . $arredonda . " dia(s).";
+        }
+    }
 
-?>
+    ?>
 <?=$msg?><font color=red><?=$errmsg?></font>
 <fieldset>
 <legend><b><?=$guild['name']?> :: Pagar pelo clã</b></legend>

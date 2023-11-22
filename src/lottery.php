@@ -1,4 +1,5 @@
 <?php
+
 include(__DIR__ . "/lib.php");
 define("PAGENAME", "Loteria");
 $player = check_user($secret_key, $db);
@@ -47,205 +48,195 @@ if ($_GET['act'] == 'aposta') {
         echo "</fieldset>";
         include(__DIR__ . "/templates/private_footer.php");
         exit;
+    } elseif ($quantia < 1) {
+        include(__DIR__ . "/templates/private_header.php");
+        echo "<fieldset><legend><b>Erro</b></legend>\n";
+        echo "A quantia que você deseja apostar não é válida.<br/><a href=\"lottery.php\">Voltar</a>.";
+        echo "</fieldset>";
+        include(__DIR__ . "/templates/private_footer.php");
+        exit;
+    } elseif ($quantia > $player->gold) {
+        include(__DIR__ . "/templates/private_header.php");
+        echo "<fieldset><legend><b>Erro</b></legend>\n";
+        echo "A quantia que você deseja apostar não é válida.<br/><a href=\"lottery.php\">Voltar</a>.";
+        echo "</fieldset>";
+        include(__DIR__ . "/templates/private_footer.php");
+        exit;
+    } elseif ($quantia > (($player->level * 4000) - $player->totalbet)) {
+        include(__DIR__ . "/templates/private_header.php");
+        echo "<fieldset><legend><b>Erro</b></legend>\n";
+        echo "Você está apostando demais. Você ainda pode apostar " . (($player->level * 4000) - $player->totalbet) . " moedas de ouro esta semana.";
+        echo " Aposte quantias mais baixas ou aguarde até a semana que vem.<br/><a href=\"lottery.php\">Voltar</a>.";
+        echo "</fieldset>";
+        include(__DIR__ . "/templates/private_footer.php");
+        exit;
+    } else {
+        $sorteio = random_int(1, 3);
+        if ($_POST['g1']) {
+            $guerreironumber = 1;
+        } elseif ($_POST['g2']) {
+            $guerreironumber = 2;
+        } elseif ($_POST['g3']) {
+            $guerreironumber = 3;
+        } else {
+            include(__DIR__ . "/templates/private_header.php");
+            echo "<fieldset><legend><b>Erro</b></legend>\n";
+            echo "Você precisa preencher todos os campos.<br/><a href=\"lottery.php\">Voltar</a>.";
+            echo "</fieldset>";
+            include(__DIR__ . "/templates/private_footer.php");
+            exit;
+        }
+
+        if ($guerreironumber == 1 && $sorteio == 1 || $guerreironumber == 2 && $sorteio == 2 || $guerreironumber == 3 && $sorteio == 3) {
+            $premioaposta = ceil($quantia * 2);
+            $db->execute("update `players` set `gold`=`gold`+?, `totalbet`=`totalbet`+? where `id`=?", [$premioaposta, $quantia, $player->id]);
+            $player = check_user($secret_key, $db); //Get new stats
+            include(__DIR__ . "/templates/private_header.php");
+            echo "<fieldset><legend><b>Parabéns</b></legend>\n";
+            echo "O guerreiro em que você apostou venceu e você ganhou <b>" . $premioaposta . " de ouro</b>.<br/><a href=\"lottery.php\">Voltar</a>.";
+            echo "</fieldset>";
+            include(__DIR__ . "/templates/private_footer.php");
+            exit;
+        }
+        $db->execute("update `players` set `gold`=`gold`-?, `totalbet`=`totalbet`+? where `id`=?", [$quantia, $quantia, $player->id]);
+        $player = check_user($secret_key, $db);
+        //Get new stats
+        include(__DIR__ . "/templates/private_header.php");
+        echo "<fieldset><legend><b>Apostas</b></legend>\n";
+        echo "O guerreiro em que você apostou perdeu e você perdeu <b>" . $quantia . " de ouro</b>.<br/><a href=\"lottery.php\">Voltar</a>.";
+        echo "</fieldset>";
+        include(__DIR__ . "/templates/private_footer.php");
+        exit;
+
     }
-    elseif ($quantia < 1)
-   	{
-   	include(__DIR__ . "/templates/private_header.php");
-   	echo "<fieldset><legend><b>Erro</b></legend>\n";
-   	echo "A quantia que você deseja apostar não é válida.<br/><a href=\"lottery.php\">Voltar</a>.";
-   	echo "</fieldset>";
-   	include(__DIR__ . "/templates/private_footer.php");
-   	exit;
-   	}
-    elseif ($quantia > $player->gold)
-   	{
-   	include(__DIR__ . "/templates/private_header.php");
-   	echo "<fieldset><legend><b>Erro</b></legend>\n";
-   	echo "A quantia que você deseja apostar não é válida.<br/><a href=\"lottery.php\">Voltar</a>.";
-   	echo "</fieldset>";
-   	include(__DIR__ . "/templates/private_footer.php");
-   	exit;
-   	}
-    elseif ($quantia > (($player->level * 4000) - $player->totalbet))
-   	{
-   	include(__DIR__ . "/templates/private_header.php");
-   	echo "<fieldset><legend><b>Erro</b></legend>\n";
-   	echo "Você está apostando demais. Você ainda pode apostar " . (($player->level * 4000) - $player->totalbet) . " moedas de ouro esta semana.";
-   	echo " Aposte quantias mais baixas ou aguarde até a semana que vem.<br/><a href=\"lottery.php\">Voltar</a>.";
-   	echo "</fieldset>";
-   	include(__DIR__ . "/templates/private_footer.php");
-   	exit;
-   	}
-    else
-   	{
-   		$sorteio = random_int(1, 3);
-   			if ($_POST['g1']){
-   				$guerreironumber = 1;
-   			}elseif ($_POST['g2']){
-   				$guerreironumber = 2;
-   			}elseif ($_POST['g3']){
-   				$guerreironumber = 3;
-   			}else{
-   				include(__DIR__ . "/templates/private_header.php");
-   				echo "<fieldset><legend><b>Erro</b></legend>\n";
-   				echo "Você precisa preencher todos os campos.<br/><a href=\"lottery.php\">Voltar</a>.";
-   				echo "</fieldset>";
-   				include(__DIR__ . "/templates/private_footer.php");
-   				exit;
-   			}
-   
-   		if ($guerreironumber == 1 && $sorteio == 1 || $guerreironumber == 2 && $sorteio == 2 || $guerreironumber == 3 && $sorteio == 3){
-   			$premioaposta = ceil($quantia * 2);
-   			$db->execute("update `players` set `gold`=`gold`+?, `totalbet`=`totalbet`+? where `id`=?", [$premioaposta, $quantia, $player->id]);
-   			$player = check_user($secret_key, $db); //Get new stats
-   				include(__DIR__ . "/templates/private_header.php");
-   				echo "<fieldset><legend><b>Parabéns</b></legend>\n";
-   				echo "O guerreiro em que você apostou venceu e você ganhou <b>" . $premioaposta . " de ouro</b>.<br/><a href=\"lottery.php\">Voltar</a>.";
-   				echo "</fieldset>";
-   				include(__DIR__ . "/templates/private_footer.php");
-   				exit;
-   		}
-     $db->execute("update `players` set `gold`=`gold`-?, `totalbet`=`totalbet`+? where `id`=?", [$quantia, $quantia, $player->id]);
-     $player = check_user($secret_key, $db);
-     //Get new stats
-     include(__DIR__ . "/templates/private_header.php");
-     echo "<fieldset><legend><b>Apostas</b></legend>\n";
-     echo "O guerreiro em que você apostou perdeu e você perdeu <b>" . $quantia . " de ouro</b>.<br/><a href=\"lottery.php\">Voltar</a>.";
-     echo "</fieldset>";
-     include(__DIR__ . "/templates/private_footer.php");
-     exit;
-   
-   	}
 }
 
 
 if ($setting->$unc3 == \T) {
-    if (time() > $setting->$unc5){
-   
-   	$query = $db->execute("update `settings` set `value`='f' where `name`='$unc3'");
-   
-   	include(__DIR__ . "/templates/private_header.php");
-   
-   	$wpaodsla = $db->execute("select * from `lotto` where `serv`=? order by RAND() limit 1", [$player->serv]);
-   	$ipwpwpwpa = $wpaodsla->fetchrow();
-   
-   	if ($setting->$unc2 > 1000){
-   	$query = $db->execute("update `players` set `bank`=`bank`+? where `id`=?", [$setting->$unc2, $ipwpwpwpa['player_id']]);
-   		$logmsg = "Você ganhou na loteria e <b>" . $setting->$unc2 . " de ouro</b> foram depositados na sua conta bancária.";
-   		addlog($ipwpwpwpa['player_id'], $logmsg, $db);
-   		$premiorecebido = "" . $setting->$unc2 . " de ouro";
-   	}else{
-   	$itotuuejdb = $db->execute("select `name` from `blueprint_items` where id=?", [$setting->$unc2]);
-   	$ioeowkewttttee = $itotuuejdb->fetchrow();
-   
-   		$insert['player_id'] = $ipwpwpwpa['player_id'];
-   		$insert['item_id'] = $setting->$unc2;
-   		$query = $db->autoexecute('items', $insert, 'INSERT');
-   		$logmsg = "Você ganhou na loteria e recebeu um/uma <b>" . $ioeowkewttttee['name'] . "</b>.";
-   		addlog($ipwpwpwpa['player_id'], $logmsg, $db);
-   		$premiorecebido = $ioeowkewttttee['name'];
-   	}
-   
-   $medalha7 = $db->execute("select * from `medalhas` where `player_id`=? and `medalha`=?", [$ipwpwpwpa['player_id'], \SORTUDO]);
-   if ($medalha7->recordcount() < 1) {
-   	$insert['player_id'] = $ipwpwpwpa['player_id'];   	  
-   	$insert['medalha'] = "Sortudo";
-   	$insert['motivo'] = "Ganhou na loteria.";
-   	$query = $db->autoexecute('medalhas', $insert, 'INSERT');
-   }
-   
-   	$peoeajjwwa = $db->execute("select `username` from `players` where `id`=?", [$ipwpwpwpa['player_id']]);
-   	$totkooowowow = $peoeajjwwa->fetchrow();
-   
-   
-   	$query = $db->execute("update `settings` set `value`=? where `name`='$unc1'", [$totkooowowow['username']]);
-   	$query = $db->execute("update `settings` set `value`=? where `name`='$unc7'", [$premiorecebido]);
-   	$query = $db->execute("update `settings` set `value`=0 where `name`='$unc6'");
-   	$query = $db->execute("update `settings` set `value`=0 where `name`='$unc5'");
-   	$query = $db->execute("delete from `lotto` where `serv`=?", [$player->serv]);
-   	
-   	echo "<fieldset><legend><b>A loteria está fechada</b></legend>\n";
-   	echo "<table>";
-   	echo "<tr>";
-   	echo "<td><b>Último ganhador:</b></td>";
-   	echo "<td>" . $totkooowowow['username'] . "</td>";
-   	echo "</tr>";
-   
-   	echo "<tr>";
-   	echo "<td><b>Prêmio recebido:</b></td>";
-   	echo "<td>" . $premiorecebido . "</td>";
-   	echo "</tr>";
-   	echo "</table>";
-   	echo "</fieldset>";
-   	echo "<br/>";
-   	echo "<a href=\"home.php\">Voltar</a>.";
-   
-   
-   	include(__DIR__ . "/templates/private_footer.php");
-   	exit;
-   	}
-    if ($_POST['buy'])
-   	{
-   		$error = 0;
-   
-   		if (!is_numeric($_POST['amount'])) {
-   		include(__DIR__ . "/templates/private_header.php");
-   		echo "O valor " . $_POST['for'] . " não é válido! <a href=\"lottery.php\">Voltar</a>.";
-   		include(__DIR__ . "/templates/private_footer.php");
-   		$error = 1;
-   		exit;
-   		}
-   
-   		if ($_POST['amount'] < 1){
-   		include(__DIR__ . "/templates/private_header.php");
-   		echo "Você precisa digitar quantias maiores que 0! <a href=\"lottery.php\">Voltar</a>.";
-   		include(__DIR__ . "/templates/private_footer.php");
-   		$error = 1;
-   		exit;
-   		}
-   
-   		if ($_POST['amount'] > 99){
-   		include(__DIR__ . "/templates/private_header.php");
-   		echo "Você pode comprar até 99 tickes por vez! <a href=\"lottery.php\">Voltar</a>.";
-   		include(__DIR__ . "/templates/private_footer.php");
-   		$error = 1;
-   		exit;
-   		}
-   	
-   		$total = ceil($_POST['amount'] * $setting->$unc4);
-   	
-   		if ($total > $player->gold){
-   		include(__DIR__ . "/templates/private_header.php");
-   		echo "Você não possui ouro sufficiente! <a href=\"lottery.php\">Voltar</a>.";
-   		include(__DIR__ . "/templates/private_footer.php");
-   		$error = 1;
-   		exit;
-   		}
-     $query = $db->execute("update `players` set `gold`=? where `id`=?", [$player->gold - $total, $player->id]);
-     $query = $db->execute("update `settings` set `value`=? where `name`='$unc6'", [$setting->$unc6 + $_POST['amount']]);
-     $num = $_POST['amount'];
-     $sql = "INSERT INTO lotto (player_id, serv) VALUES";
-     for ($i = 0; $i < $num; $i++)
-   		{
-   		    $sql .= "($player->id, $player->serv)" . (($i == $num - 1) ? "" : ", ");
-   		}
-     $result=mysql_query($sql);
-     include(__DIR__ . "/templates/private_header.php");
-     echo "Você comprou " . $_POST['amount'] . " ticket(s) por " . $total . " de ouro. <a href=\"lottery.php\">Voltar</a>.";
-     include(__DIR__ . "/templates/private_footer.php");
-     exit;
-   
-   	}
+    if (time() > $setting->$unc5) {
+
+        $query = $db->execute("update `settings` set `value`='f' where `name`='$unc3'");
+
+        include(__DIR__ . "/templates/private_header.php");
+
+        $wpaodsla = $db->execute("select * from `lotto` where `serv`=? order by RAND() limit 1", [$player->serv]);
+        $ipwpwpwpa = $wpaodsla->fetchrow();
+
+        if ($setting->$unc2 > 1000) {
+            $query = $db->execute("update `players` set `bank`=`bank`+? where `id`=?", [$setting->$unc2, $ipwpwpwpa['player_id']]);
+            $logmsg = "Você ganhou na loteria e <b>" . $setting->$unc2 . " de ouro</b> foram depositados na sua conta bancária.";
+            addlog($ipwpwpwpa['player_id'], $logmsg, $db);
+            $premiorecebido = "" . $setting->$unc2 . " de ouro";
+        } else {
+            $itotuuejdb = $db->execute("select `name` from `blueprint_items` where id=?", [$setting->$unc2]);
+            $ioeowkewttttee = $itotuuejdb->fetchrow();
+
+            $insert['player_id'] = $ipwpwpwpa['player_id'];
+            $insert['item_id'] = $setting->$unc2;
+            $query = $db->autoexecute('items', $insert, 'INSERT');
+            $logmsg = "Você ganhou na loteria e recebeu um/uma <b>" . $ioeowkewttttee['name'] . "</b>.";
+            addlog($ipwpwpwpa['player_id'], $logmsg, $db);
+            $premiorecebido = $ioeowkewttttee['name'];
+        }
+
+        $medalha7 = $db->execute("select * from `medalhas` where `player_id`=? and `medalha`=?", [$ipwpwpwpa['player_id'], \SORTUDO]);
+        if ($medalha7->recordcount() < 1) {
+            $insert['player_id'] = $ipwpwpwpa['player_id'];
+            $insert['medalha'] = "Sortudo";
+            $insert['motivo'] = "Ganhou na loteria.";
+            $query = $db->autoexecute('medalhas', $insert, 'INSERT');
+        }
+
+        $peoeajjwwa = $db->execute("select `username` from `players` where `id`=?", [$ipwpwpwpa['player_id']]);
+        $totkooowowow = $peoeajjwwa->fetchrow();
+
+
+        $query = $db->execute("update `settings` set `value`=? where `name`='$unc1'", [$totkooowowow['username']]);
+        $query = $db->execute("update `settings` set `value`=? where `name`='$unc7'", [$premiorecebido]);
+        $query = $db->execute("update `settings` set `value`=0 where `name`='$unc6'");
+        $query = $db->execute("update `settings` set `value`=0 where `name`='$unc5'");
+        $query = $db->execute("delete from `lotto` where `serv`=?", [$player->serv]);
+
+        echo "<fieldset><legend><b>A loteria está fechada</b></legend>\n";
+        echo "<table>";
+        echo "<tr>";
+        echo "<td><b>Último ganhador:</b></td>";
+        echo "<td>" . $totkooowowow['username'] . "</td>";
+        echo "</tr>";
+
+        echo "<tr>";
+        echo "<td><b>Prêmio recebido:</b></td>";
+        echo "<td>" . $premiorecebido . "</td>";
+        echo "</tr>";
+        echo "</table>";
+        echo "</fieldset>";
+        echo "<br/>";
+        echo "<a href=\"home.php\">Voltar</a>.";
+
+
+        include(__DIR__ . "/templates/private_footer.php");
+        exit;
+    }
+    if ($_POST['buy']) {
+        $error = 0;
+
+        if (!is_numeric($_POST['amount'])) {
+            include(__DIR__ . "/templates/private_header.php");
+            echo "O valor " . $_POST['for'] . " não é válido! <a href=\"lottery.php\">Voltar</a>.";
+            include(__DIR__ . "/templates/private_footer.php");
+            $error = 1;
+            exit;
+        }
+
+        if ($_POST['amount'] < 1) {
+            include(__DIR__ . "/templates/private_header.php");
+            echo "Você precisa digitar quantias maiores que 0! <a href=\"lottery.php\">Voltar</a>.";
+            include(__DIR__ . "/templates/private_footer.php");
+            $error = 1;
+            exit;
+        }
+
+        if ($_POST['amount'] > 99) {
+            include(__DIR__ . "/templates/private_header.php");
+            echo "Você pode comprar até 99 tickes por vez! <a href=\"lottery.php\">Voltar</a>.";
+            include(__DIR__ . "/templates/private_footer.php");
+            $error = 1;
+            exit;
+        }
+
+        $total = ceil($_POST['amount'] * $setting->$unc4);
+
+        if ($total > $player->gold) {
+            include(__DIR__ . "/templates/private_header.php");
+            echo "Você não possui ouro sufficiente! <a href=\"lottery.php\">Voltar</a>.";
+            include(__DIR__ . "/templates/private_footer.php");
+            $error = 1;
+            exit;
+        }
+        $query = $db->execute("update `players` set `gold`=? where `id`=?", [$player->gold - $total, $player->id]);
+        $query = $db->execute("update `settings` set `value`=? where `name`='$unc6'", [$setting->$unc6 + $_POST['amount']]);
+        $num = $_POST['amount'];
+        $sql = "INSERT INTO lotto (player_id, serv) VALUES";
+        for ($i = 0; $i < $num; $i++) {
+            $sql .= "($player->id, $player->serv)" . (($i == $num - 1) ? "" : ", ");
+        }
+        $result = mysql_query($sql);
+        include(__DIR__ . "/templates/private_header.php");
+        echo "Você comprou " . $_POST['amount'] . " ticket(s) por " . $total . " de ouro. <a href=\"lottery.php\">Voltar</a>.";
+        include(__DIR__ . "/templates/private_footer.php");
+        exit;
+
+    }
     include(__DIR__ . "/templates/private_header.php");
-    if ($setting->$unc2 < 1000){
-   	$itcheckedcheckondb = $db->execute("select name, description, type, effectiveness, img, voc, needpromo, needring, needlvl from `blueprint_items` where id=?", [$setting->$unc2]);
-   	$itchecked = $itcheckedcheckondb->fetchrow();
-   	$premio = $itchecked['name'];
-   	$premiotype = 1;
-   	}else{
-   	$premio = "" . $setting->$unc2 . " de ouro";
-   	$premiotype = 2;
-   	}
+    if ($setting->$unc2 < 1000) {
+        $itcheckedcheckondb = $db->execute("select name, description, type, effectiveness, img, voc, needpromo, needring, needlvl from `blueprint_items` where id=?", [$setting->$unc2]);
+        $itchecked = $itcheckedcheckondb->fetchrow();
+        $premio = $itchecked['name'];
+        $premiotype = 1;
+    } else {
+        $premio = "" . $setting->$unc2 . " de ouro";
+        $premiotype = 2;
+    }
     echo "<fieldset><legend><b>Loteria</b></legend>\n";
     echo "<table>";
     echo "<tr>";
@@ -255,11 +246,11 @@ if ($setting->$unc3 == \T) {
     echo "<tr>";
     echo "<td><b>Tempo Restante:</b></td>";
     $end = $setting->$unc5 - time();
-    $days = floor($end/60/60/24);
-    $hours = $end/60/60%24;
-    $minutes = $end/60%60;
+    $days = floor($end / 60 / 60 / 24);
+    $hours = $end / 60 / 60 % 24;
+    $minutes = $end / 60 % 60;
     $comecaem = "$days dia(s) $hours hora(s) $minutes minuto(s)";
-    $nova_data = date("d/m/Y G:i",  $setting->$unc5);
+    $nova_data = date("d/m/Y G:i", $setting->$unc5);
     echo "<td>" . $comecaem . " <a href=\"lottery.php\">Atualizar</a><br/><b>Dia:</b> " . $nova_data . "</td>";
     echo "</tr>";
     echo "<tr>";
@@ -280,73 +271,52 @@ if ($setting->$unc3 == \T) {
         echo "<br/>";
         echo "<fieldset><legend><b>" . $itchecked['name'] . " + 0</b></legend>\n";
         if ($itchecked['optimized'] == 10) {
-       	echo "<table width=\"100%\" bgcolor=\"#CEBBEE\">\n";
-       	}else{
-       	echo "<table width=\"100%\">\n";
-       	}
+            echo "<table width=\"100%\" bgcolor=\"#CEBBEE\">\n";
+        } else {
+            echo "<table width=\"100%\">\n";
+        }
         echo "<tr><td width=\"5%\">";
         echo "<img src=\"images/itens/" . $itchecked['img'] . "\"/>";
         echo "</td><td width=\"68%\">" . $itchecked['description'] . "<br />";
         echo "<b>";
-        if ($itchecked['type'] == 'weapon')
-       	{
-       	echo "Ataque: ";
-       	}
-       	elseif ($itchecked['type'] == 'amulet')
-       	{
-       	echo "Vitalidade: ";
-       	}
-       	elseif ($itchecked['type'] == 'boots')
-       	{
-       	echo "Agilidade: ";
-       	}else{
-       	echo "Defesa: ";
-       	}
+        if ($itchecked['type'] == 'weapon') {
+            echo "Ataque: ";
+        } elseif ($itchecked['type'] == 'amulet') {
+            echo "Vitalidade: ";
+        } elseif ($itchecked['type'] == 'boots') {
+            echo "Agilidade: ";
+        } else {
+            echo "Defesa: ";
+        }
         echo "</b>";
         echo $itchecked['effectiveness'];
         echo "<td width=\"30%\">";
         echo "<b>Vocação:</b> ";
-        if ($itchecked['voc'] == 1 && $itchecked['needpromo'] == 'f')
-        {
-        echo "Arqueiro";
-        }
-        elseif ($itchecked['voc'] == 2 && $itchecked['needpromo'] == 'f')
-        {
-        echo "Cavaleiro";
-        }
-        elseif ($itchecked['voc'] == 3 && $itchecked['needpromo'] == 'f')
-        {
-        echo "Mago";
-        }
-        elseif ($itchecked['voc'] == 1 && $itchecked['needpromo'] == 't')
-        {
-        echo "Paladino";
-        }
-        elseif ($itchecked['voc'] == 2 && $itchecked['needpromo'] == 't')
-        {
-        echo "Cavaleiro de Elite";
-        }
-        elseif ($itchecked['voc'] == 3 && $itchecked['needpromo'] == 't')
-        {
-        echo "Feiticeiro";
-        }
-        elseif ($itchecked['voc'] == 0 && $itchecked['needpromo'] == 't')
-        {
-        echo "Vocações superiores";
-        }
-        else{
-        echo "Todas";
+        if ($itchecked['voc'] == 1 && $itchecked['needpromo'] == 'f') {
+            echo "Arqueiro";
+        } elseif ($itchecked['voc'] == 2 && $itchecked['needpromo'] == 'f') {
+            echo "Cavaleiro";
+        } elseif ($itchecked['voc'] == 3 && $itchecked['needpromo'] == 'f') {
+            echo "Mago";
+        } elseif ($itchecked['voc'] == 1 && $itchecked['needpromo'] == 't') {
+            echo "Paladino";
+        } elseif ($itchecked['voc'] == 2 && $itchecked['needpromo'] == 't') {
+            echo "Cavaleiro de Elite";
+        } elseif ($itchecked['voc'] == 3 && $itchecked['needpromo'] == 't') {
+            echo "Feiticeiro";
+        } elseif ($itchecked['voc'] == 0 && $itchecked['needpromo'] == 't') {
+            echo "Vocações superiores";
+        } else {
+            echo "Todas";
         }
         echo "</td>";
         echo "</tr>";
         echo "</table>";
-        if ($itchecked['needlvl'] > 1)
-        {
-        echo "<center><b><font color=\"red\">Para usar este item você precisa ter nivel " . $itchecked['needlvl'] . " ou mais.</font></b></center>";
+        if ($itchecked['needlvl'] > 1) {
+            echo "<center><b><font color=\"red\">Para usar este item você precisa ter nivel " . $itchecked['needlvl'] . " ou mais.</font></b></center>";
         }
-        if ($itchecked['needring'] == 't')
-        {
-        echo "<center><b><font color=\"red\">Para usar este item você precisa estar usando um Jeweled Ring.</font></b></center>";
+        if ($itchecked['needring'] == 't') {
+            echo "<center><b><font color=\"red\">Para usar este item você precisa estar usando um Jeweled Ring.</font></b></center>";
         }
         echo "</fieldset>";
     }
@@ -405,5 +375,3 @@ echo "</table>";
 echo "</form></fieldset>";
 include(__DIR__ . "/templates/private_footer.php");
 exit;
-
-?>

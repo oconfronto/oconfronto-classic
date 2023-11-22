@@ -20,152 +20,155 @@
  * @author Ari Kuorikoski <ari.kuorikoski@finebyte.com>
  */
 
-class MD5Crypt{
-		function keyED($txt,$encrypt_key)
-		{
-				$encrypt_key = md5($encrypt_key);
-				$ctr=0;
-				$tmp = "";
-				for ($i=0;$i<strlen($txt);$i++){
-						if ($ctr==strlen($encrypt_key)) $ctr=0;
-						$tmp.= substr($txt,$i,1) ^ substr($encrypt_key,$ctr,1);
-						$ctr++;
-				}
-				return $tmp;
-		}
+class MD5Crypt
+{
+    public function keyED($txt, $encrypt_key)
+    {
+        $encrypt_key = md5($encrypt_key);
+        $ctr = 0;
+        $tmp = "";
+        for ($i = 0;$i < strlen($txt);$i++) {
+            if ($ctr == strlen($encrypt_key)) {
+                $ctr = 0;
+            }
+            $tmp .= substr($txt, $i, 1) ^ substr($encrypt_key, $ctr, 1);
+            $ctr++;
+        }
+        return $tmp;
+    }
 
-		function Encrypt($txt,$key)
-		{
-				$encrypt_key = md5(rand(0,32000));
-				$ctr=0;
-				$tmp = "";
-				for ($i=0;$i<strlen($txt);$i++)
-				{
-				if ($ctr==strlen($encrypt_key)) $ctr=0;
-				$tmp.= substr($encrypt_key,$ctr,1) .
-				(substr($txt,$i,1) ^ substr($encrypt_key,$ctr,1));
-				$ctr++;
-				}
-				return base64_encode($this->keyED($tmp,$key));
-		}
+    public function Encrypt($txt, $key)
+    {
+        $encrypt_key = md5(rand(0, 32000));
+        $ctr = 0;
+        $tmp = "";
+        for ($i = 0;$i < strlen($txt);$i++) {
+            if ($ctr == strlen($encrypt_key)) {
+                $ctr = 0;
+            }
+            $tmp .= substr($encrypt_key, $ctr, 1) .
+            (substr($txt, $i, 1) ^ substr($encrypt_key, $ctr, 1));
+            $ctr++;
+        }
+        return base64_encode($this->keyED($tmp, $key));
+    }
 
-		function Decrypt($txt,$key)
-		{
-				$txt = $this->keyED(base64_decode($txt),$key);
-				$tmp = "";
-				for ($i=0;$i<strlen($txt);$i++){
-						$md5 = substr($txt,$i,1);
-						$i++;
-						$tmp.= (substr($txt,$i,1) ^ $md5);
-				}
-				return $tmp;
-		}
+    public function Decrypt($txt, $key)
+    {
+        $txt = $this->keyED(base64_decode($txt), $key);
+        $tmp = "";
+        for ($i = 0;$i < strlen($txt);$i++) {
+            $md5 = substr($txt, $i, 1);
+            $i++;
+            $tmp .= (substr($txt, $i, 1) ^ $md5);
+        }
+        return $tmp;
+    }
 
-		function RandPass()
-		{
-				$randomPassword = "";
-				for($i=0;$i<8;$i++)
-				{
-						$randnumber = rand(48,120);
+    public function RandPass()
+    {
+        $randomPassword = "";
+        for($i = 0;$i < 8;$i++) {
+            $randnumber = rand(48, 120);
 
-						while (($randnumber >= 58 && $randnumber <= 64) || ($randnumber >= 91 && $randnumber <= 96))
-						{
-								$randnumber = rand(48,120);
-						}
+            while (($randnumber >= 58 && $randnumber <= 64) || ($randnumber >= 91 && $randnumber <= 96)) {
+                $randnumber = rand(48, 120);
+            }
 
-						$randomPassword .= chr($randnumber);
-				}
-				return $randomPassword;
-		}
+            $randomPassword .= chr($randnumber);
+        }
+        return $randomPassword;
+    }
 
 }
 
 
-class SHA1Crypt{
-		function keyED($txt,$encrypt_key)
-		{
+class SHA1Crypt
+{
+    public function keyED($txt, $encrypt_key)
+    {
 
-				$encrypt_key = sha1($encrypt_key);
-				$ctr=0;
-				$tmp = "";
+        $encrypt_key = sha1($encrypt_key);
+        $ctr = 0;
+        $tmp = "";
 
-				for ($i=0;$i<strlen($txt);$i++){
-						if ($ctr==strlen($encrypt_key)) $ctr=0;
-						$tmp.= substr($txt,$i,1) ^ substr($encrypt_key,$ctr,1);
-						$ctr++;
-				}
-				return $tmp;
+        for ($i = 0;$i < strlen($txt);$i++) {
+            if ($ctr == strlen($encrypt_key)) {
+                $ctr = 0;
+            }
+            $tmp .= substr($txt, $i, 1) ^ substr($encrypt_key, $ctr, 1);
+            $ctr++;
+        }
+        return $tmp;
 
-		}
+    }
 
-		function Encrypt($txt,$key)
-		{
+    public function Encrypt($txt, $key)
+    {
 
-				$encrypt_key = sha1(rand(0,32000));
-				$ctr=0;
-				$tmp = "";
+        $encrypt_key = sha1(rand(0, 32000));
+        $ctr = 0;
+        $tmp = "";
 
-				for ($i=0;$i<strlen($txt);$i++)
+        for ($i = 0;$i < strlen($txt);$i++) {
 
-				{
+            if ($ctr == strlen($encrypt_key)) {
+                $ctr = 0;
+            }
 
-				if ($ctr==strlen($encrypt_key)) $ctr=0;
+            $tmp .= substr($encrypt_key, $ctr, 1) .
 
-				$tmp.= substr($encrypt_key,$ctr,1) .
+            (substr($txt, $i, 1) ^ substr($encrypt_key, $ctr, 1));
 
-				(substr($txt,$i,1) ^ substr($encrypt_key,$ctr,1));
+            $ctr++;
 
-				$ctr++;
+        }
 
-				}
+        return base64_encode($this->keyED($tmp, $key));
 
-				return base64_encode($this->keyED($tmp,$key));
-
-		}
-
-
-
-		function Decrypt($txt,$key)
-		{
-
-				$txt = $this->keyED(base64_decode($txt),$key);
-
-				$tmp = "";
-
-				for ($i=0;$i<strlen($txt);$i++){
-
-						$sha1 = substr($txt,$i,1);
-
-						$i++;
-
-						$tmp.= (substr($txt,$i,1) ^ $sha1);
-
-				}
-
-				return $tmp;
-		}
+    }
 
 
 
-		function RandPass()
-		{
-				$randomPassword = "";
-				for($i=0;$i<8;$i++)
-				{
+    public function Decrypt($txt, $key)
+    {
 
-						$randnumber = rand(48,120);
+        $txt = $this->keyED(base64_decode($txt), $key);
 
-						while (($randnumber >= 58 && $randnumber <= 64) || ($randnumber >= 91 && $randnumber <= 96))
-						{
-								$randnumber = rand(48,120);
-						}
+        $tmp = "";
 
-						$randomPassword .= chr($randnumber);
-				}
+        for ($i = 0;$i < strlen($txt);$i++) {
 
-				return $randomPassword;
+            $sha1 = substr($txt, $i, 1);
 
-		}
+            $i++;
+
+            $tmp .= (substr($txt, $i, 1) ^ $sha1);
+
+        }
+
+        return $tmp;
+    }
+
+
+
+    public function RandPass()
+    {
+        $randomPassword = "";
+        for($i = 0;$i < 8;$i++) {
+
+            $randnumber = rand(48, 120);
+
+            while (($randnumber >= 58 && $randnumber <= 64) || ($randnumber >= 91 && $randnumber <= 96)) {
+                $randnumber = rand(48, 120);
+            }
+
+            $randomPassword .= chr($randnumber);
+        }
+
+        return $randomPassword;
+
+    }
 
 
 

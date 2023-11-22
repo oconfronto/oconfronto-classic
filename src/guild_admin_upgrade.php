@@ -25,21 +25,21 @@ if ($player->username != $guild['leader'] && $player->username != $guild['vice']
     echo "<a href=\"home.php\">Principal</a><p />";
 } else {
 
-if ($_GET['upgrade'] == \MAXPLAYERS) {
-	if ($guild['maxmembers'] > 49) {
-     $errmsg .= "<center><b>Você não pode adicionar mais vagas para o clã.</b></center>";
-     $error = 1;
- } elseif ($price > $guild['gold']) {
-     $errmsg .= "<center><b>Seu clã não possui ouro suficiente. (Preço: " . $price . ")</b></center>";
-     $error = 1;
- }
-		if ($error == 0){
-		$query = $db->execute("update `guilds` set `maxmembers`=?, `gold`=? where `id`=?", [$guild['maxmembers'] + 10, $guild['gold'] - $price, $guild['id']]);
-		$msg .= "<center><b>Agora seu clã pode possuir " . ($guild['maxmembers'] + 10) . " membros.</b></center>";
-		}
-}
+    if ($_GET['upgrade'] == \MAXPLAYERS) {
+        if ($guild['maxmembers'] > 49) {
+            $errmsg .= "<center><b>Você não pode adicionar mais vagas para o clã.</b></center>";
+            $error = 1;
+        } elseif ($price > $guild['gold']) {
+            $errmsg .= "<center><b>Seu clã não possui ouro suficiente. (Preço: " . $price . ")</b></center>";
+            $error = 1;
+        }
+        if ($error == 0) {
+            $query = $db->execute("update `guilds` set `maxmembers`=?, `gold`=? where `id`=?", [$guild['maxmembers'] + 10, $guild['gold'] - $price, $guild['id']]);
+            $msg .= "<center><b>Agora seu clã pode possuir " . ($guild['maxmembers'] + 10) . " membros.</b></center>";
+        }
+    }
 
-?>
+    ?>
 <?=$msg?><font color=red><?=$errmsg?></font>
 <fieldset>
 <legend><b><?=$guild['name']?> :: Melhorias</b></legend>

@@ -20,119 +20,125 @@
  */
 
 // security - hide paths
-if (!defined('ADODB_DIR')) die();
-
-if (!defined('_ADODB_ODBC_LAYER')) {
- include_once(ADODB_DIR."/drivers/adodb-odbc.inc.php");
+if (!defined('ADODB_DIR')) {
+    die();
 }
 
-if (!defined('ADODB_SYBASE_SQLANYWHERE')){
+if (!defined('_ADODB_ODBC_LAYER')) {
+    include_once(ADODB_DIR."/drivers/adodb-odbc.inc.php");
+}
 
- define('ADODB_SYBASE_SQLANYWHERE',1);
+if (!defined('ADODB_SYBASE_SQLANYWHERE')) {
 
- class ADODB_sqlanywhere extends ADODB_odbc
- {
-	 var $databaseType = "sqlanywhere";
-	 var $hasInsertID = true;
+    define('ADODB_SYBASE_SQLANYWHERE', 1);
 
-	protected function _insertID($table = '', $column = '')
-	{
-		 return $this->GetOne('select @@identity');
-	}
+    class ADODB_sqlanywhere extends ADODB_odbc
+    {
+        public $databaseType = "sqlanywhere";
+        public $hasInsertID = true;
 
-  function create_blobvar($blobVarName) {
-   $this->Execute("create variable $blobVarName long binary");
-   return;
-  }
+        protected function _insertID($table = '', $column = '')
+        {
+            return $this->GetOne('select @@identity');
+        }
 
-  function drop_blobvar($blobVarName) {
-   $this->Execute("drop variable $blobVarName");
-   return;
-  }
+        public function create_blobvar($blobVarName)
+        {
+            $this->Execute("create variable $blobVarName long binary");
+            return;
+        }
 
-  function load_blobvar_from_file($blobVarName, $filename) {
-   $chunk_size = 1000;
+        public function drop_blobvar($blobVarName)
+        {
+            $this->Execute("drop variable $blobVarName");
+            return;
+        }
 
-   $fd = fopen ($filename, "rb");
+        public function load_blobvar_from_file($blobVarName, $filename)
+        {
+            $chunk_size = 1000;
 
-   $integer_chunks = (integer)filesize($filename) / $chunk_size;
-   $modulus = filesize($filename) % $chunk_size;
-   if ($modulus != 0){
-	$integer_chunks += 1;
-   }
+            $fd = fopen($filename, "rb");
 
-   for($loop=1;$loop<=$integer_chunks;$loop++){
-	$contents = fread ($fd, $chunk_size);
-	$contents = bin2hex($contents);
+            $integer_chunks = (int)filesize($filename) / $chunk_size;
+            $modulus = filesize($filename) % $chunk_size;
+            if ($modulus != 0) {
+                $integer_chunks += 1;
+            }
 
-	$hexstring = '';
+            for($loop = 1;$loop <= $integer_chunks;$loop++) {
+                $contents = fread($fd, $chunk_size);
+                $contents = bin2hex($contents);
 
-	for($loop2=0;$loop2<strlen($contents);$loop2+=2){
-	 $hexstring .= '\x' . substr($contents,$loop2,2);
-	 }
+                $hexstring = '';
 
-	$hexstring = $this->qstr($hexstring);
+                for($loop2 = 0;$loop2 < strlen($contents);$loop2 += 2) {
+                    $hexstring .= '\x' . substr($contents, $loop2, 2);
+                }
 
-	$this->Execute("set $blobVarName = $blobVarName || " . $hexstring);
-   }
+                $hexstring = $this->qstr($hexstring);
 
-   fclose ($fd);
-   return;
-  }
+                $this->Execute("set $blobVarName = $blobVarName || " . $hexstring);
+            }
 
-  function load_blobvar_from_var($blobVarName, &$varName) {
-   $chunk_size = 1000;
+            fclose($fd);
+            return;
+        }
 
-   $integer_chunks = (integer)strlen($varName) / $chunk_size;
-   $modulus = strlen($varName) % $chunk_size;
-   if ($modulus != 0){
-	$integer_chunks += 1;
-   }
+        public function load_blobvar_from_var($blobVarName, &$varName)
+        {
+            $chunk_size = 1000;
 
-   for($loop=1;$loop<=$integer_chunks;$loop++){
-	$contents = substr ($varName, (($loop - 1) * $chunk_size), $chunk_size);
-	$contents = bin2hex($contents);
+            $integer_chunks = (int)strlen($varName) / $chunk_size;
+            $modulus = strlen($varName) % $chunk_size;
+            if ($modulus != 0) {
+                $integer_chunks += 1;
+            }
 
-	$hexstring = '';
+            for($loop = 1;$loop <= $integer_chunks;$loop++) {
+                $contents = substr($varName, (($loop - 1) * $chunk_size), $chunk_size);
+                $contents = bin2hex($contents);
 
-	for($loop2=0;$loop2<strlen($contents);$loop2+=2){
-	 $hexstring .= '\x' . substr($contents,$loop2,2);
-	 }
+                $hexstring = '';
 
-	$hexstring = $this->qstr($hexstring);
+                for($loop2 = 0;$loop2 < strlen($contents);$loop2 += 2) {
+                    $hexstring .= '\x' . substr($contents, $loop2, 2);
+                }
 
-	$this->Execute("set $blobVarName = $blobVarName || " . $hexstring);
-   }
+                $hexstring = $this->qstr($hexstring);
 
-   return;
-  }
+                $this->Execute("set $blobVarName = $blobVarName || " . $hexstring);
+            }
 
- /*
-  Insert a null into the blob field of the table first.
-  Then use UpdateBlob to store the blob.
+            return;
+        }
 
-  Usage:
+        /*
+         Insert a null into the blob field of the table first.
+         Then use UpdateBlob to store the blob.
 
-  $conn->Execute('INSERT INTO blobtable (id, blobcol) VALUES (1, null)');
-  $conn->UpdateBlob('blobtable','blobcol',$blob,'id=1');
- */
-  function updateBlob($table, $column, $val, $where, $blobtype = 'BLOB')
-  {
-   $blobVarName = 'hold_blob';
-   $this->create_blobvar($blobVarName);
-   $this->load_blobvar_from_var($blobVarName, $val);
-   $this->Execute("UPDATE $table SET $column=$blobVarName WHERE $where");
-   $this->drop_blobvar($blobVarName);
-   return true;
-  }
- }; //class
+         Usage:
 
- class  ADORecordSet_sqlanywhere extends ADORecordSet_odbc {
+         $conn->Execute('INSERT INTO blobtable (id, blobcol) VALUES (1, null)');
+         $conn->UpdateBlob('blobtable','blobcol',$blob,'id=1');
+        */
+        public function updateBlob($table, $column, $val, $where, $blobtype = 'BLOB')
+        {
+            $blobVarName = 'hold_blob';
+            $this->create_blobvar($blobVarName);
+            $this->load_blobvar_from_var($blobVarName, $val);
+            $this->Execute("UPDATE $table SET $column=$blobVarName WHERE $where");
+            $this->drop_blobvar($blobVarName);
+            return true;
+        }
+    }; //class
 
-  var $databaseType = "sqlanywhere";
+    class ADORecordSet_sqlanywhere extends ADORecordSet_odbc
+    {
+        public $databaseType = "sqlanywhere";
 
 
- }; //class
+    }; //class
 
 
 } //define

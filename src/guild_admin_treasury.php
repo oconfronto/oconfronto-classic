@@ -34,48 +34,48 @@ if ($player->username != $guild['leader'] && $player->username != $guild['vice']
     echo "<a href=\"home.php\">Principal</a><p />";
 } else {
 
-if (isset($_POST['username']) && ($_POST['amount']) && ($_POST['submit'])) {
-	
-	$query = $db->execute("select * from `players` where `username`=?", [$username]);
-	
-    if ($query->recordcount() == 0) {
-        $errmsg .= "Este usuário não existe!<p />";
-        $error = 1;
-    } elseif ($amount < 1) {
-        $errmsg .= "Você não pode enviar esta quantia de dinheiro!<p />";
-        $error = 1;
-    } elseif (!is_numeric($amount)) {
-        $errmsg .= "Você não pode enviar esta quantia de dinheiro!<p />";
-        $error = 1;
-    } elseif ($amount > $guild['gold']) {
-        $errmsg .= "Seu clã não possui esta quantia de dinheiro!<p />";
-        $error = 1;
-    } else {
-        $member = $query->fetchrow();
-        	if ($member['guild'] != $guild['id']) {
-    			$errmsg .= "O usuário $username não é membro do clã ". $guild['name'] ."!<p />";
-    			$error = 1;
-        	} else {
-            	$query = $db->execute("update `guilds` set `gold`=? where `id`=?", [$guild['gold'] - $amount, $player->guild]);
-            	$query1 = $db->execute("update `players` set `gold`=? where `username`=?", [$member['gold'] + $amount, $member['username']]);
-            	$logmsg = "Você recebeu <b>$amount</b> de ouro do clã: <b>". $guild['name'] ."</b>.";
-				addlog($member['id'], $logmsg, $db);
+    if (isset($_POST['username']) && ($_POST['amount']) && ($_POST['submit'])) {
 
-		$insert['player_id'] = $member['id'];
-		$insert['name1'] = $player->username;
-		$insert['name2'] = $guild['name'];
-		$insert['action'] = "ganhou";
-		$insert['value'] = $amount;
-		$insert['aditional'] = "gangue";
-		$insert['time'] = time();
-		$query = $db->autoexecute('log_gold', $insert, 'INSERT');
+        $query = $db->execute("select * from `players` where `username`=?", [$username]);
 
-            	$msg .= "Você tranferiu <b>$amount</b> de ouro para: <b>$username</b>.<p />";
-        	}
-    	}
-	}
+        if ($query->recordcount() == 0) {
+            $errmsg .= "Este usuário não existe!<p />";
+            $error = 1;
+        } elseif ($amount < 1) {
+            $errmsg .= "Você não pode enviar esta quantia de dinheiro!<p />";
+            $error = 1;
+        } elseif (!is_numeric($amount)) {
+            $errmsg .= "Você não pode enviar esta quantia de dinheiro!<p />";
+            $error = 1;
+        } elseif ($amount > $guild['gold']) {
+            $errmsg .= "Seu clã não possui esta quantia de dinheiro!<p />";
+            $error = 1;
+        } else {
+            $member = $query->fetchrow();
+            if ($member['guild'] != $guild['id']) {
+                $errmsg .= "O usuário $username não é membro do clã ". $guild['name'] ."!<p />";
+                $error = 1;
+            } else {
+                $query = $db->execute("update `guilds` set `gold`=? where `id`=?", [$guild['gold'] - $amount, $player->guild]);
+                $query1 = $db->execute("update `players` set `gold`=? where `username`=?", [$member['gold'] + $amount, $member['username']]);
+                $logmsg = "Você recebeu <b>$amount</b> de ouro do clã: <b>". $guild['name'] ."</b>.";
+                addlog($member['id'], $logmsg, $db);
 
-?>
+                $insert['player_id'] = $member['id'];
+                $insert['name1'] = $player->username;
+                $insert['name2'] = $guild['name'];
+                $insert['action'] = "ganhou";
+                $insert['value'] = $amount;
+                $insert['aditional'] = "gangue";
+                $insert['time'] = time();
+                $query = $db->autoexecute('log_gold', $insert, 'INSERT');
+
+                $msg .= "Você tranferiu <b>$amount</b> de ouro para: <b>$username</b>.<p />";
+            }
+        }
+    }
+
+    ?>
 
 <fieldset>
 <legend><b><?=$guild['name']?> :: Tranferir Ouro</b></legend>

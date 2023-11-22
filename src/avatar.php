@@ -18,7 +18,7 @@ if ($_POST['submit']) {
 
     if ($error == 0) {
 
-	$avat = $_POST['avatar'] ?: "anonimo.gif";
+        $avat = $_POST['avatar'] ?: "anonimo.gif";
 
         $query = $db->execute("update `players` set `avatar`=? where `id`=?", [$avat, $player->id]);
         $msg .= "Você alterou seu avatar com sucesso!";

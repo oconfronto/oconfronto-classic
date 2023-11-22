@@ -1,4 +1,5 @@
 <?php
+
 include 'adodb.inc.php';
 //include 'adodb-exceptions.inc.php';
 error_reporting(E_ALL & ~E_DEPRECATED);
@@ -24,4 +25,3 @@ $db->setFetchMode(ADODB_FETCH_ASSOC);
 $db->Execute($sql, $param);
 var_dump($db->ErrorNo());
 var_dump($db->ErrorMsg());
-

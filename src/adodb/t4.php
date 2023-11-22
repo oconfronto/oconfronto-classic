@@ -1,10 +1,11 @@
 <?php
+
 include 'adodb.inc.php';
 
 $db = newAdoConnection('firebird');
 $db->dialect = 3;
 $db->connect("localhost:/tmp/test.fdb", 'SYSDBA', 'C0yote71');
-if(!$db->isConnected()){
+if(!$db->isConnected()) {
     var_dump($db);
     exit(0);
 }

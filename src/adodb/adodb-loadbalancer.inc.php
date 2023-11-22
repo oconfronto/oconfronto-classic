@@ -135,13 +135,13 @@ class ADOdbLoadBalancer
     public function removeConnection($i)
     {
         if (isset($this->connections[$i])) {
-               $obj = $this->connections[ $i ];
+            $obj = $this->connections[ $i ];
 
-               $this->total_connections[ $obj->type ]--;
-               $this->total_connections['all']--;
+            $this->total_connections[ $obj->type ]--;
+            $this->total_connections['all']--;
 
-               $this->total_connection_weights[ $obj->type ] -= abs($obj->weight);
-               $this->total_connection_weights['all'] -= abs($obj->weight);
+            $this->total_connection_weights[ $obj->type ] -= abs($obj->weight);
+            $this->total_connection_weights['all'] -= abs($obj->weight);
 
             if ($obj->type == 'write') {
                 unset($this->connections_write[array_search($i, $this->connections_write)]);
@@ -265,7 +265,7 @@ class ADOdbLoadBalancer
                 // This is useful for testing replication lag and such to ensure the connection is suitable to be used.
                 $test_connection_callback = $connection_obj->getConnectionTestCallback();
                 if (is_callable($test_connection_callback)
-                    && $test_connection_callback($connection_obj, $adodb_obj) !== TRUE
+                    && $test_connection_callback($connection_obj, $adodb_obj) !== true
                 ) {
                     return false;
                 }
@@ -316,7 +316,7 @@ class ADOdbLoadBalancer
                 } catch (Exception $e) {
                     // Connection error, see if there are other connections to try still.
                     $this->removeConnection($connection_id);
-                    if (   ($type == 'write' && $this->total_connections['write'] == 0)
+                    if (($type == 'write' && $this->total_connections['write'] == 0)
                         || ($type == 'readonly' && $this->total_connections['all'] == 0)
                     ) {
                         throw $e;
@@ -444,7 +444,8 @@ class ADOdbLoadBalancer
         if (is_array($this->connections) && count($this->connections) > 0) {
             foreach ($this->connections as $key => $connection_obj) {
                 if ($existing_connections_only == false
-                    || ($existing_connections_only == true
+                    || (
+                        $existing_connections_only == true
                         && $connection_obj->getADOdbObject()->_connectionID !== false
                     )
                 ) {
@@ -491,7 +492,7 @@ class ADOdbLoadBalancer
      */
     public function isReadOnlyQuery($sql)
     {
-        if (   stripos($sql, 'SELECT') === 0
+        if (stripos($sql, 'SELECT') === 0
             && stripos($sql, 'FOR UPDATE') === false
             && stripos($sql, ' INTO ') === false
             && stripos($sql, 'LOCK IN') === false
@@ -588,7 +589,7 @@ class ADOdbLoadBalancer
                 // Manual transactions
             case 'begintrans':
             case 'settransactionmode':
-                    $pin_connection = true;
+                $pin_connection = true;
                 break;
             case 'rollbacktrans':
             case 'committrans':
@@ -604,18 +605,18 @@ class ADOdbLoadBalancer
                 $pin_connection = false;
                 break;
 
-            // Functions that don't require any connection and therefore
-            // shouldn't force a connection be established before they run.
+                // Functions that don't require any connection and therefore
+                // shouldn't force a connection be established before they run.
             case 'qstr':
             case 'escape':
             case 'binddate':
             case 'bindtimestamp':
             case 'setfetchmode':
             case 'setcustommetatype':
-                  $type = false; // No connection necessary.
+                $type = false; // No connection necessary.
                 break;
 
-            // Default to assuming write connection is required to be on the safe side.
+                // Default to assuming write connection is required to be on the safe side.
             default:
                 break;
         }
@@ -628,7 +629,7 @@ class ADOdbLoadBalancer
                 }
             }
         } else {
-               $adodb_obj = $this->getConnection($type, $pin_connection);
+            $adodb_obj = $this->getConnection($type, $pin_connection);
             if (is_object($adodb_obj)) {
                 $result = call_user_func_array(array($adodb_obj, $method), $this->makeValuesReferenced($args));
 
@@ -674,7 +675,7 @@ class ADOdbLoadBalancer
                 $connection_obj->getADOdbObject()->$property = $value;
             }
 
-               return true;
+            return true;
         }
 
         return false;
@@ -706,7 +707,7 @@ class ADOdbLoadBalancerConnection
     /**
      * @var callable    Closure
      */
-    protected $connection_test_callback = NULL;
+    protected $connection_test_callback = null;
 
     /**
      * @var string    Type of connection, either 'write' capable or 'readonly'
@@ -790,14 +791,16 @@ class ADOdbLoadBalancerConnection
      * @param callable $callback
      * @return void
      */
-    function setConnectionTestCallback($callback) {
+    public function setConnectionTestCallback($callback)
+    {
         $this->connection_test_callback = $callback;
     }
 
     /**
      * @return callable|null
      */
-    function getConnectionTestCallback() {
+    public function getConnectionTestCallback()
+    {
         return $this->connection_test_callback;
     }
 

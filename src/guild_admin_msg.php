@@ -32,31 +32,31 @@ if ($guild['msgs'] > 3) {
 }
 
 if ($_POST['submit']) {
-	if (!$_POST['subject']) {
-    		$errmsg .= "<font color=red>Você precisa adicionar um titulo para sua mensagem.</font>";
-    		$error = 1;
-	}
-	if (!$_POST['body']) {
-    		$errmsg .= "<font color=red>Você precisa escrever uma mensagem.</font>";
-    		$error = 1;
-	}
-	if (strlen((string) $_POST['body']) > 5000) {
-    		$errmsg .= "<font color=red>Sua mensagem deve ter menos que 5000 caracteres.</font>";
-    		$error = 1;
-	}
+    if (!$_POST['subject']) {
+        $errmsg .= "<font color=red>Você precisa adicionar um titulo para sua mensagem.</font>";
+        $error = 1;
+    }
+    if (!$_POST['body']) {
+        $errmsg .= "<font color=red>Você precisa escrever uma mensagem.</font>";
+        $error = 1;
+    }
+    if (strlen((string) $_POST['body']) > 5000) {
+        $errmsg .= "<font color=red>Sua mensagem deve ter menos que 5000 caracteres.</font>";
+        $error = 1;
+    }
 
 
-		if ($error == 0){
-				$mensagem = "<div style='width:100%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px' align='center'><font size=1><b>Esta mensagem foi enviada para todos os membros do clã: " . $guild['name'] . ".</b></font></div><br/>" . $_POST['body'] . "";
+    if ($error == 0) {
+        $mensagem = "<div style='width:100%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px' align='center'><font size=1><b>Esta mensagem foi enviada para todos os membros do clã: " . $guild['name'] . ".</b></font></div><br/>" . $_POST['body'] . "";
 
-				$database = $db->execute("select `id` from `players` where `guild`=?", [$guild['id']]);
-  					while($member = $database->fetchrow()) {
-					$query = $db->execute("insert into `mail` (`to`, `from`, `body`, `subject`, `time`) values (?, ?, ?, ?, ?)", [$member['id'], $player->id, $mensagem, $_POST['subject'], time()]);
-					}
-			$query = $db->execute("update `guilds` set `msgs`=? where `id`=?", [$guild['msgs'] + 1, $player->guild]);
-			$errmsg .= "Mensagem enviada com sucesso.";
-			}
-	}
+        $database = $db->execute("select `id` from `players` where `guild`=?", [$guild['id']]);
+        while($member = $database->fetchrow()) {
+            $query = $db->execute("insert into `mail` (`to`, `from`, `body`, `subject`, `time`) values (?, ?, ?, ?, ?)", [$member['id'], $player->id, $mensagem, $_POST['subject'], time()]);
+        }
+        $query = $db->execute("update `guilds` set `msgs`=? where `id`=?", [$guild['msgs'] + 1, $player->guild]);
+        $errmsg .= "Mensagem enviada com sucesso.";
+    }
+}
 
 
 ?>

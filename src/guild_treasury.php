@@ -26,21 +26,21 @@ if ($query->recordcount() == 0) {
 
 if (isset($_POST['amount']) && ($_POST['submit'])) {
 
-$amount = floor($_POST['amount']);
-if ($player->gold < $amount) {
-    include(__DIR__ . "/templates/private_header.php");
-    echo "Você não pode enviar esta quantia de ouro!<br />";
-    echo "<a href=\"guild_treasury.php\">Tentar Novamente</a>.";
-    include(__DIR__ . "/templates/private_footer.php");
-    exit;
-}
-if ($amount < 1) {
-    include(__DIR__ . "/templates/private_header.php");
-    echo "Você não pode enviar esta quantia de ouro!<br />";
-    echo "<a href=\"guild_treasury.php\">Tentar Novamente</a>.";
-    include(__DIR__ . "/templates/private_footer.php");
-    exit;
-}
+    $amount = floor($_POST['amount']);
+    if ($player->gold < $amount) {
+        include(__DIR__ . "/templates/private_header.php");
+        echo "Você não pode enviar esta quantia de ouro!<br />";
+        echo "<a href=\"guild_treasury.php\">Tentar Novamente</a>.";
+        include(__DIR__ . "/templates/private_footer.php");
+        exit;
+    }
+    if ($amount < 1) {
+        include(__DIR__ . "/templates/private_header.php");
+        echo "Você não pode enviar esta quantia de ouro!<br />";
+        echo "<a href=\"guild_treasury.php\">Tentar Novamente</a>.";
+        include(__DIR__ . "/templates/private_footer.php");
+        exit;
+    }
 
     if (!is_numeric($amount)) {
         include(__DIR__ . "/templates/private_header.php");
@@ -65,12 +65,12 @@ if ($amount < 1) {
     $insert['aditional'] = "gangue";
     $insert['time'] = time();
     $query = $db->autoexecute('log_gold', $insert, 'INSERT');
-    if ($guild['vice'] != '' && $guild['vice'] != NULL){
-  		$quety00 = $db->execute("select `id` from `players` where `username`=?", [$guild['vice']]);
-      		$vice = $quety00->fetchrow();
-      		$logmsg = "<b>$player->username</b> transferiu <b>$amount de gold</b> para o clã.";
-  		addlog($vice['id'], $logmsg, $db);
-  		}
+    if ($guild['vice'] != '' && $guild['vice'] != null) {
+        $quety00 = $db->execute("select `id` from `players` where `username`=?", [$guild['vice']]);
+        $vice = $quety00->fetchrow();
+        $logmsg = "<b>$player->username</b> transferiu <b>$amount de gold</b> para o clã.";
+        addlog($vice['id'], $logmsg, $db);
+    }
     include(__DIR__ . "/templates/private_footer.php");
     exit;
 }

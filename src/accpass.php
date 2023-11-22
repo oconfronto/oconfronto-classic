@@ -1,14 +1,14 @@
 <?php
-	include(__DIR__ . "/lib.php");
-	define("PAGENAME", "Alterar Senha");
-	include(__DIR__ . "/templates/acc_header.php");
+include(__DIR__ . "/lib.php");
+define("PAGENAME", "Alterar Senha");
+include(__DIR__ . "/templates/acc_header.php");
 
-	$acc = check_acc($secret_key, $db);
+$acc = check_acc($secret_key, $db);
 
 $sucess1 = 0;
 $sucess2 = 0;
 
-	echo "<br/><br/><br/>";
+echo "<br/><br/><br/>";
 
 if ($_POST['changepassword']) {
     //Check password
@@ -32,21 +32,21 @@ if ($_POST['changepassword']) {
         $error = 1;
     }
     if ($error == 0) {
-		$insert['player_id'] = $acc->id;
-		$insert['msg'] = "Você alterou a senha de sua conta.";
-		$insert['time'] = time();
-		$query = $db->autoexecute('account_log', $insert, 'INSERT');
+        $insert['player_id'] = $acc->id;
+        $insert['msg'] = "Você alterou a senha de sua conta.";
+        $insert['time'] = time();
+        $query = $db->autoexecute('account_log', $insert, 'INSERT');
 
         $query = $db->execute("update `accounts` set `password`=? where `id`=?", [sha1((string) $_POST['password']), $acc->id]);
         $msg .= "Você trocou sua senha.";
-	$sucess1 = 1;
+        $sucess1 = 1;
     }
 }
 
 
 
-if ($sucess1 == 0){
-?>
+if ($sucess1 == 0) {
+    ?>
 <fieldset>
 <p /><legend><b>Alterar senha da conta</b></legend><p />
 <table width="100%">
@@ -62,10 +62,10 @@ if ($sucess1 == 0){
 <br/>
 <a href="characters.php">Voltar</a>.
 <?php
-}else{
-echo "<center><b>Sucesso</b><br/>" . $msg . " <a href=\"characters.php\">Voltar</a>.</center>";
+} else {
+    echo "<center><b>Sucesso</b><br/>" . $msg . " <a href=\"characters.php\">Voltar</a>.</center>";
 }
 
-	include(__DIR__ . "/templates/acc_footer.php");
+include(__DIR__ . "/templates/acc_footer.php");
 
 ?>

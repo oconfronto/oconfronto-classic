@@ -20,8 +20,8 @@
  * @author Grzegorz Pacan <gp@dione.cc>
  */
 
-$ADODB_LANG_ARRAY = array (
-			'LANG'                      => 'pl',
+$ADODB_LANG_ARRAY = array(
+            'LANG'                      => 'pl',
             DB_ERROR                    => 'niezidentyfikowany błąd',
             DB_ERROR_ALREADY_EXISTS     => 'już istnieją',
             DB_ERROR_CANNOT_CREATE      => 'nie można stworzyć',
@@ -46,7 +46,7 @@ $ADODB_LANG_ARRAY = array (
             DB_ERROR_CONNECT_FAILED     => 'połączenie nie zostało zrealizowane',
             0	                       => 'brak błędów', // DB_OK
             DB_ERROR_NEED_MORE_DATA     => 'niedostateczna ilość informacji',
-            DB_ERROR_EXTENSION_NOT_FOUND=> 'nie znaleziono rozszerzenia',
+            DB_ERROR_EXTENSION_NOT_FOUND => 'nie znaleziono rozszerzenia',
             DB_ERROR_NOSUCHDB           => 'nie znaleziono bazy',
             DB_ERROR_ACCESS_VIOLATION   => 'niedostateczne uprawnienia'
 );

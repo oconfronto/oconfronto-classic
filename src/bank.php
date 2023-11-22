@@ -8,9 +8,8 @@ include(__DIR__ . "/checkwork.php");
 $lockedgold = 0;
 
 $countlocked = $db->execute("select `prize` from `duels` where `owner`=? and (`active`='w' or `active`='t')", [$player->id]);
-while($count = $countlocked->fetchrow())
-{
-$lockedgold += $lockedgold + $count['prize'];
+while($count = $countlocked->fetchrow()) {
+    $lockedgold += $lockedgold + $count['prize'];
 }
 
 if (isset($_POST['deposit'])) {
@@ -19,24 +18,22 @@ if (isset($_POST['deposit'])) {
         $msg = "<font color=\"red\">Você não pode depositar esta quantia de dinheiro!</font>\n";
     } elseif (!is_numeric($_POST['deposit'])) {
         $msg = "<font color=\"red\">Esta quantia de ouro não é válida!</font>\n";
-    } else
-   	{
-   		$query = $db->execute("update `players` set `bank`=?, `gold`=? where `id`=?", [$player->bank + $deposita, $player->gold - $deposita, $player->id]);
-   		$msg = "<font color=\"green\">Você depositou seu ouro no banco.</font>\n";
-   		$player = check_user($secret_key, $db); //Get new stats so new amount of gold is displayed on left menu
-   	}
+    } else {
+        $query = $db->execute("update `players` set `bank`=?, `gold`=? where `id`=?", [$player->bank + $deposita, $player->gold - $deposita, $player->id]);
+        $msg = "<font color=\"green\">Você depositou seu ouro no banco.</font>\n";
+        $player = check_user($secret_key, $db); //Get new stats so new amount of gold is displayed on left menu
+    }
 } elseif (isset($_POST['withdraw'])) {
     $saca = floor($_POST['withdraw']);
     if ($saca > ($player->bank - $lockedgold) || $saca < 1) {
         $msg = "<font color=\"red\">Você não tem esta quantia de dinheiro na sua conta do banco!</font>\n";
     } elseif (!is_numeric($_POST['withdraw'])) {
         $msg = "<font color=\"red\">Esta quantia de ouro não é válida!</font>\n";
-    } else
-   	{
-   		$query = $db->execute("update `players` set `bank`=?, `gold`=? where `id`=?", [$player->bank - $saca, $player->gold + $saca, $player->id]);
-   		$msg = "<font color=\"green\">Você retirou seu dinheiro do banco.</font>\n";
-   		$player = check_user($secret_key, $db); //Get new stats so new amount of gold is displayed on left menu
-   	}
+    } else {
+        $query = $db->execute("update `players` set `bank`=?, `gold`=? where `id`=?", [$player->bank - $saca, $player->gold + $saca, $player->id]);
+        $msg = "<font color=\"green\">Você retirou seu dinheiro do banco.</font>\n";
+        $player = check_user($secret_key, $db); //Get new stats so new amount of gold is displayed on left menu
+    }
 }
 
 include(__DIR__ . "/templates/private_header.php");
@@ -63,22 +60,22 @@ Você tem <b><?=$player->gold?></b> de ouro com você.<br />
 <td width="100%">
 <fieldset>
 <legend><b>Retirar ouro</b></legend>
-Você tem <b><?php echo ($player->bank - $lockedgold); ?></b> de ouro na sua conta bancária.<br />
+Você tem <b><?php echo($player->bank - $lockedgold); ?></b> de ouro na sua conta bancária.<br />
 <form method="post" action="bank.php">
-<input type="text" name="withdraw" size="15" value="<?php echo ($player->bank - $lockedgold); ?>" />
+<input type="text" name="withdraw" size="15" value="<?php echo($player->bank - $lockedgold); ?>" />
 <input type="submit" name="bank_action" value="Retirar"/>
 </form>
 <?php
-if ($lockedgold > 0){
-echo "<center><font size=\"1\">Você tem <b>" . $lockedgold . "</b> de ouro bloqueado na sua conta bancária. (ouro para duelos)</font></center>";
+if ($lockedgold > 0) {
+    echo "<center><font size=\"1\">Você tem <b>" . $lockedgold . "</b> de ouro bloqueado na sua conta bancária. (ouro para duelos)</font></center>";
 }
 ?>
 </fieldset>
 <?php
-if (($player->bank + $player->gold) > $setting->bank_limit){
-echo "<center><font size=1>Sua fortuna já passou de " . $setting->bank_limit . ", agora você não receberá mais juros!</font></center>";
-}else{
-echo "<center><font size=1>Seu ouro depositado se valoriza " . $setting->bank_interest_rate . "% ao dia.</font></center>";
+if (($player->bank + $player->gold) > $setting->bank_limit) {
+    echo "<center><font size=1>Sua fortuna já passou de " . $setting->bank_limit . ", agora você não receberá mais juros!</font></center>";
+} else {
+    echo "<center><font size=1>Seu ouro depositado se valoriza " . $setting->bank_interest_rate . "% ao dia.</font></center>";
 }
 ?>
 </td>
@@ -109,5 +106,5 @@ echo "</form><font size=\"1\"><a href=\"forgottrans.php\">Esqueceu sua senha de 
 echo "</fieldset>";
 echo "<center><font size=1><a href=\"#\" onclick=\"javascript:window.open('loggold.php', '_blank','top=100, left=100, height=350, width=450, status=no, menubar=no, resizable=no, scrollbars=yes, toolbar=no, location=no, directories=no');\">Transferências realizadas nos últimos 14 dias.</a></font></center>";
 include(__DIR__ . "/templates/private_footer.php");
-exit; 
+exit;
 ?>

@@ -1,6 +1,6 @@
 <?php
-	include(__DIR__ . "/lib.php");
-	$player = check_user($secret_key, $db);
+include(__DIR__ . "/lib.php");
+$player = check_user($secret_key, $db);
 ?>
 <html>
 <head>
@@ -48,27 +48,26 @@ a:visited {
 <body onload="divDown()">
 <?php
 
-		if (!$_GET['id']){
-		echo "Um erro ocorreu.";
-		echo "</body>";
-		echo "</html>";
-		exit;
-		}
+        if (!$_GET['id']) {
+            echo "Um erro ocorreu.";
+            echo "</body>";
+            echo "</html>";
+            exit;
+        }
 
-		$query = $db->execute("select * from `log_battle` where `id`=? and `player_id`=?", [$_GET['id'], $player->id]);
-		if ($query->recordcount() < 1)
-		{
-		echo "Log não encontrado.";
-		echo "</body>";
-		echo "</html>";
-		exit;
-		}
+        $query = $db->execute("select * from `log_battle` where `id`=? and `player_id`=?", [$_GET['id'], $player->id]);
+if ($query->recordcount() < 1) {
+    echo "Log não encontrado.";
+    echo "</body>";
+    echo "</html>";
+    exit;
+}
 
-		$log = $query->fetchrow();
-		echo "<br/><center><div id=\"logdebatalha\" align=\"left\" class=\"scroll\" style=\"background-color:#FFFDE0; overflow: auto; width:95%; height:270px; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">";
-		echo $log['log'];
-		echo "</div></center>";
-		echo "</body>";
-		echo "</html>";
-		exit;
+$log = $query->fetchrow();
+echo "<br/><center><div id=\"logdebatalha\" align=\"left\" class=\"scroll\" style=\"background-color:#FFFDE0; overflow: auto; width:95%; height:270px; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">";
+echo $log['log'];
+echo "</div></center>";
+echo "</body>";
+echo "</html>";
+exit;
 ?>

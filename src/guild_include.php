@@ -15,5 +15,3 @@ if ($query->recordcount() == 0) {
 } else {
     $guild = $query->fetchrow();
 }
-
-?>

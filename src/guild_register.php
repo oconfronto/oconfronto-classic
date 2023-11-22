@@ -16,7 +16,7 @@ $error = 0;
 $goldcost = 200000;
 
 
-if ($player->guild != NULL) {
+if ($player->guild != null) {
     include(__DIR__ . "/templates/private_header.php");
     echo "Você não pode ter mais de um clã.";
     echo "<br/><a href=\"home.php\">Voltar</a>.";
@@ -34,20 +34,20 @@ if ($player->gold < $goldcost) {
 
 if ($_POST['register']) {
 
-$msg1 = "<font color=\"red\">";
-$msg2 = "<font color=\"red\">";
-$msg3 = "<font color=\"red\">";
-$msg4 = "<font color=\"red\">";
+    $msg1 = "<font color=\"red\">";
+    $msg2 = "<font color=\"red\">";
+    $msg3 = "<font color=\"red\">";
+    $msg4 = "<font color=\"red\">";
 
     $query = $db->execute("select `id` from `guilds` where `name`=? and `serv`=?", [$_POST['name'], $player->serv]);
 
-		$pat[0] = "/^\s+/";
-		$pat[1] = "/\s{2,}/";
-		$pat[2] = "/\s+\$/";
-		$rep[0] = "";
-		$rep[1] = " ";
-		$rep[2] = "";
-		$nomedecla = ucwords(preg_replace($pat,(string) $rep,(string) $_POST['name']));
+    $pat[0] = "/^\s+/";
+    $pat[1] = "/\s{2,}/";
+    $pat[2] = "/\s+\$/";
+    $rep[0] = "";
+    $rep[1] = " ";
+    $rep[2] = "";
+    $nomedecla = ucwords(preg_replace($pat, (string) $rep, (string) $_POST['name']));
 
     $query2 = $db->execute("select `id` from `guilds` where `name`=? and `serv`=?", [$nomedecla, $player->serv]);
 
@@ -66,7 +66,7 @@ $msg4 = "<font color=\"red\">";
     } elseif (!preg_match("/^[A-Za-z[:space:]\-]+$/", (string) $_POST['name'])) {
         $msg1 .= "O nome de seu clã não pode conter <b>caracteres especiais!<br />\n";
         $error = 1;
-        //Set error check
+    //Set error check
     } elseif ($query->recordcount() > 0) {
         $msg1 .= "Este nome já está sendo usado.<br />\n";
         //Set error check
@@ -119,74 +119,74 @@ $msg4 = "<font color=\"red\">";
         $error = 1;
     }
 
-if ($error == 0) {
-		$pat[0] = "/^\s+/";
-		$pat[1] = "/\s{2,}/";
-		$pat[2] = "/\s+\$/";
-		$rep[0] = "";
-		$rep[1] = " ";
-		$rep[2] = "";
-		$nomedecla = ucwords(preg_replace($pat,(string) $rep,(string) $_POST['name']));
+    if ($error == 0) {
+        $pat[0] = "/^\s+/";
+        $pat[1] = "/\s{2,}/";
+        $pat[2] = "/\s+\$/";
+        $rep[0] = "";
+        $rep[1] = " ";
+        $rep[2] = "";
+        $nomedecla = ucwords(preg_replace($pat, (string) $rep, (string) $_POST['name']));
 
-    $removehtmlmtd=strip_tags((string) $_POST['motd']);
-    $insert['name'] = $nomedecla;
-    $insert['tag'] = $_POST['tag'];
-    $insert['leader'] = $player->username;
-    $insert['motd'] = ($removehtmlmtd);
-    $tirahtmldades=strip_tags((string) $_POST['blurb']);
-    $texto=nl2br($tirahtmldades);
-$listaExtensao = ['JPG' => 1, 'jpg' => 2, 'PNG' => 3, 'png' => 4, 'BMP' => 5, 'bmp' => 6, 'GIF' => 7, 'gif' => 8];
-$aux = " " . $texto . "";
-
-
-	while(true){
-	$inicioImg = 0;
-
-	$inicioImg = strpos($aux ,'[img]');
-	
-	if($inicioImg < 1) {
-		break;
-	}
-	
-	$fimImg = strpos($aux ,'[/img]');
-	$tamanho = strlen($aux);
-	$parteAnterior = substr($aux , 0, $inicioImg);
-	$partePosterior = substr($aux , $fimImg+6, $tamanho-1);
-	$parteLink = substr($aux ,  $inicioImg, $fimImg-$inicioImg+6);
-	$extensao = substr($parteLink, strlen($parteLink)-9,3);
-
-	if(!array_key_exists($extensao, $listaExtensao)){
-		$parteLink  = '[IMG REMOVIDA]';
-	}
-	$textoFinal = $textoFinal.$parteAnterior.$parteLink;
-	$aux = $partePosterior;
+        $removehtmlmtd = strip_tags((string) $_POST['motd']);
+        $insert['name'] = $nomedecla;
+        $insert['tag'] = $_POST['tag'];
+        $insert['leader'] = $player->username;
+        $insert['motd'] = ($removehtmlmtd);
+        $tirahtmldades = strip_tags((string) $_POST['blurb']);
+        $texto = nl2br($tirahtmldades);
+        $listaExtensao = ['JPG' => 1, 'jpg' => 2, 'PNG' => 3, 'png' => 4, 'BMP' => 5, 'bmp' => 6, 'GIF' => 7, 'gif' => 8];
+        $aux = " " . $texto . "";
 
 
-	}
-	$mostraimg = $textoFinal . "" . $aux;
-	$mostraimg = substr($mostraimg, 1);
+        while(true) {
+            $inicioImg = 0;
+
+            $inicioImg = strpos($aux, '[img]');
+
+            if($inicioImg < 1) {
+                break;
+            }
+
+            $fimImg = strpos($aux, '[/img]');
+            $tamanho = strlen($aux);
+            $parteAnterior = substr($aux, 0, $inicioImg);
+            $partePosterior = substr($aux, $fimImg + 6, $tamanho - 1);
+            $parteLink = substr($aux, $inicioImg, $fimImg - $inicioImg + 6);
+            $extensao = substr($parteLink, strlen($parteLink) - 9, 3);
+
+            if(!array_key_exists($extensao, $listaExtensao)) {
+                $parteLink  = '[IMG REMOVIDA]';
+            }
+            $textoFinal = $textoFinal.$parteAnterior.$parteLink;
+            $aux = $partePosterior;
 
 
-    $insert['blurb'] = $mostraimg;
-    $insert['pagopor'] = (time() + 950400);
-    $insert['serv'] = $player->serv;
-    $query = $db->autoexecute('guilds', $insert, 'INSERT');
-    
+        }
+        $mostraimg = $textoFinal . "" . $aux;
+        $mostraimg = substr($mostraimg, 1);
+
+
+        $insert['blurb'] = $mostraimg;
+        $insert['pagopor'] = (time() + 950400);
+        $insert['serv'] = $player->serv;
+        $query = $db->autoexecute('guilds', $insert, 'INSERT');
+
         $insertid = $db->Insert_ID();
         $query = $db->execute("update `players` set `guild`=?, `gold`=? where `id`=?", [$insertid, $player->gold - $goldcost, $player->id]);
-        
-	include(__DIR__ . "/templates/private_header.php");
-	echo "Parabéns! Você acaba de criar um novo clã!";
-	echo "<br/><a href=\"home.php\">Voltar</a>.";
-	include(__DIR__ . "/templates/private_footer.php");
-	exit;
-	}
 
-//Username error
-$msg1 .= "</font>";
-$msg2 .= "</font>";
-$msg3 .= "</font>";
-$msg4 .= "</font>";
+        include(__DIR__ . "/templates/private_header.php");
+        echo "Parabéns! Você acaba de criar um novo clã!";
+        echo "<br/><a href=\"home.php\">Voltar</a>.";
+        include(__DIR__ . "/templates/private_footer.php");
+        exit;
+    }
+
+    //Username error
+    $msg1 .= "</font>";
+    $msg2 .= "</font>";
+    $msg3 .= "</font>";
+    $msg4 .= "</font>";
 
 }
 

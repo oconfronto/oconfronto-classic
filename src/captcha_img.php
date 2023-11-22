@@ -1,11 +1,11 @@
-<?
+<?php
 /*
 Captcha ZDR
 This is simple powerfull captcha tool writen in PHP
 for protecting your web FORMS from spamers.
 
-Copyright (C) 2007  Zdravko Shishmanov 
-Country: Bulgaria 
+Copyright (C) 2007  Zdravko Shishmanov
+Country: Bulgaria
 Email: zdrsoft@yahoo.com
 http://www.webtoolbag.com
 
@@ -29,6 +29,5 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.s
 session_start();
 include("class/captchaZDR.php");
 
-$capt = new captchaZDR;
+$capt = new captchaZDR();
 $capt->display();
-?>

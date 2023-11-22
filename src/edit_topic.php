@@ -8,86 +8,82 @@ include(__DIR__ . "/templates/private_header.php");
 ?>
 <script type="text/javascript" src="bbeditor/ed.js"></script>
 <?php
-if (!$_GET['topic'])
-{
-	echo "Um erro desconhecido ocorreu! <a href=\"main_forum.php\">Voltar</a>.";
-	include(__DIR__ . "/templates/private_footer.php");
-	exit;
+if (!$_GET['topic']) {
+    echo "Um erro desconhecido ocorreu! <a href=\"main_forum.php\">Voltar</a>.";
+    include(__DIR__ . "/templates/private_footer.php");
+    exit;
 }
 
-	if ($player->gm_rank > 2) {
-	$procuramensagem = $db->execute("select `topic`, `detail`, `fixo`, `closed`, `vota` from `forum_question` where `id`=?", [$_GET['topic']]);
-	}else{
-	$procuramensagem = $db->execute("select `topic`, `detail`, `fixo`, `closed`, `vota` from `forum_question` where `id`=? and `user_id`=?", [$_GET['topic'], $player->id]);
-	}
-	if ($procuramensagem->recordcount() == 0)
-	{
-	echo "Você não pode editar este topico! <a href=\"main_forum.php\">Voltar</a>.";
-	include(__DIR__ . "/templates/private_footer.php");
-	exit;
-	}
+    if ($player->gm_rank > 2) {
+        $procuramensagem = $db->execute("select `topic`, `detail`, `fixo`, `closed`, `vota` from `forum_question` where `id`=?", [$_GET['topic']]);
+    } else {
+        $procuramensagem = $db->execute("select `topic`, `detail`, `fixo`, `closed`, `vota` from `forum_question` where `id`=? and `user_id`=?", [$_GET['topic'], $player->id]);
+    }
+    if ($procuramensagem->recordcount() == 0) {
+        echo "Você não pode editar este topico! <a href=\"main_forum.php\">Voltar</a>.";
+        include(__DIR__ . "/templates/private_footer.php");
+        exit;
+    }
  $editmsg = $procuramensagem->fetchrow();
- $texto = $editmsg['detail'];
- $quebras = ['<br />', '<br>', '<br/>'];
- $editandomensagem = str_replace($quebras, "", (string) $texto);
-if(isset($_POST['submit']))
-{
+$texto = $editmsg['detail'];
+$quebras = ['<br />', '<br>', '<br/>'];
+$editandomensagem = str_replace($quebras, "", (string) $texto);
+if(isset($_POST['submit'])) {
 
-if (!$_POST['detail'])
-{
-	echo "Você precisa preencher todos os campos! <a href=\"edit_topic.php?topic=" . $_GET['topic'] . "\">Voltar</a>.";
-	include(__DIR__ . "/templates/private_footer.php");
-	exit;
-}
-$novaresposto=strip_tags((string) $_POST['detail'], '<b><br><center><a><img>');
-	$quebras = ['<br />', '<br>', '<br/>'];
-	$newresposta = str_replace($quebras, "\n", $novaresposto);
-$texto=nl2br($newresposta);
+    if (!$_POST['detail']) {
+        echo "Você precisa preencher todos os campos! <a href=\"edit_topic.php?topic=" . $_GET['topic'] . "\">Voltar</a>.";
+        include(__DIR__ . "/templates/private_footer.php");
+        exit;
+    }
+    $novaresposto = strip_tags((string) $_POST['detail'], '<b><br><center><a><img>');
+    $quebras = ['<br />', '<br>', '<br/>'];
+    $newresposta = str_replace($quebras, "\n", $novaresposto);
+    $texto = nl2br($newresposta);
 
-$listaExtensao = ['JPG' => 1, 'jpg' => 2, 'PNG' => 3, 'png' => 4, 'BMP' => 5, 'bmp' => 6, 'GIF' => 7, 'gif' => 8];
-$aux = " " . $texto . "";
+    $listaExtensao = ['JPG' => 1, 'jpg' => 2, 'PNG' => 3, 'png' => 4, 'BMP' => 5, 'bmp' => 6, 'GIF' => 7, 'gif' => 8];
+    $aux = " " . $texto . "";
 
 
-while(true){
-	$inicioImg = 0;
+    while(true) {
+        $inicioImg = 0;
 
-	$inicioImg = strpos($aux ,'[img]');
-	
-	if($inicioImg < 1) {
-		break;
-	}
-	
-	$fimImg = strpos($aux ,'[/img]');
-	$tamanho = strlen($aux);
-	$parteAnterior = substr($aux , 0, $inicioImg);
-	$partePosterior = substr($aux , $fimImg+6, $tamanho-1);
-	$parteLink = substr($aux ,  $inicioImg, $fimImg-$inicioImg+6);
-	$extensao = substr($parteLink, strlen($parteLink)-9,3);
+        $inicioImg = strpos($aux, '[img]');
 
-	if(!array_key_exists($extensao, $listaExtensao)){
-		$parteLink  = '[IMG REMOVIDA]';
-	}
-	$textoFinal = $textoFinal.$parteAnterior.$parteLink;
-	$aux = $partePosterior;
+        if($inicioImg < 1) {
+            break;
+        }
+
+        $fimImg = strpos($aux, '[/img]');
+        $tamanho = strlen($aux);
+        $parteAnterior = substr($aux, 0, $inicioImg);
+        $partePosterior = substr($aux, $fimImg + 6, $tamanho - 1);
+        $parteLink = substr($aux, $inicioImg, $fimImg - $inicioImg + 6);
+        $extensao = substr($parteLink, strlen($parteLink) - 9, 3);
+
+        if(!array_key_exists($extensao, $listaExtensao)) {
+            $parteLink  = '[IMG REMOVIDA]';
+        }
+        $textoFinal = $textoFinal.$parteAnterior.$parteLink;
+        $aux = $partePosterior;
 
 
-}
-	$mostraimg = $textoFinal . "" . $aux;
-	$mostraimg = substr($mostraimg, 1);
+    }
+    $mostraimg = $textoFinal . "" . $aux;
+    $mostraimg = substr($mostraimg, 1);
 
 
 
 
-$fixo = !$_POST['fixo'] || $player->gm_rank < 2 ? "f" : "t";
+    $fixo = !$_POST['fixo'] || $player->gm_rank < 2 ? "f" : "t";
 
-$closed = !$_POST['closed'] || $player->gm_rank < 2 ? "f" : "t";
+    $closed = !$_POST['closed'] || $player->gm_rank < 2 ? "f" : "t";
 
-$vota = !$_POST['vota'] || $player->gm_rank < 2 ? "f" : "t";
+    $vota = !$_POST['vota'] || $player->gm_rank < 2 ? "f" : "t";
 
-$real = $db->execute("update `forum_question` set `topic`=?, `detail`=?, `fixo`=?, `closed`=?, `vota`=? where `id`=?", [$_POST['topic'], $mostraimg, $fixo, $closed, $vota, $_GET['topic']]);
-	echo "Postagem editada com sucesso! <a href=\"view_topic.php?id=" . $_GET['topic'] . "\">Voltar</a>.";
-	include(__DIR__ . "/templates/private_footer.php");
-	exit;
+    $real = $db->execute("update `forum_question` set `topic`=?, `detail`=?, `fixo`=?, `closed`=?, `vota`=? where `id`=?", [$_POST['topic'], $mostraimg, $fixo, $closed, $vota, $_GET['topic']]);
+    echo "Postagem editada com sucesso! <a href=\"view_topic.php?id=" . $_GET['topic'] . "\">Voltar</a>.";
+    include(__DIR__ . "/templates/private_footer.php");
+    exit;
 }
 
 ?>
@@ -108,25 +104,25 @@ $real = $db->execute("update `forum_question` set `topic`=?, `detail`=?, `fixo`=
 </tr>
 <tr>
 <td><input type="submit" name="submit" value="Enviar" />
-<?php 
-if ($player->gm_rank > 2){
-	if ($editmsg['fixo'] == 't'){
-	echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" name=\"fixo\" VALUE=\"yes\" checked> Fixar Tópico";
-	}else{
-	echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" name=\"fixo\" VALUE=\"yes\"> Fixar Tópico";
-	}
+<?php
+if ($player->gm_rank > 2) {
+    if ($editmsg['fixo'] == 't') {
+        echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" name=\"fixo\" VALUE=\"yes\" checked> Fixar Tópico";
+    } else {
+        echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" name=\"fixo\" VALUE=\"yes\"> Fixar Tópico";
+    }
 
-	if ($editmsg['closed'] == 't'){
-	echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" name=\"closed\" VALUE=\"yes\" checked> Fechado";
-	}else{
-	echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" name=\"closed\" VALUE=\"yes\"> Fechado";
-	}
+    if ($editmsg['closed'] == 't') {
+        echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" name=\"closed\" VALUE=\"yes\" checked> Fechado";
+    } else {
+        echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" name=\"closed\" VALUE=\"yes\"> Fechado";
+    }
 }
-	if ($editmsg['vota'] == 't'){
-	echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" name=\"vota\" VALUE=\"yes\" checked> Ativar Votação";
-	}else{
-	echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" name=\"vota\" VALUE=\"yes\"> Ativar Votação";
-	}
+    if ($editmsg['vota'] == 't') {
+        echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" name=\"vota\" VALUE=\"yes\" checked> Ativar Votação";
+    } else {
+        echo "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" name=\"vota\" VALUE=\"yes\"> Ativar Votação";
+    }
 ?></td>
 </tr>
 </table>

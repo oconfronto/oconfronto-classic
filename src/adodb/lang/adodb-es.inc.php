@@ -20,8 +20,8 @@
  * @author Horacio Degiorgi <horaciod@codigophp.com>
  */
 
-$ADODB_LANG_ARRAY = array (
-			'LANG'                      => 'es',
+$ADODB_LANG_ARRAY = array(
+            'LANG'                      => 'es',
             DB_ERROR                    => 'error desconocido',
             DB_ERROR_ALREADY_EXISTS     => 'ya existe',
             DB_ERROR_CANNOT_CREATE      => 'imposible crear',
@@ -46,7 +46,7 @@ $ADODB_LANG_ARRAY = array (
             DB_ERROR_CONNECT_FAILED     => 'fallo la conexion',
             0	                       => 'sin error', // DB_OK
             DB_ERROR_NEED_MORE_DATA     => 'insuficientes datos',
-            DB_ERROR_EXTENSION_NOT_FOUND=> 'extension no encontrada',
+            DB_ERROR_EXTENSION_NOT_FOUND => 'extension no encontrada',
             DB_ERROR_NOSUCHDB           => 'base de datos no encontrada',
             DB_ERROR_ACCESS_VIOLATION   => 'permisos insuficientes'
 );

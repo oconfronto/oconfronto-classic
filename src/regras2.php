@@ -1,7 +1,7 @@
 <?php
-	include(__DIR__ . "/lib.php");
-	define("PAGENAME", "Regras");
-	include(__DIR__ . "/templates/header.php");
+include(__DIR__ . "/lib.php");
+define("PAGENAME", "Regras");
+include(__DIR__ . "/templates/header.php");
 ?>
 <fieldset>
 <legend><b>Regras</b></legend>
@@ -37,5 +37,5 @@ Estas regras se aplicam a todas as partes de "O Confronto".<br><br>
 
 </fieldset>
 <?php
-	include(__DIR__ . "/templates/footer.php");
+    include(__DIR__ . "/templates/footer.php");
 ?>

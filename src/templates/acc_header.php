@@ -10,12 +10,12 @@
 <meta name="GOOGLEBOT" content="index,follow" />
 <meta name="revisit-after" content="3 Days" />
 <?php
-		$checknocur000 = $db->execute("select * from `other` where `value`=? and `player_id`=?", [\CURSOR, $acc->id]);
-		if ($checknocur000->recordcount() > 0) {
-		echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/acc_style_2.css\" />";
-		}else{
-		echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/acc_style_1.css\" />";
-		}
+        $checknocur000 = $db->execute("select * from `other` where `value`=? and `player_id`=?", [\CURSOR, $acc->id]);
+if ($checknocur000->recordcount() > 0) {
+    echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/acc_style_2.css\" />";
+} else {
+    echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/acc_style_1.css\" />";
+}
 ?>
 
 <Script Language=JavaScript>
@@ -66,12 +66,12 @@ document.getElementById('servDiv').innerHTML = nServ[txtIndex];
 <div id="wrapper">
 <center><img src="images/topo.jpg" alt="O Confronto - MMORPG" border="0"></center>
 <?php
-if ($escolheper == 55){
-echo "<div id=\"footer-text\"><div id=\"textoAviso\"><i>Escolha seu Personagem</i></div></div>";
-} elseif ($escolheper == 44){
-echo "<div id=\"footer-text\"><div id=\"textoAviso\"><i>Criar novo Personagem</i></div></div>";
+if ($escolheper == 55) {
+    echo "<div id=\"footer-text\"><div id=\"textoAviso\"><i>Escolha seu Personagem</i></div></div>";
+} elseif ($escolheper == 44) {
+    echo "<div id=\"footer-text\"><div id=\"textoAviso\"><i>Criar novo Personagem</i></div></div>";
 } else {
-echo "<div id=\"footer-text\"><div id=\"textoAviso\"><i>Sua Conta</i></div></div>";
+    echo "<div id=\"footer-text\"><div id=\"textoAviso\"><i>Sua Conta</i></div></div>";
 }
 ?>
 

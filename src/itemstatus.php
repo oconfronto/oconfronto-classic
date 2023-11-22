@@ -126,8 +126,3 @@ $checkitem7 = $checkitem7->fetchrow();
 $val888r7 = $checkitem7['res'];
 
 $resistenciaaaadebonus = $val888r1 + $val888r2 + $val888r3 + $val888r4 + $val888r5 + $val888r6 + $val888r7;
-
-
-
-
-?>

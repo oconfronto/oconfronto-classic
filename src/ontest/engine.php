@@ -1,4 +1,5 @@
 <?php
+
 include(__DIR__ . "/../lib.php");
 $ipp = $_SERVER['REMOTE_ADDR'];
 
@@ -18,5 +19,3 @@ mysql_query('delete from online where time < '.(time() - 15)); //aqui coloquei 3
 $qr_on = mysql_query('select * from online');
 echo mysql_num_rows($qr_on);
 mysql_free_result($qr_on);
-
-?>

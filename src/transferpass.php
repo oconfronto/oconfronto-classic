@@ -46,8 +46,7 @@ if (($_POST['pass']) && ($_POST['pass2'])) {
         echo"<br/><a href=\"home.php\">Voltar</a>.</br>";
         include(__DIR__ . "/templates/private_footer.php");
         exit;
-    }
-    elseif (sha1($pass1) == $player->password) {
+    } elseif (sha1($pass1) == $player->password) {
         include(__DIR__ . "/templates/private_header.php");
         echo "<fieldset><legend><b>Segurança</b></legend>";
         echo "Sua senha de transferência não pode ser igual a senha da sua conta.";
@@ -55,16 +54,15 @@ if (($_POST['pass']) && ($_POST['pass2'])) {
         echo"<br/><a href=\"home.php\">Voltar</a>.</br>";
         include(__DIR__ . "/templates/private_footer.php");
         exit;
-    }
-    else {
-            $query = $db->execute("update `players` set `transpass`=? where `id`=?", [$pass1, $player->id]);
-            include(__DIR__ . "/templates/private_header.php");
-		echo "<fieldset><legend><b>Segurança</b></legend>";
-		echo "Sua senha de transfêrencia foi criada com sucesso.";
-		echo "</fieldset>";
-		echo"<br/><a href=\"home.php\">Voltar</a>.</br>";
-            include(__DIR__ . "/templates/private_footer.php");
-            exit;
+    } else {
+        $query = $db->execute("update `players` set `transpass`=? where `id`=?", [$pass1, $player->id]);
+        include(__DIR__ . "/templates/private_header.php");
+        echo "<fieldset><legend><b>Segurança</b></legend>";
+        echo "Sua senha de transfêrencia foi criada com sucesso.";
+        echo "</fieldset>";
+        echo"<br/><a href=\"home.php\">Voltar</a>.</br>";
+        include(__DIR__ . "/templates/private_footer.php");
+        exit;
     }
 
 }
@@ -74,4 +72,3 @@ echo "Você precisa preencher todos os campos.";
 echo "</fieldset>";
 echo"<br/><a href=\"home.php\">Voltar</a>.</br>";
 include(__DIR__ . "/templates/private_footer.php");
-?>

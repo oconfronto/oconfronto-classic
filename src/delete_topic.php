@@ -6,48 +6,44 @@ $player = check_user($secret_key, $db);
 
 include(__DIR__ . "/templates/private_header.php");
 
-if (!$_GET['topic'])
-{
-	echo "Um erro desconhecido ocorreu! <a href=\"main_forum.php\">Voltar</a>.";
-	include(__DIR__ . "/templates/private_footer.php");
-	exit;
+if (!$_GET['topic']) {
+    echo "Um erro desconhecido ocorreu! <a href=\"main_forum.php\">Voltar</a>.";
+    include(__DIR__ . "/templates/private_footer.php");
+    exit;
 }
-	if ($player->gm_rank > 2){
-	$procuramensagem = $db->execute("select `topic`, `detail` from `forum_question` where `id`=?", [$_GET['topic']]);
-	}else{
-	$procuramensagem = $db->execute("select `topic`, `detail` from `forum_question` where `id`=? and `user_id`=?", [$_GET['topic'], $player->id]);
-	}
-	if ($procuramensagem->recordcount() == 0)
-	{
-	echo "Você não pode apagar este tópico! <a href=\"main_forum.php\">Voltar</a>.";
-	include(__DIR__ . "/templates/private_footer.php");
-	exit;
-	}
- $editmsg = $procuramensagem->fetchrow();
- $editandomensagem = "" . $editmsg['detail'] . "";
-if(isset($_POST['submit']))
-{
-	if ($player->gm_rank > 2){
-	$logalert2 = "O tópico " . $editmsg['topic'] . " foi deletado pelo moderador <b>" . $player->username . "</b>";
-	forumlog($logalert2, $db);
-	}
+if ($player->gm_rank > 2) {
+    $procuramensagem = $db->execute("select `topic`, `detail` from `forum_question` where `id`=?", [$_GET['topic']]);
+} else {
+    $procuramensagem = $db->execute("select `topic`, `detail` from `forum_question` where `id`=? and `user_id`=?", [$_GET['topic'], $player->id]);
+}
+if ($procuramensagem->recordcount() == 0) {
+    echo "Você não pode apagar este tópico! <a href=\"main_forum.php\">Voltar</a>.";
+    include(__DIR__ . "/templates/private_footer.php");
+    exit;
+}
+$editmsg = $procuramensagem->fetchrow();
+$editandomensagem = "" . $editmsg['detail'] . "";
+if(isset($_POST['submit'])) {
+    if ($player->gm_rank > 2) {
+        $logalert2 = "O tópico " . $editmsg['topic'] . " foi deletado pelo moderador <b>" . $player->username . "</b>";
+        forumlog($logalert2, $db);
+    }
 
-	$removeposts = $db->execute("select `a_user_id` from `forum_answer` where `question_id`=?", [$_GET['topic']]);
-	while($player = $removeposts->fetchrow())
-	{
-	$query = $db->execute("update `players` set `posts`=`posts`-1 where `id`=?", [$player['a_user_id']]);
-	}
+    $removeposts = $db->execute("select `a_user_id` from `forum_answer` where `question_id`=?", [$_GET['topic']]);
+    while($player = $removeposts->fetchrow()) {
+        $query = $db->execute("update `players` set `posts`=`posts`-1 where `id`=?", [$player['a_user_id']]);
+    }
 
-	$removeposts2 = $db->execute("select `user_id` from `forum_question` where `id`=?", [$_GET['topic']]);
-	$player2 = $removeposts2->fetchrow();
-	$query = $db->execute("update `players` set `posts`=`posts`-1 where `id`=?", [$player2['user_id']]);
+    $removeposts2 = $db->execute("select `user_id` from `forum_question` where `id`=?", [$_GET['topic']]);
+    $player2 = $removeposts2->fetchrow();
+    $query = $db->execute("update `players` set `posts`=`posts`-1 where `id`=?", [$player2['user_id']]);
 
-        $real = $db->execute("delete from `forum_question` where `id`=?", [$_GET['topic']]);
-        $real = $db->execute("delete from `forum_answer` where `question_id`=?", [$_GET['topic']]);
-        $real = $db->execute("delete from `thumb` where `topic_id`=?", [$_GET['topic']]);
-	echo "Tópico removido com sucesso! <a href=\"main_forum.php\">Voltar</a>.";
-	include(__DIR__ . "/templates/private_footer.php");
-	exit;
+    $real = $db->execute("delete from `forum_question` where `id`=?", [$_GET['topic']]);
+    $real = $db->execute("delete from `forum_answer` where `question_id`=?", [$_GET['topic']]);
+    $real = $db->execute("delete from `thumb` where `topic_id`=?", [$_GET['topic']]);
+    echo "Tópico removido com sucesso! <a href=\"main_forum.php\">Voltar</a>.";
+    include(__DIR__ . "/templates/private_footer.php");
+    exit;
 }
 
 ?>

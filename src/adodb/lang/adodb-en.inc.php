@@ -19,8 +19,8 @@
  * @copyright 2014 Damien Regad, Mark Newnham and the ADOdb community
  */
 
-$ADODB_LANG_ARRAY = array (
-			'LANG'                      => 'en',
+$ADODB_LANG_ARRAY = array(
+            'LANG'                      => 'en',
             DB_ERROR                    => 'unknown error',
             DB_ERROR_ALREADY_EXISTS     => 'already exists',
             DB_ERROR_CANNOT_CREATE      => 'can not create',
@@ -45,7 +45,7 @@ $ADODB_LANG_ARRAY = array (
             DB_ERROR_CONNECT_FAILED     => 'connect failed',
             0	                       => 'no error', // DB_OK
             DB_ERROR_NEED_MORE_DATA     => 'insufficient data supplied',
-            DB_ERROR_EXTENSION_NOT_FOUND=> 'extension not found',
+            DB_ERROR_EXTENSION_NOT_FOUND => 'extension not found',
             DB_ERROR_NOSUCHDB           => 'no such database',
             DB_ERROR_ACCESS_VIOLATION   => 'insufficient permissions',
             DB_ERROR_DEADLOCK           => 'deadlock detected',

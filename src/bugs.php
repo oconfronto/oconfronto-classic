@@ -11,17 +11,17 @@ include(__DIR__ . "/lib.php");
 define("PAGENAME", "Contato");
 $player = check_user($secret_key, $db);
 
-if ($_POST['comment'] && $_POST['submit']) {  
+if ($_POST['comment'] && $_POST['submit']) {
 
 
-		$insert['to'] = 1;
-		$insert['from'] = $player->id;
-		$insert['body'] = $_POST['comment'];
-		$insert['body'] = htmlentities((string) $_POST['comment'], ENT_QUOTES);
-		$insert['subject'] = \CONTATO;
-		$insert['time'] = time();
-		$query = $db->execute("insert into `mail` (`to`, `from`, `body`, `subject`, `time`) values (?, ?, ?, ?, ?)", [$insert['to'], $insert['from'], $insert['body'], $insert['subject'], $insert['time']]);
-    
+    $insert['to'] = 1;
+    $insert['from'] = $player->id;
+    $insert['body'] = $_POST['comment'];
+    $insert['body'] = htmlentities((string) $_POST['comment'], ENT_QUOTES);
+    $insert['subject'] = \CONTATO;
+    $insert['time'] = time();
+    $query = $db->execute("insert into `mail` (`to`, `from`, `body`, `subject`, `time`) values (?, ?, ?, ?, ?)", [$insert['to'], $insert['from'], $insert['body'], $insert['subject'], $insert['time']]);
+
     include(__DIR__ . "/templates/private_header.php");
     echo "<p /><center>Obrigado, em breve enviaremos uma resposta.<p />";
     echo "<a href=\"home.php\">Principal</a></center><p />";

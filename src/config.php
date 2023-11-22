@@ -1,4 +1,5 @@
 <?php
+
 $config_server = "host.docker.internal:3306";
 $config_database = "database";
 $config_username = "usuariosql";
@@ -14,4 +15,3 @@ $db->Connect($config_server, $config_username, $config_password, $config_databas
 $db->SetFetchMode(ADODB_FETCH_ASSOC); // Fetch associative arrays
 $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC; // Fetch associative arrays
 // $db->debug = true; // Debug
-?>
