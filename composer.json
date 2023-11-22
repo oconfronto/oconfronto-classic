@@ -1,0 +1,21 @@
+{
+    "name": "jeeanribeiro/oconfronto",
+    "description": "Classic browser RPG game",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Jeeanribeiro\\Oconfronto\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jean Ribeiro",
+            "email": "contact@jeanribeiro.dev"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require-dev": {
+        "rector/rector": "^0.18.10"
+    }
+}
