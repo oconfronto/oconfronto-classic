@@ -9,15 +9,25 @@ services:
       MYSQL_PASSWORD: senhasql
       MYSQL_ROOT_PASSWORD: root
     ports:
-    - 3306:3306
-    - 33060:33060
+      - 3306:3306
+      - 33060:33060
     volumes:
-    - ./src/confronto.sql:/docker-entrypoint-initdb.d/confronto.sql 
+      - ./src/confronto.sql:/docker-entrypoint-initdb.d/confronto.sql
   legacy-php:
     depends_on:
-    - mysql
+      - mysql
     image: orsolin/docker-php-5.3-apache
     volumes:
-    - ./src:/var/www/html
+      - ./src:/var/www/html
     ports:
-    - "5000:80"
+      - "5000:80"
+  php:
+    depends_on:
+      - mysql
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "5001:80"
