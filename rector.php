@@ -12,10 +12,6 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . '/src',
     ]);
 
-    $rectorConfig->skip([
-        __DIR__ . '/src/adodb',
-    ]);
-
     // register a single rule
     $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
 

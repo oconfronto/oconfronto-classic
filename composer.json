@@ -18,5 +18,8 @@
     "require-dev": {
         "rector/rector": "^0.18.10",
         "friendsofphp/php-cs-fixer": "^3.38"
+    },
+    "require": {
+        "adodb/adodb-php": "^5.22"
     }
 }

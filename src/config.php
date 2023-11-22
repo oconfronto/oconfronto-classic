@@ -6,7 +6,7 @@ $config_username = "usuariosql";
 $config_password = "senhasql";
 $secret_key = "895mhsdf4sf4884svdsdvs54equw"; // Secret key, make it a random word/sentence/whatever
 
-include(__DIR__ . '/adodb/adodb.inc.php'); // Include ADOdb files
+include('/vendor/adodb/adodb-php/adodb.inc.php'); // Include ADOdb files
 
 // Connect to database using the mysqli driver
 $db = ADONewConnection('mysqli');
