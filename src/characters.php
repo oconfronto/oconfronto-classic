@@ -65,7 +65,7 @@ if ($playerstrans->recordcount() > 0) {
             $auxiliar2 = "dia(s)";
         }
 
-        echo "<div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">Foi solicitado a transferência do personagem <b>" . $change['pending_status'] . "</b> para a conta <b>" . $coconta . "</b><br/>Ele será enviado em " . $valortempo2 . " " . $auxiliar2 . ". Se você não quer fazer a transferência do personagem, <a href=\"transferchar.php?cancel=true\">clique aqui</a>.</div>";
+        echo "<div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">Foi solicitado a transferï¿½ncia do personagem <b>" . $change['pending_status'] . "</b> para a conta <b>" . $coconta . "</b><br/>Ele serï¿½ enviado em " . $valortempo2 . " " . $auxiliar2 . ". Se vocï¿½ nï¿½o quer fazer a transferï¿½ncia do personagem, <a href=\"transferchar.php?cancel=true\">clique aqui</a>.</div>";
     }
     $menosespaco = 5;
 }
@@ -99,7 +99,7 @@ if ($query04876->recordcount() > 0) {
             $auxiliar2 = "dia(s)";
         }
 
-        echo "<div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">Foi solicitada a mudança de seu email para: <b>" . $change['pending_status'] . "</b><br/>Seu email será alterado em " . $valortempo2 . " " . $auxiliar2 . ". Se não quiser mais mudar de email <a href=\"changemail.php?act=cancel\">clique aqui</a>.</div>";
+        echo "<div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">Foi solicitada a mudanï¿½a de seu email para: <b>" . $change['pending_status'] . "</b><br/>Seu email serï¿½ alterado em " . $valortempo2 . " " . $auxiliar2 . ". Se nï¿½o quiser mais mudar de email <a href=\"changemail.php?act=cancel\">clique aqui</a>.</div>";
     }
     $menosespaco = 5;
 }
@@ -107,13 +107,13 @@ if ($query04876->recordcount() > 0) {
 
 $queryactivate = $db->execute("select `id` from `players` where `acc_id`=? and `level`>=?", [$acc->id, $setting->activate_level]);
 
-if ($acc->ref != \T && $queryactivate->recordcount() > 0) {
-    $query7 = $db->execute("update `players` set `gold`=`gold`+2500, `ref`=`ref`+1 where `id`=?", [$acc->ref]);
-    if($setting->promo == \T) {
-        $query6 = $db->execute("update `promo` set `refs`=`refs`+1 where `player_id`=?", [$acc->ref]);
-    }
-    $validaconta = $db->execute("update `accounts` set `ref`='t' where `id`=?", [$acc->id]);
-}
+// if ($acc->ref != \T && $queryactivate->recordcount() > 0) {
+//     $query7 = $db->execute("update `players` set `gold`=`gold`+2500, `ref`=`ref`+1 where `id`=?", [$acc->ref]);
+//     if($setting->promo == \T) {
+//         $query6 = $db->execute("update `promo` set `refs`=`refs`+1 where `player_id`=?", [$acc->ref]);
+//     }
+//     $validaconta = $db->execute("update `accounts` set `ref`='t' where `id`=?", [$acc->id]);
+// }
 
 
 $query = $db->execute("select `id`, `username`, `avatar`, `ban`, `serv` from `players` where `acc_id`=? order by `username` asc", [$acc->id]);
@@ -123,7 +123,7 @@ if ($query->recordcount() == 0) {
     }
     echo "<br/>";
     echo "<br/>";
-    echo "<center><b>Você ainda não possui nenhum personagem, <a href=\"newchar.php\">clique aqui</a> para criar um.</b></center>";
+    echo "<center><b>VocÃª ainda nÃ£o possui nenhum personagem, <a href=\"newchar.php\">clique aqui</a> para criar um.</b></center>";
     echo "<br/>";
 } else {
 
@@ -217,7 +217,7 @@ if ($playerstrans2->recordcount() > 0) {
             $auxiliar2 = "dia(s)";
         }
 
-        echo "<br/><center><font size=\"1\">A tranferência do personagem <b>" . $change2['pending_status'] . "</b> para sua conta acontecerá em " . $valortempo2 . " " . $auxiliar2 . ".</font></center>";
+        echo "<br/><center><font size=\"1\">A tranferÃªncia do personagem <b>" . $change2['pending_status'] . "</b> para sua conta acontecerÃ¡ em " . $valortempo2 . " " . $auxiliar2 . ".</font></center>";
     }
 }
 include(__DIR__ . "/templates/acc_footer.php");

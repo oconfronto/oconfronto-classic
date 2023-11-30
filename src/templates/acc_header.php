@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>O Confronto :: <?=PAGENAME?></title>
-<meta name="keywords" content="confronto, confronto medieval, confrontos medievais, mmorpg, rpg online, webgame, jogo online, jogos online, diversão online, medieval, batalhas, jogo medieval, jogos medievais" />
+<meta name="keywords" content="confronto, confronto medieval, confrontos medievais, mmorpg, rpg online, webgame, jogo online, jogos online, diversï¿½o online, medieval, batalhas, jogo medieval, jogos medievais" />
 <meta name="description" content="Venha confrontar monstros e jogadores, neste incrivel e maravilhoso game medieval, sobreviva a este desafio online e totalmente gratuito! Jogue Online." />
 <meta name="RATING" content="GENERAL" />
 <meta name="audience" content="all" />
@@ -10,7 +10,7 @@
 <meta name="GOOGLEBOT" content="index,follow" />
 <meta name="revisit-after" content="3 Days" />
 <?php
-        $checknocur000 = $db->execute("select * from `other` where `value`=? and `player_id`=?", [\CURSOR, $acc->id]);
+        $checknocur000 = $db->execute("select * from `other` where `value`=? and `player_id`=?", ["", $acc->id]);
 if ($checknocur000->recordcount() > 0) {
     echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/acc_style_2.css\" />";
 } else {
@@ -20,9 +20,9 @@ if ($checknocur000->recordcount() > 0) {
 
 <Script Language=JavaScript>
 var nText = new Array()
-nText[0] = "<font size=\"1\">Escolha sua vocação.</font>";
+nText[0] = "<font size=\"1\">Escolha sua vocaï¿½ï¿½o.</font>";
 nText[1] = "<font size=\"1\">Os Cavaleiros possuem uma grande defesa mas um baixo ataque.</font>";
-nText[2] = "<font size=\"1\">Os Magos são nivelados em ataque e defesa.</font>";
+nText[2] = "<font size=\"1\">Os Magos sï¿½o nivelados em ataque e defesa.</font>";
 nText[3] = "<font size=\"1\">Os Arqueiros possuem um bom ataque mas uma defesa fraca.</font>"
 function swapText(isList){
 txtIndex = isList.selectedIndex;
@@ -42,9 +42,9 @@ $top2 = $db->GetOne("select `level` from `players` where `serv`=2 and `gm_rank`<
 ?>
 <Script Language=JavaScript>
 var nServ = new Array()
-nServ[0] = "<font size=\"1\">Selecione um servidor para obter informações.</font>";
-nServ[1] = "<table><tr><td width=\"90px\"><font size=\"2\"><b>Servidor I</b></font></td><td><font size=\"1\"><b>Usuários Online:</b> <?=$online1->recordcount();?></font><br/><font size=\"1\"><b>Usuários Registrados:</b> <?=$registrados1->recordcount();?></font><br/><font size=\"1\"><b>Maior Nível:</b> <?=$top1;?></font></td></tr></table>";
-nServ[2] = "<table><tr><td width=\"90px\"><font size=\"2\"><b>Servidor II</b></font></td><td><font size=\"1\"><b>Usuários Online:</b> <?=$online2->recordcount();?></font><br/><font size=\"1\"><b>Usuários Registrados:</b> <?=$registrados2->recordcount();?></font><br/><font size=\"1\"><b>Maior Nível:</b> <?=$top2;?></font></td></tr></table>";
+nServ[0] = "<font size=\"1\">Selecione um servidor para obter informaï¿½ï¿½es.</font>";
+nServ[1] = "<table><tr><td width=\"90px\"><font size=\"2\"><b>Servidor I</b></font></td><td><font size=\"1\"><b>Usuï¿½rios Online:</b> <?=$online1->recordcount();?></font><br/><font size=\"1\"><b>Usuï¿½rios Registrados:</b> <?=$registrados1->recordcount();?></font><br/><font size=\"1\"><b>Maior Nï¿½vel:</b> <?=$top1;?></font></td></tr></table>";
+nServ[2] = "<table><tr><td width=\"90px\"><font size=\"2\"><b>Servidor II</b></font></td><td><font size=\"1\"><b>Usuï¿½rios Online:</b> <?=$online2->recordcount();?></font><br/><font size=\"1\"><b>Usuï¿½rios Registrados:</b> <?=$registrados2->recordcount();?></font><br/><font size=\"1\"><b>Maior Nï¿½vel:</b> <?=$top2;?></font></td></tr></table>";
 function mudaText(isList){
 txtIndex = isList.selectedIndex;
 document.getElementById('servDiv').innerHTML = nServ[txtIndex];
