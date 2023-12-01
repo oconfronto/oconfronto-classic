@@ -17,7 +17,7 @@ switch($_GET['act']) {
         $query = $db->execute("select * from `monsters` where `id`=?", [$_GET['id']]);
         if ($query->recordcount() == 0) { //Player doesn't exist
             include(__DIR__ . "/templates/private_header.php");
-            echo "Este monstro não existe! <a href=\"monster.php\">Voltar</a>.";
+            echo "Este monstro nï¿½o existe! <a href=\"monster.php\">Voltar</a>.";
             include(__DIR__ . "/templates/private_footer.php");
             break;
         }
@@ -31,14 +31,14 @@ switch($_GET['act']) {
         $tolevelttyy = round($player->level * 1.8);
         if ($tolevelttyy < $enemy->level && $enemy->evento == 'f') {
             include(__DIR__ . "/templates/private_header.php");
-            echo "Você não pode atacar este monstro!</b></font> <a href=\"monster.php\">Voltar</a>.";
+            echo "Vocï¿½ nï¿½o pode atacar este monstro!</b></font> <a href=\"monster.php\">Voltar</a>.";
             include(__DIR__ . "/templates/private_footer.php");
             break;
         }
 
         if ($enemy->evento == 'n') {
             include(__DIR__ . "/templates/private_header.php");
-            echo "Este monstro não existe! <a href=\"monster.php\">Voltar</a>.";
+            echo "Este monstro nï¿½o existe! <a href=\"monster.php\">Voltar</a>.";
             include(__DIR__ . "/templates/private_footer.php");
             break;
         }
@@ -47,16 +47,16 @@ switch($_GET['act']) {
         if ($player->energy == 0) {
             include(__DIR__ . "/templates/private_header.php");
             echo "<fieldset>";
-            echo "<legend><b>Você está sem energia!</b></legend>\n";
-            echo "Você deve descançar um pouco. <b>(1 minuto = 1 energia)</b>";
+            echo "<legend><b>Vocï¿½ estï¿½ sem energia!</b></legend>\n";
+            echo "Vocï¿½ deve descanï¿½ar um pouco. <b>(1 minuto = 1 energia)</b>";
             echo "</fieldset><a href=\"monster.php\">Voltar</a>";
             echo "<br><br>";
 
-            echo "<b>Poções de Energia:</b>";
+            echo "<b>Poï¿½ï¿½es de Energia:</b>";
             echo "<br />";
             $query = $db->execute("select items.id, items.item_id, blueprint_items.type, blueprint_items.name, blueprint_items.description, blueprint_items.img from `items`, `blueprint_items` where blueprint_items.id=items.item_id and items.player_id=? and blueprint_items.type='potion' and blueprint_items.id=137 order by blueprint_items.name asc", [$player->id]);
             if ($query->recordcount() == 0) {
-                echo "Você não tem poções de energia.";
+                echo "Vocï¿½ nï¿½o tem poï¿½ï¿½es de energia.";
             } else {
                 while($item = $query->fetchrow()) {
                     echo "<fieldset>\n<legend>";
@@ -80,12 +80,12 @@ switch($_GET['act']) {
 
         if ($player->monsterkill >= $setting->securyty_capcha) {
             include(__DIR__ . "/templates/private_header.php");
-            echo "<fieldset><legend><b>Segurança</b></legend>";
+            echo "<fieldset><legend><b>Seguranï¿½a</b></legend>";
             echo "<form name=\"nobot\" method=\"post\" action=\"checkmonster.php\">";
             echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">";
             echo "<tr>";
             echo "<td width=\"200\" height=\"100\" style=\"border: 1px solid #666666;\"><img src=\"captcha_img.php\" border=\"0\"></td>";
-            echo "<td height=\"100\"> Insira abaixo o código abaixo exatamente como você vê, lembre-se de que <b>letras maiusculas são diferentes de minusculas</b>.<br/><br/>Se Você visualizar uma conta matemática, insira seu resultado abaixo.</td>";
+            echo "<td height=\"100\"> Insira abaixo o cï¿½digo abaixo exatamente como vocï¿½ vï¿½, lembre-se de que <b>letras maiusculas sï¿½o diferentes de minusculas</b>.<br/><br/>Se Vocï¿½ visualizar uma conta matemï¿½tica, insira seu resultado abaixo.</td>";
             echo "</tr></table>";
             echo "<b>Texto/Resultado:</b> <input type=\"text\" name=\"capt\" style=\"width: 80px\"> <input type=\"submit\" name=\"Submit\" value=\"Enviar\"></form></fieldset>";
             include(__DIR__ . "/templates/private_footer.php");
@@ -225,7 +225,7 @@ switch($_GET['act']) {
                         $damage2 = random_int(($attacking->maxdmg * 1.20), ($attacking->maxdmg * 1.25) + ($attacking->magiclevel * 1.5)); //Calculate random damage
                         $defending->hp -= $damage2;
                         $output .= ($player->username == $defending->username) ? "<font color=\"red\">" : "<font color=\"green\">";
-                        $output .= $attacking->username . " lançou um feitiço em " . $defending->username . " e tirou <b>" . $damage2 . "</b> de vida! (";
+                        $output .= $attacking->username . " lanï¿½ou um feitiï¿½o em " . $defending->username . " e tirou <b>" . $damage2 . "</b> de vida! (";
                         $output .= ($defending->hp > 0) ? $defending->hp . " de vida" : "Morto";
                         $output .= ")<br />";
                         $output .= "</font>";
@@ -263,7 +263,7 @@ switch($_GET['act']) {
                         $damage2 = random_int(($defending->maxdmg * 1.20), ($defending->maxdmg * 1.25) + ($defending->magiclevel * 1.5)); //Calculate random damage
                         $attacking->hp -= $damage2;
                         $output .= ($player->username == $defending->username) ? "<font color=\"green\">" : "<font color=\"red\">";
-                        $output .= $defending->username . " lançou um feitiço em " . $attacking->username . " e tirou <b>" . $damage2 . "</b> de vida! (";
+                        $output .= $defending->username . " lanï¿½ou um feitiï¿½o em " . $attacking->username . " e tirou <b>" . $damage2 . "</b> de vida! (";
                         $output .= ($attacking->hp > 0) ? $attacking->hp . " de vida" : "Morto";
                         $output .= ")<br />";
                         $output .= "</font>";
@@ -301,11 +301,11 @@ switch($_GET['act']) {
             if ($chanceloot == $enemy->loot) {
                 $veositemz = $db->execute("select `item_id`, `item_prepo`, `item_name` from `loot` where `monster_id`=?", [$enemy->id]);
                 if ($veositemz->recordcount() == 0) {
-                    echo "Contate ao administrador que o monstro " . $enemy->username . " está com erros.";
+                    echo "Contate ao administrador que o monstro " . $enemy->username . " estï¿½ com erros.";
                     exit;
                 }
                 $loot_item = $veositemz->fetchrow();
-                $mensagem = "<u><b>Você encontrou " . $loot_item['item_prepo'] . " " . $loot_item['item_name'] . " com " . $enemy->prepo . " " . $enemy->username . "</b></u>";
+                $mensagem = "<u><b>Vocï¿½ encontrou " . $loot_item['item_prepo'] . " " . $loot_item['item_name'] . " com " . $enemy->prepo . " " . $enemy->username . "</b></u>";
                 $lootstatus = 5;
                 $loot_id = $loot_item['item_id'];
             } else {
@@ -316,22 +316,22 @@ switch($_GET['act']) {
             if ($sorteioitem == 32) {
                 $sorteiaitem = $db->execute("select `id`, `name` from `blueprint_items` where `type`!=? and `price`>? and `price`<? order by rand() limit 1", [\ADDON, $enemy->mtexp * 2.5, $enemy->mtexp * 3.5]);
                 if ($sorteiaitem->recordcount() == 0) {
-                    $mensagem = "Contate ao administrador que o monstro " . $enemy->username . " está com erros.";
+                    $mensagem = "Contate ao administrador que o monstro " . $enemy->username . " estï¿½ com erros.";
                     $lootstatus = 2;
                 } else {
                     $loot_item2 = $sorteiaitem->fetchrow();
-                    $mensagem = "<u><b>Você encontrou um/uma " . $loot_item2['name'] . " com " . $enemy->prepo . " " . $enemy->username . "</b></u>";
+                    $mensagem = "<u><b>Vocï¿½ encontrou um/uma " . $loot_item2['name'] . " com " . $enemy->prepo . " " . $enemy->username . "</b></u>";
                     $lootstatus = 5;
                     $loot_id = $loot_item2['id'];
                 }
             } elseif ($sorteioitem == 1) {
                 $sorteiapotion = random_int(1, 3);
                 if ($sorteiapotion == 3) {
-                    $mensagem = "<u><b>Você encontrou uma Energy Potion com " . $enemy->prepo . " " . $enemy->username . "</b></u>";
+                    $mensagem = "<u><b>Vocï¿½ encontrou uma Energy Potion com " . $enemy->prepo . " " . $enemy->username . "</b></u>";
                     $lootstatus = 5;
                     $loot_id = 137;
                 } else {
-                    $mensagem = "<u><b>Você encontrou uma Health Potion com " . $enemy->prepo . " " . $enemy->username . "</b></u>";
+                    $mensagem = "<u><b>Vocï¿½ encontrou uma Health Potion com " . $enemy->prepo . " " . $enemy->username . "</b></u>";
                     $lootstatus = 5;
                     $loot_id = 136;
                 }
@@ -347,8 +347,8 @@ switch($_GET['act']) {
             $exploss = $exploss1 + $exploss2;
             $goldloss = (int) (0.4 * $player->gold);
             $goldloss = random_int(1, $goldloss);
-            $output .= "<br/><div style=\"background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><b><u>Você foi morto pel" . $enemy->prepo . " " . $enemy->username . "!</u></b></div>";
-            $output .= "<div style=\"background-color:#FFFDE0; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">Você perdeu <b>" . $exploss . "</b> de EXP e <b>" . $goldloss . "</b> de ouro.</div>";
+            $output .= "<br/><div style=\"background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><b><u>Vocï¿½ foi morto pel" . $enemy->prepo . " " . $enemy->username . "!</u></b></div>";
+            $output .= "<div style=\"background-color:#FFFDE0; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">Vocï¿½ perdeu <b>" . $exploss . "</b> de EXP e <b>" . $goldloss . "</b> de ouro.</div>";
             $exploss3 = (($player->exp - $exploss) <= 0) ? $player->exp : $exploss;
             $goldloss2 = (($player->gold - $goldloss) <= 0) ? $player->gold : $goldloss;
             //Update player (the loser)
@@ -362,8 +362,8 @@ switch($_GET['act']) {
             $expwin = ceil(random_int($expwin3, $expwin2));
             $goldwin = round(0.8 * $expwin);
             $goldwin = round($goldwin * 1.35);
-            $output .= "<br/><div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><b><u>Você matou " . $enemy->prepo . " " . $enemy->username . "!</u></b></div>";
-            $output .= "<div style=\"background-color:#FFFDE0; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">Você ganhou <b>" . $enemy->mtexp . "</b> de EXP e <b>" . $goldwin . "</b> de ouro.</div>";
+            $output .= "<br/><div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><b><u>Vocï¿½ matou " . $enemy->prepo . " " . $enemy->username . "!</u></b></div>";
+            $output .= "<div style=\"background-color:#FFFDE0; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">Vocï¿½ ganhou <b>" . $enemy->mtexp . "</b> de EXP e <b>" . $goldwin . "</b> de ouro.</div>";
             if ($mensagem != "") {
                 $output .= "<div style=\"background-color:#FFFDE0; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">" . $mensagem . "</div>";
             }
@@ -374,7 +374,7 @@ switch($_GET['act']) {
             }
             if ($enemy->mtexp + $player->exp >= $player->maxexp) { //Player gained a level!
                 //Update player, gained a level
-                $output .= "<div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><u><b>Você passou de nivel!</b></u></div>";
+                $output .= "<div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><u><b>Vocï¿½ passou de nivel!</b></u></div>";
                 $newexp = $enemy->mtexp + $player->exp - $player->maxexp;
 
                 if ($player->level <= 3) {
@@ -399,7 +399,7 @@ switch($_GET['act']) {
                 $output .= "<div style=\"background-color:#FFFDE0; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><a href=\"hospt.php?act=heal\">Clique aqui</a> para recuperar toda sua vida por <b>" . $cost . "</b> de ouro.</div>";
             }
         } else {
-            $output .= "<div style=\"background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><b><u>Os dois estão muito cançados para terminar a batalha! Ninguém venceu.</u></b></div>";
+            $output .= "<div style=\"background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\"><b><u>Os dois estï¿½o muito canï¿½ados para terminar a batalha! Ninguï¿½m venceu.</u></b></div>";
             $query = $db->execute("update `players` set `hp`=?, `energy`=?, `monsterkill`=? where `id`=?", [$player->hp, $player->energy - 1, $player->monsterkill + 1, $player->id]);
 
         }
@@ -433,15 +433,15 @@ switch($_GET['act']) {
         $fromlevel = 1;
         $tolevel = round($player->level * 1.8);
 
-        ($sql = mysql_query("SELECT * FROM monsters WHERE level>='$fromlevel' AND level<='$tolevel' AND evento='f' order by level asc")) || die(mysql_error());
-        if (mysql_num_rows($sql) > 0) {//Check if any monsters were found
+        ($sql = mysqli_query($db, "SELECT * FROM monsters WHERE level>='$fromlevel' AND level<='$tolevel' AND evento='f' order by level asc")) || die(mysqli_error($db)());
+        if (mysqli_num_rows($sql) > 0) {//Check if any monsters were found
             include(__DIR__ . "/templates/private_header.php");
-            echo "<center><i>Você pode enfrentar montros do nivel " . $fromlevel . " à " . $tolevel . ".</i></center>";
+            echo "<center><i>Vocï¿½ pode enfrentar montros do nivel " . $fromlevel . " ï¿½ " . $tolevel . ".</i></center>";
             echo "<br/>";
             echo "<table width=\"100%\">\n";
             echo "<tr><th width=\"45%\">Nome</th><th width=\"15%\">Nivel</th><th width=\"25%\">Batalha</a></th></tr>\n";
             $bool = 1;
-            while ($result = mysql_fetch_array($sql)) {
+            while ($result = mysqli_fetch_array($sql)) {
                 echo "<tr class=\"row" . $bool . "\">\n";
                 echo "<td width=\"45%\">" . $result['username'] . "</td>\n";
                 echo "<td width=\"15%\">" . $result['level'] . "</td>\n";
@@ -451,12 +451,12 @@ switch($_GET['act']) {
             }
             echo "</table>\n";
             echo "<br/><br/><b>Monstros Especiais</b>\n";
-            ($sql2 = mysql_query("SELECT * FROM monsters WHERE evento='t' order by level asc")) || die(mysql_error());
-            if (mysql_num_rows($sql2) > 0) {//Check if any monsters were found
+            ($sql2 = mysqli_query($db, "SELECT * FROM monsters WHERE evento='t' order by level asc")) || die(mysqli_error($db)());
+            if (mysqli_num_rows($sql2) > 0) {//Check if any monsters were found
                 echo "<table width=\"100%\">\n";
                 echo "<tr><th width=\"45%\">Nome</th><th width=\"15%\">Nivel</th><th width=\"20%\">Batalha</a></th></tr>\n";
                 $bool = 1;
-                while ($result = mysql_fetch_array($sql2)) {
+                while ($result = mysqli_fetch_array($sql2)) {
                     echo "<tr class=\"row" . $bool . "\">\n";
                     echo "<td width=\"45%\">" . $result['username'] . "</td>\n";
                     echo "<td width=\"15%\">" . $result['level'] . "</td>\n";
@@ -474,7 +474,7 @@ switch($_GET['act']) {
             include(__DIR__ . "/templates/private_header.php");
             echo "<table width=\"100%\">\n";
             echo "<tr>\n";
-            echo "<td>Seu nivel está muito avançado, agora você só pode lutar contra os outros <a href=\"battle.php\">jogadores</a>.</td>\n";
+            echo "<td>Seu nivel estï¿½ muito avanï¿½ado, agora vocï¿½ sï¿½ pode lutar contra os outros <a href=\"battle.php\">jogadores</a>.</td>\n";
             echo "</tr>\n";
             echo "</table>\n";
             include(__DIR__ . "/templates/private_footer.php");

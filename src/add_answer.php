@@ -11,7 +11,7 @@ $tbl_name = "forum_answer"; // Table name
 $id = $_POST['id'];
 
 if (!$_POST['a_answer']) {
-    echo "<fieldset><legend><b>Erro</b></legend>Você precisa preencher todos os campos!<BR>";
+    echo "<fieldset><legend><b>Erro</b></legend>Vocï¿½ precisa preencher todos os campos!<BR>";
     echo "<a href='view_topic.php?id=".$id."'>Voltar</a></fieldset>";
     include(__DIR__ . "/templates/private_footer.php");
     exit;
@@ -19,7 +19,7 @@ if (!$_POST['a_answer']) {
 
 $fecxhado = $db->GetOne("select `closed` from `forum_question` where `id`=?", [$id]);
 if ($fecxhado['closed'] == 't') {
-    echo "<fieldset><legend><b>Erro</b></legend>Este tópico está fechado.<BR>";
+    echo "<fieldset><legend><b>Erro</b></legend>Este tï¿½pico estï¿½ fechado.<BR>";
     echo "<a href='view_topic.php?id=".$id."'>Voltar</a></fieldset>";
     include(__DIR__ . "/templates/private_footer.php");
     exit;
@@ -28,7 +28,7 @@ if ($fecxhado['closed'] == 't') {
 $categoryae = $db->GetOne("select `category` from `forum_question` where `id`=?", [$id]);
 $servae = $db->GetOne("select `serv` from `forum_question` where `id`=?", [$id]);
 if (($categoryae == 'gangues' || $categoryae == 'trade') && $player->serv != $servae) {
-    echo "<fieldset><legend><b>Erro</b></legend>Você não pode postar aqui.<BR>";
+    echo "<fieldset><legend><b>Erro</b></legend>Vocï¿½ nï¿½o pode postar aqui.<BR>";
     echo "<a href='select_forum.php'>Voltar</a></fieldset>";
     include(__DIR__ . "/templates/private_footer.php");
     exit;
@@ -36,8 +36,8 @@ if (($categoryae == 'gangues' || $categoryae == 'trade') && $player->serv != $se
 
 // Find highest answer number.
 $sql = "SELECT MAX(a_id) AS Maxa_id FROM $tbl_name WHERE question_id='$id'";
-$result = mysql_query($sql);
-$rows = mysql_fetch_array($result);
+$result = mysqli_query($db, $sql);
+$rows = mysqli_fetch_array($result);
 
 // add + 1 to highest answer number and keep it in variable name "$Max_id". if there no answer yet set it = 1
 $Max_id = $rows ? $rows['Maxa_id'] + 1 : 1;
@@ -88,7 +88,7 @@ $datetime = date("d/m/y H:i:s");
 $sql2 = "INSERT INTO $tbl_name(question_id, a_id, a_user_id, a_answer, a_datetime)VALUES('$id', '$Max_id', '$player->id', '$mostraimg', '$time')";
 $sql4 = $db->execute("update `forum_question` set `last_post`=?, `last_post_date`=? where `id`=?", [time(), $datetime, $id]);
 $sql5 = $db->execute("update `players` set `posts`=`posts`+1 where `id`=?", [$player->id]);
-$result2 = mysql_query($sql2);
+$result2 = mysqli_query($db, $sql2);
 
 if($result2) {
     echo "<fieldset><legend><b>Sucesso</b></legend>Mensagem enviada com sucesso!<BR>";
@@ -97,14 +97,14 @@ if($result2) {
     // If added new answer, add value +1 in reply column
     $tbl_name2 = "forum_question";
     $sql3 = "UPDATE $tbl_name2 SET reply='$Max_id' WHERE id='$id'";
-    $result3 = mysql_query($sql3);
+    $result3 = mysqli_query($db, $sql3);
 
 } else {
     echo "<fieldset><legend><b>Erro</b></legend>Um erro inesperado ocorreu.<BR>";
     echo "<a href=select_forum.php>Voltar</a></fieldset>";
 }
 
-mysql_close();
+mysqli_close($db);
 ?>
 <?php
 include(__DIR__ . "/templates/private_footer.php");

@@ -1,6 +1,6 @@
 <?php
 include(__DIR__ . "/lib.php");
-define("PAGENAME", "Fórum");
+define("PAGENAME", "Fï¿½rum");
 $player = check_user($secret_key, $db);
 
 include(__DIR__ . "/checkforum.php");
@@ -17,15 +17,15 @@ if (!$_GET['cat']) {
 $cate = $_GET['cat'];
 
 if ($cate == 'gangues') {
-    $categoria = "Clãs";
+    $categoria = "Clï¿½s";
 } elseif ($cate == 'trade') {
     $categoria = "Compro/Vendo";
 } elseif ($cate == 'noticias') {
-    $categoria = "Notícias";
+    $categoria = "Notï¿½cias";
 } elseif ($cate == 'sugestoes') {
-    $categoria = "Sugestões";
+    $categoria = "Sugestï¿½es";
 } elseif ($cate == 'duvidas') {
-    $categoria = "Dúvidas";
+    $categoria = "Dï¿½vidas";
 } elseif ($cate == 'fan') {
     $categoria = "Fanwork";
 } elseif ($cate == 'off') {
@@ -34,15 +34,15 @@ if ($cate == 'gangues') {
     $categoria = $cate;
 }
 
-echo "<b><font size=\"1\"><a href=\"select_forum.php\">Fóruns</a> -> <a href=\"main_forum.php?cat=" . $cate . "\">" . ucfirst((string) $categoria) . "</a></font></b>";
+echo "<b><font size=\"1\"><a href=\"select_forum.php\">Fï¿½runs</a> -> <a href=\"main_forum.php?cat=" . $cate . "\">" . ucfirst((string) $categoria) . "</a></font></b>";
 ?>
 
 <table width="95%" border="0" align="center" cellpadding="3" cellspacing="1" bgcolor="#CCCCCC">
 <tr>
-<td width="55%" align="center" bgcolor="#E1CBA4"><strong>Tópico</strong></td>
+<td width="55%" align="center" bgcolor="#E1CBA4"><strong>Tï¿½pico</strong></td>
 <td width="15%" align="center" bgcolor="#E1CBA4"><strong>Visitas</strong></td>
 <td width="15%" align="center" bgcolor="#E1CBA4"><strong>Respostas</strong></td>
-<td width="15%" align="center" bgcolor="#E1CBA4"><strong><font size=1>Ùltima Postagem</font></strong></td>
+<td width="15%" align="center" bgcolor="#E1CBA4"><strong><font size=1>ï¿½ltima Postagem</font></strong></td>
 </tr>
 
 <?php
@@ -54,7 +54,7 @@ echo "<b><font size=\"1\"><a href=\"select_forum.php\">Fóruns</a> -> <a href=\"m
     }
 
 if ($total_players == 0) {
-    echo "<tr><td align=\"center\" bgcolor=\"#FFFFFF\"><b>Nenhum tópico encontrado.</b></td><td align=\"center\" bgcolor=\"#FFFFFF\">#</td><td align=\"center\" bgcolor=\"#FFFFFF\">#</td><td align=\"center\" bgcolor=\"#FFFFFF\">#</td></tr>";
+    echo "<tr><td align=\"center\" bgcolor=\"#FFFFFF\"><b>Nenhum tï¿½pico encontrado.</b></td><td align=\"center\" bgcolor=\"#FFFFFF\">#</td><td align=\"center\" bgcolor=\"#FFFFFF\">#</td><td align=\"center\" bgcolor=\"#FFFFFF\">#</td></tr>";
 } else {
 
     if ($cate == 'gangues' || $cate == 'trade') {
@@ -66,9 +66,9 @@ if ($total_players == 0) {
     $pager = new PS_Pagination($sql, 20, 20, "cat=" . $cate . "");
 
 
-    $rs = $pager->paginate();
+    $rs = $pager->paginate($db);
     //Loop through the result set
-    while($rows = mysql_fetch_assoc($rs)) {
+    while($rows = mysqli_fetch_assoc($rs)) {
 
         $query = $db->execute("select `username` from `players` where `id`=?", [$rows['user_id']]);
         $user = $query->fetchrow();
@@ -84,7 +84,7 @@ if ($total_players == 0) {
         if ($rows['reply'] > 0) {
             $lastpostid = $db->GetOne("select `a_user_id` from `forum_answer` where `question_id`=? order by `a_datetime` DESC", [$rows['id']]);
             $lastpostname = $db->GetOne("select `username` from `players` where `id`=?", [$lastpostid]);
-            echo "<font size=\"1\">Último post por <a href=\"profile.php?id=" . $lastpostname . "\">" . $lastpostname . "</a></font></td>";
+            echo "<font size=\"1\">ï¿½ltimo post por <a href=\"profile.php?id=" . $lastpostname . "\">" . $lastpostname . "</a></font></td>";
         } else {
             echo "<font size=\"1\">Iniciado por <a href=\"profile.php?id=" . $user['username'] . "\">" . $user['username'] . "</a></font></td>";
         }
@@ -101,7 +101,7 @@ if ($total_players == 0) {
 
 ?>
 <tr>
-<td colspan="5" align="right" bgcolor="#E1CBA4"><a href="create_topic.php"><strong>Criar novo Tópico</strong> </a></td>
+<td colspan="5" align="right" bgcolor="#E1CBA4"><a href="create_topic.php"><strong>Criar novo Tï¿½pico</strong> </a></td>
 </tr>
 </table>
 <?php

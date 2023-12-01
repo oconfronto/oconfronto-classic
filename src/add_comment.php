@@ -9,7 +9,7 @@ include(__DIR__ . "/templates/private_header.php");
 $tbl_name = "forum_question"; // Table name
 
 if (!$_POST['detail']) {
-    echo "<fieldset><legend><b>Erro</b></legend>Você precisa preencher todos os campos!<BR>";
+    echo "<fieldset><legend><b>Erro</b></legend>Vocï¿½ precisa preencher todos os campos!<BR>";
     echo "<a href='edit_comment.php'>Voltar</a></fieldset>";
     include(__DIR__ . "/templates/private_footer.php");
     exit;
@@ -72,7 +72,7 @@ if ($procuramengperfil->recordcount() == 0) {
 
 // get data that sent from form
 
-mysql_close();
+mysqli_close($db);
 ?>
 <?php
 include(__DIR__ . "/templates/private_footer.php");

@@ -2,7 +2,7 @@
 include(__DIR__ . "/lib.php");
 include(__DIR__ . '/bbcode.php');
 $bbcode = new bbcode();
-define("PAGENAME", "Fórum");
+define("PAGENAME", "Fï¿½rum");
 $player = check_user($secret_key, $db);
 
 include(__DIR__ . "/checkforum.php");
@@ -15,7 +15,7 @@ if (!$_GET['id']) {
 include(__DIR__ . "/templates/private_header.php");
 $foruminfo = $db->execute("select * from `forum_question` where `id`=?", [$_GET['id']]);
 if ($foruminfo->recordcount() != 1) {
-    echo "Este tópico não existe. <a href=\"select_forum.php\">Voltar</a>.";
+    echo "Este tï¿½pico nï¿½o existe. <a href=\"select_forum.php\">Voltar</a>.";
     include(__DIR__ . "/templates/private_footer.php");
     exit;
 }
@@ -23,7 +23,7 @@ $rows = $foruminfo->fetchrow();
 $id = $_GET['id'];
 
 if (($rows['category'] == 'gangues' || $rows['category'] == 'trade') && $player->serv != $rows['serv']) {
-    echo "<fieldset><legend><b>Erro</b></legend>Você não pode visualizar este tópico.<BR>";
+    echo "<fieldset><legend><b>Erro</b></legend>Vocï¿½ nï¿½o pode visualizar este tï¿½pico.<BR>";
     echo "<a href='select_forum.php'>Voltar</a></fieldset>";
     include(__DIR__ . "/templates/private_footer.php");
     exit;
@@ -31,7 +31,7 @@ if (($rows['category'] == 'gangues' || $rows['category'] == 'trade') && $player-
 if ($_GET['up']) {
     $jaupou = $db->execute("select * from `thumb` where `topic_id`=? and `player_id`=?", [$_GET['id'], $player->id]);
     if ($jaupou->recordcount() > 0) {
-        echo "Você já votou neste tópico! <a href=\"view_topic.php?id=" . $_GET['id'] . "\">Voltar</a>.";
+        echo "Vocï¿½ jï¿½ votou neste tï¿½pico! <a href=\"view_topic.php?id=" . $_GET['id'] . "\">Voltar</a>.";
         include(__DIR__ . "/templates/private_footer.php");
         exit;
     }
@@ -48,7 +48,7 @@ if ($_GET['up']) {
 if ($_GET['down']) {
     $jadown = $db->execute("select * from `thumb` where `topic_id`=? and `player_id`=?", [$_GET['id'], $player->id]);
     if ($jadown->recordcount() > 0) {
-        echo "Você já votou neste tópico! <a href=\"view_topic.php?id=" . $_GET['id'] . "\">Voltar</a>.";
+        echo "Vocï¿½ jï¿½ votou neste tï¿½pico! <a href=\"view_topic.php?id=" . $_GET['id'] . "\">Voltar</a>.";
         include(__DIR__ . "/templates/private_footer.php");
         exit;
     }
@@ -65,15 +65,15 @@ if ($_GET['down']) {
 // get value of id that sent from address bar
 
 if ($rows['category'] == 'gangues') {
-    $categoria = "Clãs";
+    $categoria = "Clï¿½s";
 } elseif ($rows['category'] == 'trade') {
     $categoria = "Compro/Vendo";
 } elseif ($rows['category'] == 'noticias') {
-    $categoria = "Notícias";
+    $categoria = "Notï¿½cias";
 } elseif ($rows['category'] == 'sugestoes') {
-    $categoria = "Sugestões";
+    $categoria = "Sugestï¿½es";
 } elseif ($rows['category'] == 'duvidas') {
-    $categoria = "Dúvidas";
+    $categoria = "Dï¿½vidas";
 } elseif ($rows['category'] == 'fan') {
     $categoria = "Fanwork";
 } elseif ($rows['category'] == 'off') {
@@ -82,7 +82,7 @@ if ($rows['category'] == 'gangues') {
     $categoria = $rows['category'];
 }
 
-echo "<b><font size=\"1\"><a href=\"select_forum.php\">Fóruns</a> -> <a href=\"main_forum.php?cat=" . $rows['category'] . "\">" . ucfirst((string) $categoria) . "</a> -> <a href=\"view_topic.php?id=" . $rows['id'] . "\">" . ucfirst((string) $rows['topic']) . "</a></font></b>";
+echo "<b><font size=\"1\"><a href=\"select_forum.php\">Fï¿½runs</a> -> <a href=\"main_forum.php?cat=" . $rows['category'] . "\">" . ucfirst((string) $categoria) . "</a> -> <a href=\"view_topic.php?id=" . $rows['id'] . "\">" . ucfirst((string) $rows['topic']) . "</a></font></b>";
 
 $query = $db->execute("select `id`, `username`, `avatar`, `posts`, `ban`, `alerts`, `gm_rank`, `serv` from `players` where `id`=?", [$rows['user_id']]);
 $topicouser = $query->fetchrow();
@@ -104,7 +104,7 @@ if ($topicouser['alerts'] != 0 && $topicouser['alerts'] < 100 && $topicouser['ba
 } elseif ($topicouser['ban'] > time()) {
     echo "Banido</br>";
 } elseif ($topicouser['alerts'] == 'forever' || $topicouser['alerts'] > 99) {
-    echo "Banido do Fórum</br>";
+    echo "Banido do Fï¿½rum</br>";
 }
 if ($player->gm_rank > 2) {
     if ($player->gm_rank > 10) {
@@ -169,9 +169,9 @@ if ($conta->recordcount() > 0) {
     $pager = new PS_Pagination($sql2, 5, 15, "id=" . $_GET['id'] . "");
 
 
-    $rs = $pager->paginate();
+    $rs = $pager->paginate($db);
     //Loop through the result set
-    while($rows = mysql_fetch_assoc($rs)) {
+    while($rows = mysqli_fetch_assoc($rs)) {
 
         $query = $db->execute("select `id`, `username`, `avatar`, `posts`, `ban`, `alerts`, `gm_rank`, `serv` from `players` where `id`=?", [$rows['a_user_id']]);
         $user = $query->fetchrow();
@@ -192,7 +192,7 @@ if ($user['alerts'] != 0 && $user['alerts'] < 100 && $user['ban'] < time()) {
 } elseif ($user['ban'] > time()) {
     echo "Banido</br>";
 } elseif ($user['alerts'] == 'forever' || $user['alerts'] > 99) {
-    echo "Banido do Fórum</br>";
+    echo "Banido do Fï¿½rum</br>";
 }
 if ($player->gm_rank > 2) {
     if ($player->gm_rank > 10) {
@@ -243,7 +243,7 @@ if ($fecxhado['closed'] != 't') {
 <td><input name="id" type="hidden" value="<?php echo $id; ?>"><script>edToolbar('a_answer'); </script><textarea name="a_answer" rows="6" id="a_answer" class="ed"></textarea></td>
 </tr>
 <tr>
-<td><input type="submit" name="submit" value="Enviar" />&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" onclick="javascript:window.open('example.html', '_blank','top=100, left=100, height=400, width=400, status=no, menubar=no, resizable=no, scrollbars=yes, toolbar=no, location=no, directories=no');">Dicas de formatação</a></td>
+<td><input type="submit" name="submit" value="Enviar" />&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" onclick="javascript:window.open('example.html', '_blank','top=100, left=100, height=400, width=400, status=no, menubar=no, resizable=no, scrollbars=yes, toolbar=no, location=no, directories=no');">Dicas de formataï¿½ï¿½o</a></td>
 </tr>
 </table>
 </td>
@@ -252,7 +252,7 @@ if ($fecxhado['closed'] != 't') {
 </table>
 <?php
 } else {
-    echo "<br/><center><b>Tópico fechado.</b></center>";
+    echo "<br/><center><b>Tï¿½pico fechado.</b></center>";
 }
 include(__DIR__ . "/templates/private_footer.php");
 ?>

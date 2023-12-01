@@ -13,6 +13,7 @@
 // ------------------------------------------------------------------------
 
 
+
 class PS_Pagination
 {
     /**
@@ -58,18 +59,18 @@ class PS_Pagination
      * @access public
      * @return resource
      */
-    public function paginate()
+    public function paginate($db)
     {
         //Find total number of rows
-        $all_rs = @mysql_query($this->sql);
+        $all_rs = @mysqli_query($db, $this->sql);
         if (!$all_rs) {
             if ($this->debug) {
-                echo "SQL query failed. Check your query.<br /><br />Error Returned: " . mysql_error();
+                echo "SQL query failed. Check your query.<br /><br />Error Returned: " . mysqli_error($db)();
             }
             return false;
         }
-        $this->total_rows = mysql_num_rows($all_rs);
-        @mysql_close($all_rs);
+        $this->total_rows = mysqli_num_rows($all_rs);
+        @mysqli_close($all_rs);
 
         //Return FALSE if no rows found
         if ($this->total_rows == 0) {
@@ -94,10 +95,10 @@ class PS_Pagination
         $this->offset = $this->rows_per_page * ($this->page - 1);
 
         //Fetch the required result set
-        $rs = @mysql_query($this->sql . " LIMIT {$this->offset}, {$this->rows_per_page}");
+        $rs = @mysqli_query($db, $this->sql . " LIMIT {$this->offset}, {$this->rows_per_page}");
         if (!$rs) {
             if ($this->debug) {
-                echo "Pagination query failed. Check your query.<br /><br />Error Returned: " . mysql_error();
+                echo "Pagination query failed. Check your query.<br /><br />Error Returned: " . mysqli_error($db)();
             }
             return false;
         }
@@ -128,7 +129,7 @@ class PS_Pagination
   * @access public
   * @param string $tag Text string to be displayed as the link. Defaults to 'Last'
   */
-    public function renderLast(string $tag = 'Ùltima'): bool|string
+    public function renderLast(string $tag = 'ï¿½ltima'): bool|string
     {
         if ($this->total_rows == 0) {
             return false;

@@ -20,7 +20,7 @@ if ($_GET['act'] == 'aposta') {
     if ($setting->$unc3 != \F) {
         include(__DIR__ . "/templates/private_header.php");
         echo "<fieldset><legend><b>Erro</b></legend>\n";
-        echo "Você só pode apostar enquanto a loteria estiver fechada.<br/><a href=\"lottery.php\">Voltar</a>.";
+        echo "Vocï¿½ sï¿½ pode apostar enquanto a loteria estiver fechada.<br/><a href=\"lottery.php\">Voltar</a>.";
         echo "</fieldset>";
         include(__DIR__ . "/templates/private_footer.php");
         exit;
@@ -28,7 +28,7 @@ if ($_GET['act'] == 'aposta') {
     if (!$_POST['amount']) {
         include(__DIR__ . "/templates/private_header.php");
         echo "<fieldset><legend><b>Erro</b></legend>\n";
-        echo "Você precisa preencher todos os campos.<br/><a href=\"lottery.php\">Voltar</a>.";
+        echo "Vocï¿½ precisa preencher todos os campos.<br/><a href=\"lottery.php\">Voltar</a>.";
         echo "</fieldset>";
         include(__DIR__ . "/templates/private_footer.php");
         exit;
@@ -36,7 +36,7 @@ if ($_GET['act'] == 'aposta') {
     if (!$_POST['g1'] && !$_POST['g2'] && !$_POST['g3']) {
         include(__DIR__ . "/templates/private_header.php");
         echo "<fieldset><legend><b>Erro</b></legend>\n";
-        echo "Você precisa preencher todos os campos.<br/><a href=\"lottery.php\">Voltar</a>.";
+        echo "Vocï¿½ precisa preencher todos os campos.<br/><a href=\"lottery.php\">Voltar</a>.";
         echo "</fieldset>";
         include(__DIR__ . "/templates/private_footer.php");
         exit;
@@ -44,29 +44,29 @@ if ($_GET['act'] == 'aposta') {
     if (!is_numeric($_POST['amount'])) {
         include(__DIR__ . "/templates/private_header.php");
         echo "<fieldset><legend><b>Erro</b></legend>\n";
-        echo "A quantia que você deseja apostar não é válida.<br/><a href=\"lottery.php\">Voltar</a>.";
+        echo "A quantia que vocï¿½ deseja apostar nï¿½o ï¿½ vï¿½lida.<br/><a href=\"lottery.php\">Voltar</a>.";
         echo "</fieldset>";
         include(__DIR__ . "/templates/private_footer.php");
         exit;
     } elseif ($quantia < 1) {
         include(__DIR__ . "/templates/private_header.php");
         echo "<fieldset><legend><b>Erro</b></legend>\n";
-        echo "A quantia que você deseja apostar não é válida.<br/><a href=\"lottery.php\">Voltar</a>.";
+        echo "A quantia que vocï¿½ deseja apostar nï¿½o ï¿½ vï¿½lida.<br/><a href=\"lottery.php\">Voltar</a>.";
         echo "</fieldset>";
         include(__DIR__ . "/templates/private_footer.php");
         exit;
     } elseif ($quantia > $player->gold) {
         include(__DIR__ . "/templates/private_header.php");
         echo "<fieldset><legend><b>Erro</b></legend>\n";
-        echo "A quantia que você deseja apostar não é válida.<br/><a href=\"lottery.php\">Voltar</a>.";
+        echo "A quantia que vocï¿½ deseja apostar nï¿½o ï¿½ vï¿½lida.<br/><a href=\"lottery.php\">Voltar</a>.";
         echo "</fieldset>";
         include(__DIR__ . "/templates/private_footer.php");
         exit;
     } elseif ($quantia > (($player->level * 4000) - $player->totalbet)) {
         include(__DIR__ . "/templates/private_header.php");
         echo "<fieldset><legend><b>Erro</b></legend>\n";
-        echo "Você está apostando demais. Você ainda pode apostar " . (($player->level * 4000) - $player->totalbet) . " moedas de ouro esta semana.";
-        echo " Aposte quantias mais baixas ou aguarde até a semana que vem.<br/><a href=\"lottery.php\">Voltar</a>.";
+        echo "Vocï¿½ estï¿½ apostando demais. Vocï¿½ ainda pode apostar " . (($player->level * 4000) - $player->totalbet) . " moedas de ouro esta semana.";
+        echo " Aposte quantias mais baixas ou aguarde atï¿½ a semana que vem.<br/><a href=\"lottery.php\">Voltar</a>.";
         echo "</fieldset>";
         include(__DIR__ . "/templates/private_footer.php");
         exit;
@@ -81,7 +81,7 @@ if ($_GET['act'] == 'aposta') {
         } else {
             include(__DIR__ . "/templates/private_header.php");
             echo "<fieldset><legend><b>Erro</b></legend>\n";
-            echo "Você precisa preencher todos os campos.<br/><a href=\"lottery.php\">Voltar</a>.";
+            echo "Vocï¿½ precisa preencher todos os campos.<br/><a href=\"lottery.php\">Voltar</a>.";
             echo "</fieldset>";
             include(__DIR__ . "/templates/private_footer.php");
             exit;
@@ -92,8 +92,8 @@ if ($_GET['act'] == 'aposta') {
             $db->execute("update `players` set `gold`=`gold`+?, `totalbet`=`totalbet`+? where `id`=?", [$premioaposta, $quantia, $player->id]);
             $player = check_user($secret_key, $db); //Get new stats
             include(__DIR__ . "/templates/private_header.php");
-            echo "<fieldset><legend><b>Parabéns</b></legend>\n";
-            echo "O guerreiro em que você apostou venceu e você ganhou <b>" . $premioaposta . " de ouro</b>.<br/><a href=\"lottery.php\">Voltar</a>.";
+            echo "<fieldset><legend><b>Parabï¿½ns</b></legend>\n";
+            echo "O guerreiro em que vocï¿½ apostou venceu e vocï¿½ ganhou <b>" . $premioaposta . " de ouro</b>.<br/><a href=\"lottery.php\">Voltar</a>.";
             echo "</fieldset>";
             include(__DIR__ . "/templates/private_footer.php");
             exit;
@@ -103,7 +103,7 @@ if ($_GET['act'] == 'aposta') {
         //Get new stats
         include(__DIR__ . "/templates/private_header.php");
         echo "<fieldset><legend><b>Apostas</b></legend>\n";
-        echo "O guerreiro em que você apostou perdeu e você perdeu <b>" . $quantia . " de ouro</b>.<br/><a href=\"lottery.php\">Voltar</a>.";
+        echo "O guerreiro em que vocï¿½ apostou perdeu e vocï¿½ perdeu <b>" . $quantia . " de ouro</b>.<br/><a href=\"lottery.php\">Voltar</a>.";
         echo "</fieldset>";
         include(__DIR__ . "/templates/private_footer.php");
         exit;
@@ -124,7 +124,7 @@ if ($setting->$unc3 == \T) {
 
         if ($setting->$unc2 > 1000) {
             $query = $db->execute("update `players` set `bank`=`bank`+? where `id`=?", [$setting->$unc2, $ipwpwpwpa['player_id']]);
-            $logmsg = "Você ganhou na loteria e <b>" . $setting->$unc2 . " de ouro</b> foram depositados na sua conta bancária.";
+            $logmsg = "Vocï¿½ ganhou na loteria e <b>" . $setting->$unc2 . " de ouro</b> foram depositados na sua conta bancï¿½ria.";
             addlog($ipwpwpwpa['player_id'], $logmsg, $db);
             $premiorecebido = "" . $setting->$unc2 . " de ouro";
         } else {
@@ -134,7 +134,7 @@ if ($setting->$unc3 == \T) {
             $insert['player_id'] = $ipwpwpwpa['player_id'];
             $insert['item_id'] = $setting->$unc2;
             $query = $db->autoexecute('items', $insert, 'INSERT');
-            $logmsg = "Você ganhou na loteria e recebeu um/uma <b>" . $ioeowkewttttee['name'] . "</b>.";
+            $logmsg = "Vocï¿½ ganhou na loteria e recebeu um/uma <b>" . $ioeowkewttttee['name'] . "</b>.";
             addlog($ipwpwpwpa['player_id'], $logmsg, $db);
             $premiorecebido = $ioeowkewttttee['name'];
         }
@@ -157,15 +157,15 @@ if ($setting->$unc3 == \T) {
         $query = $db->execute("update `settings` set `value`=0 where `name`='$unc5'");
         $query = $db->execute("delete from `lotto` where `serv`=?", [$player->serv]);
 
-        echo "<fieldset><legend><b>A loteria está fechada</b></legend>\n";
+        echo "<fieldset><legend><b>A loteria estï¿½ fechada</b></legend>\n";
         echo "<table>";
         echo "<tr>";
-        echo "<td><b>Último ganhador:</b></td>";
+        echo "<td><b>ï¿½ltimo ganhador:</b></td>";
         echo "<td>" . $totkooowowow['username'] . "</td>";
         echo "</tr>";
 
         echo "<tr>";
-        echo "<td><b>Prêmio recebido:</b></td>";
+        echo "<td><b>Prï¿½mio recebido:</b></td>";
         echo "<td>" . $premiorecebido . "</td>";
         echo "</tr>";
         echo "</table>";
@@ -182,7 +182,7 @@ if ($setting->$unc3 == \T) {
 
         if (!is_numeric($_POST['amount'])) {
             include(__DIR__ . "/templates/private_header.php");
-            echo "O valor " . $_POST['for'] . " não é válido! <a href=\"lottery.php\">Voltar</a>.";
+            echo "O valor " . $_POST['for'] . " nï¿½o ï¿½ vï¿½lido! <a href=\"lottery.php\">Voltar</a>.";
             include(__DIR__ . "/templates/private_footer.php");
             $error = 1;
             exit;
@@ -190,7 +190,7 @@ if ($setting->$unc3 == \T) {
 
         if ($_POST['amount'] < 1) {
             include(__DIR__ . "/templates/private_header.php");
-            echo "Você precisa digitar quantias maiores que 0! <a href=\"lottery.php\">Voltar</a>.";
+            echo "Vocï¿½ precisa digitar quantias maiores que 0! <a href=\"lottery.php\">Voltar</a>.";
             include(__DIR__ . "/templates/private_footer.php");
             $error = 1;
             exit;
@@ -198,7 +198,7 @@ if ($setting->$unc3 == \T) {
 
         if ($_POST['amount'] > 99) {
             include(__DIR__ . "/templates/private_header.php");
-            echo "Você pode comprar até 99 tickes por vez! <a href=\"lottery.php\">Voltar</a>.";
+            echo "Vocï¿½ pode comprar atï¿½ 99 tickes por vez! <a href=\"lottery.php\">Voltar</a>.";
             include(__DIR__ . "/templates/private_footer.php");
             $error = 1;
             exit;
@@ -208,7 +208,7 @@ if ($setting->$unc3 == \T) {
 
         if ($total > $player->gold) {
             include(__DIR__ . "/templates/private_header.php");
-            echo "Você não possui ouro sufficiente! <a href=\"lottery.php\">Voltar</a>.";
+            echo "Vocï¿½ nï¿½o possui ouro sufficiente! <a href=\"lottery.php\">Voltar</a>.";
             include(__DIR__ . "/templates/private_footer.php");
             $error = 1;
             exit;
@@ -220,9 +220,9 @@ if ($setting->$unc3 == \T) {
         for ($i = 0; $i < $num; $i++) {
             $sql .= "($player->id, $player->serv)" . (($i == $num - 1) ? "" : ", ");
         }
-        $result = mysql_query($sql);
+        $result = mysqli_query($db, $sql);
         include(__DIR__ . "/templates/private_header.php");
-        echo "Você comprou " . $_POST['amount'] . " ticket(s) por " . $total . " de ouro. <a href=\"lottery.php\">Voltar</a>.";
+        echo "Vocï¿½ comprou " . $_POST['amount'] . " ticket(s) por " . $total . " de ouro. <a href=\"lottery.php\">Voltar</a>.";
         include(__DIR__ . "/templates/private_footer.php");
         exit;
 
@@ -240,7 +240,7 @@ if ($setting->$unc3 == \T) {
     echo "<fieldset><legend><b>Loteria</b></legend>\n";
     echo "<table>";
     echo "<tr>";
-    echo "<td><b>Prêmio:</b></td>";
+    echo "<td><b>Prï¿½mio:</b></td>";
     echo "<td>" . $premio . "</td>";
     echo "</tr>";
     echo "<tr>";
@@ -254,7 +254,7 @@ if ($setting->$unc3 == \T) {
     echo "<td>" . $comecaem . " <a href=\"lottery.php\">Atualizar</a><br/><b>Dia:</b> " . $nova_data . "</td>";
     echo "</tr>";
     echo "<tr>";
-    echo "<td><b>Preço por Ticket:</b></td>";
+    echo "<td><b>Preï¿½o por Ticket:</b></td>";
     echo "<td>" . $setting->$unc4 . "</td>";
     echo "</tr>";
     echo "<tr>";
@@ -264,7 +264,7 @@ if ($setting->$unc3 == \T) {
     echo "</table>";
     echo "</fieldset>";
     echo "<br/><br/>";
-    echo "<i>Compre tickets de loteria. Se seu ticket for sorteado você ganhará:</i> ";
+    echo "<i>Compre tickets de loteria. Se seu ticket for sorteado vocï¿½ ganharï¿½:</i> ";
     if ($premiotype == 2) {
         echo "<b>" . $premio . "</b>.";
     } elseif ($premiotype === 1) {
@@ -291,7 +291,7 @@ if ($setting->$unc3 == \T) {
         echo "</b>";
         echo $itchecked['effectiveness'];
         echo "<td width=\"30%\">";
-        echo "<b>Vocação:</b> ";
+        echo "<b>Vocaï¿½ï¿½o:</b> ";
         if ($itchecked['voc'] == 1 && $itchecked['needpromo'] == 'f') {
             echo "Arqueiro";
         } elseif ($itchecked['voc'] == 2 && $itchecked['needpromo'] == 'f') {
@@ -305,7 +305,7 @@ if ($setting->$unc3 == \T) {
         } elseif ($itchecked['voc'] == 3 && $itchecked['needpromo'] == 't') {
             echo "Feiticeiro";
         } elseif ($itchecked['voc'] == 0 && $itchecked['needpromo'] == 't') {
-            echo "Vocações superiores";
+            echo "Vocaï¿½ï¿½es superiores";
         } else {
             echo "Todas";
         }
@@ -313,10 +313,10 @@ if ($setting->$unc3 == \T) {
         echo "</tr>";
         echo "</table>";
         if ($itchecked['needlvl'] > 1) {
-            echo "<center><b><font color=\"red\">Para usar este item você precisa ter nivel " . $itchecked['needlvl'] . " ou mais.</font></b></center>";
+            echo "<center><b><font color=\"red\">Para usar este item vocï¿½ precisa ter nivel " . $itchecked['needlvl'] . " ou mais.</font></b></center>";
         }
         if ($itchecked['needring'] == 't') {
-            echo "<center><b><font color=\"red\">Para usar este item você precisa estar usando um Jeweled Ring.</font></b></center>";
+            echo "<center><b><font color=\"red\">Para usar este item vocï¿½ precisa estar usando um Jeweled Ring.</font></b></center>";
         }
         echo "</fieldset>";
     }
@@ -327,26 +327,26 @@ if ($setting->$unc3 == \T) {
     echo "</form>";
     echo "</fieldset>";
     $getlottocount = $db->execute("select `id` from `lotto` where `player_id`=?", [$player->id]);
-    echo " <b>Cada ticket custa:</b> " . $setting->$unc4 . " de ouro | <b>Você já comprou:</b> " . $getlottocount->recordcount() . " tickets.";
+    echo " <b>Cada ticket custa:</b> " . $setting->$unc4 . " de ouro | <b>Vocï¿½ jï¿½ comprou:</b> " . $getlottocount->recordcount() . " tickets.";
     include(__DIR__ . "/templates/private_footer.php");
     exit;
 }
 include(__DIR__ . "/templates/private_header.php");
-echo "<fieldset><legend><b>A loteria está fechada</b></legend>\n";
+echo "<fieldset><legend><b>A loteria estï¿½ fechada</b></legend>\n";
 echo "<table>";
 echo "<tr>";
-echo "<td><b>Último ganhador:</b></td>";
+echo "<td><b>ï¿½ltimo ganhador:</b></td>";
 echo "<td>" . $setting->$unc1 . "</td>";
 echo "</tr>";
 echo "<tr>";
-echo "<td><b>Prêmio recebido:</b></td>";
+echo "<td><b>Prï¿½mio recebido:</b></td>";
 echo "<td>" . $setting->$unc7 . "</td>";
 echo "</tr>";
 echo "</table>";
 echo "</fieldset>";
 echo "<br/>";
 echo "<fieldset><legend><b>Apostas</b></legend>\n";
-echo "Enquanto a loteria está fechada, você poderá apostar em um de nossos 3 guerreiros. Se o guerreiro em que você apostar vencer, você ganha o dobro do que apostou, caso contrário perde todo o dinheiro apostado.<br/><br/>";
+echo "Enquanto a loteria estï¿½ fechada, vocï¿½ poderï¿½ apostar em um de nossos 3 guerreiros. Se o guerreiro em que vocï¿½ apostar vencer, vocï¿½ ganha o dobro do que apostou, caso contrï¿½rio perde todo o dinheiro apostado.<br/><br/>";
 echo "<form method=\"POST\" action=\"lottery.php?act=aposta\">";
 echo "<center><b>Apostar:</b> <input type=\"text\" name=\"amount\" size=\"15\"/> ";
 echo "<input type=\"submit\" name=\"g1\" value=\"Guerreiro I\"> ";
@@ -365,7 +365,7 @@ echo "<legend><b>Apostar</b></legend>";
 echo "<form method=\"POST\" action=\"duel.php\">";
 echo "<table width=\"100%\">";
 echo "<tr>";
-echo "<td width=\"20%\"><b><font size=\"1\">Usuário:</font></b></td>";
+echo "<td width=\"20%\"><b><font size=\"1\">Usuï¿½rio:</font></b></td>";
 echo "<td width=\"80%\"><input type=\"text\" name=\"rival\" /></td>";
 echo "</tr><tr>";
 echo "<td width=\"20%\"><b><font size=\"1\">Aposta:</font></b></td>";

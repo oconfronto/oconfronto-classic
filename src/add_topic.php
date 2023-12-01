@@ -8,21 +8,21 @@ include(__DIR__ . "/checkforum.php");
 include(__DIR__ . "/templates/private_header.php");
 
 if (!$_POST['detail'] || !$_POST['topic']) {
-    echo "<fieldset><legend><b>Erro</b></legend>Você precisa preencher todos os campos!<BR>";
+    echo "<fieldset><legend><b>Erro</b></legend>Vocï¿½ precisa preencher todos os campos!<BR>";
     echo "<a href=\"#\" onClick='javascript: history.back();'>Voltar</a></fieldset>";
     include(__DIR__ . "/templates/private_footer.php");
     exit;
 }
 
 if ($_POST['category'] == 'none') {
-    echo "<fieldset><legend><b>Erro</b></legend>Você precisa escolher uma categoria!<BR>";
+    echo "<fieldset><legend><b>Erro</b></legend>Vocï¿½ precisa escolher uma categoria!<BR>";
     echo "<a href=\"#\" onClick='javascript: history.back();'>Voltar</a></fieldset>";
     include(__DIR__ . "/templates/private_footer.php");
     exit;
 }
 
 if ($_POST['category'] != 'sugestoes' && $_POST['category'] != 'gangues' && $_POST['category'] != 'trade' && $_POST['category'] != 'duvidas' && $_POST['category'] != 'outros' && $_POST['category'] != 'fan' && $_POST['category'] != 'off' && $player->gm_rank < 3) {
-    echo "<fieldset><legend><b>Erro</b></legend>Você não tem autorização para criar tópicos nesta categoria!<BR>";
+    echo "<fieldset><legend><b>Erro</b></legend>Vocï¿½ nï¿½o tem autorizaï¿½ï¿½o para criar tï¿½picos nesta categoria!<BR>";
     echo "<a href=\"#\" onClick='javascript: history.back();'>Voltar</a></fieldset>";
     include(__DIR__ . "/templates/private_footer.php");
     exit;
@@ -89,13 +89,13 @@ $result = $db->autoexecute('forum_question', $insert, 'INSERT');
 $sql5 = $db->execute("update `players` set `posts`=`posts`+1 where `id`=?", [$player->id]);
 
 if($result) {
-    echo "<fieldset><legend><b>Sucesso</b></legend>Tópico postado com sucesso!<BR>";
+    echo "<fieldset><legend><b>Sucesso</b></legend>Tï¿½pico postado com sucesso!<BR>";
     echo "<a href=main_forum.php?cat=" . $category . ">Visualizar mensagem</a></fieldset>";
 } else {
     echo "<fieldset><legend><b>Erro</b></legend>Um erro inesperado ocorreu.<BR>";
     echo "<a href=select_forum.php>Voltar</a></fieldset>";
 }
-mysql_close();
+mysqli_close($db);
 ?>
 <?php
 include(__DIR__ . "/templates/private_footer.php");

@@ -8,7 +8,7 @@ $querynumplayers = $db->execute("select `id` from `players` where `acc_id`=?", [
 
 if ($querynumplayers->recordcount() > 19) {
     include(__DIR__ . "/templates/acc_header.php");
-    echo "<br/><br/><br/><br/><center>Você já atingiu o número máximo de personagens por conta, vinte.<br/>Você não pode mais criar usuários nesta conta. <a href=\"characters.php\">Voltar</a>.</center><br/>";
+    echo "<br/><br/><br/><br/><center>Vocï¿½ jï¿½ atingiu o nï¿½mero mï¿½ximo de personagens por conta, vinte.<br/>Vocï¿½ nï¿½o pode mais criar usuï¿½rios nesta conta. <a href=\"characters.php\">Voltar</a>.</center><br/>";
     include(__DIR__ . "/templates/acc_footer.php");
 } else {
 
@@ -33,31 +33,31 @@ if ($querynumplayers->recordcount() > 19) {
         $query = $db->execute("select `id` from `players` where `username`=?", [$_POST['username']]);
         //Check username
         if (!$_POST['username']) { //If username isn't filled in...
-            $msg1 .= "Você precisa digitar um nome de usuário!<br />\n"; //Add to error message
+            $msg1 .= "Vocï¿½ precisa digitar um nome de usuï¿½rio!<br />\n"; //Add to error message
             $error = 1; //Set error check
         } elseif (strlen($nomedeusuari0) < 3) { //If username is too short...
-            $msg1 .= "Seu nome de usuário deve ter mais que 2 caracteres!<br />\n"; //Add to error message
+            $msg1 .= "Seu nome de usuï¿½rio deve ter mais que 2 caracteres!<br />\n"; //Add to error message
             $error = 1; //Set error check
         } elseif (strlen($nomedeusuari0) > 20) {
             //If username is too short...
-            $msg1 .= "Seu nome de usuário deve ser de 20 caracteres ou menos!<br />\n";
+            $msg1 .= "Seu nome de usuï¿½rio deve ser de 20 caracteres ou menos!<br />\n";
             //Add to error message
             $error = 1;
         //Set error check
         } elseif (!preg_match("/^[A-Za-z[:space:]\-]+$/", (string) $_POST['username'])) {
             //If username contains illegal characters...
-            $msg1 .= "Seu nome de usuário não pode conter <b>números</b> ou <b>caracteres especiais</b>!<br />\n";
+            $msg1 .= "Seu nome de usuï¿½rio nï¿½o pode conter <b>nï¿½meros</b> ou <b>caracteres especiais</b>!<br />\n";
             //Add to error message
             $error = 1;
         //Set error check
         } elseif ($query->recordcount() > 0) {
-            $msg1 .= "Este nome de usuário já está sendo usado!<br />\n";
+            $msg1 .= "Este nome de usuï¿½rio jï¿½ estï¿½ sendo usado!<br />\n";
             $error = 1;
             //Set error check
         }
 
         if ($_POST['voc'] == \NONE) {
-            $msg2 .= "<br/>Você precisa escolher uma vocação!";
+            $msg2 .= "<br/>Vocï¿½ precisa escolher uma vocaï¿½ï¿½o!";
             $error = 1;
         }
 
@@ -67,7 +67,7 @@ if ($querynumplayers->recordcount() > 19) {
         }
 
         if ($_POST['serv'] == \NONE) {
-            $msg3 .= "<br/>Você precisa escolher um servidor!";
+            $msg3 .= "<br/>Vocï¿½ precisa escolher um servidor!";
             $error = 1;
         }
 
@@ -122,7 +122,7 @@ if ($querynumplayers->recordcount() > 19) {
             for ($i = 0; $i < $numpots; $i++) {
                 $addpots .= "($playerpots, 136)" . (($i == $numpots - 1) ? "" : ", ");
             }
-            $result = mysql_query($addpots);
+            $result = mysqli_query($db, $addpots);
 
             $insert['player_id'] = $player['id'];
             $insert['magia_id'] = 4;
@@ -134,11 +134,11 @@ if ($querynumplayers->recordcount() > 19) {
                 include(__DIR__ . "/templates/acc_header.php");
                 echo "<br/><br/><br/>";
                 if ($nomedeusuario !== $nomedeusuario2) {
-                    $alerta2 = "<b>Atenção</b>: Seu nome de usuário foi alterado para " . $nomedeusuario . ".<br/><br/>";
+                    $alerta2 = "<b>Atenï¿½ï¿½o</b>: Seu nome de usuï¿½rio foi alterado para " . $nomedeusuario . ".<br/><br/>";
                 }
 
-                echo "<center>Parabéns! Seu personagem foi criado com sucesso!<br />";
-                echo "<a href=\"login.php?id=" . $player['id'] . "\">Clique aqui</a> e começe a jogar com " . $nomedeusuario . ".</center>";
+                echo "<center>Parabï¿½ns! Seu personagem foi criado com sucesso!<br />";
+                echo "<a href=\"login.php?id=" . $player['id'] . "\">Clique aqui</a> e comeï¿½e a jogar com " . $nomedeusuario . ".</center>";
                 include(__DIR__ . "/templates/acc_footer.php");
                 exit;
             }
@@ -157,10 +157,10 @@ if ($querynumplayers->recordcount() > 19) {
 <?=$could_not_register?>
 <form method="POST" action="newchar.php">
 <table width="90%" align="center" border=\"0\">
-<tr><td width="10%"><b>Nome</b>:</td><td width="45%"><input type="text" name="username" id="username" value="<?=$_POST['username'];?>" size=\"20\"/><span id="msgbox" style="display:none"></span></td><td width="15%"><b>Vocação</b>:</td><td width="30%"><select name="voc" onchange="swapText(this)"><option value="none" selected="selected">Selecione</option><option value="knight">Guerreiro</option><option value="mage">Mago</option><option value="archer">Arqueiro</option></select></td></tr>
-<tr><td colspan="2"><font size="1"><u>Números</u> e <u>caracteres especiais</u> não são permitidos.<br /></font><?=$msg1;?><br /></td><td colspan="2"><font size="1"><div id="textDiv">Escolha sua vocação.</font><?=$msg2;?></div></td></tr></table>
+<tr><td width="10%"><b>Nome</b>:</td><td width="45%"><input type="text" name="username" id="username" value="<?=$_POST['username'];?>" size=\"20\"/><span id="msgbox" style="display:none"></span></td><td width="15%"><b>Vocaï¿½ï¿½o</b>:</td><td width="30%"><select name="voc" onchange="swapText(this)"><option value="none" selected="selected">Selecione</option><option value="knight">Guerreiro</option><option value="mage">Mago</option><option value="archer">Arqueiro</option></select></td></tr>
+<tr><td colspan="2"><font size="1"><u>Nï¿½meros</u> e <u>caracteres especiais</u> nï¿½o sï¿½o permitidos.<br /></font><?=$msg1;?><br /></td><td colspan="2"><font size="1"><div id="textDiv">Escolha sua vocaï¿½ï¿½o.</font><?=$msg2;?></div></td></tr></table>
 <table width="90%" align="center" border=\"0\">
-<tr><td width="55%"><div id="servDiv"><font size=\"1\">Selecione um servidor para obter informações.</font></div></td><td width="45%"><table width="90%"><tr><td width="15%"><b>Servidor</b>:</td><td width="30%"><select name="serv" onchange="mudaText(this)"><option value="none" selected="selected">Selecione</option><option value="1">Servidor I</option><option value="2">Servidor II</option></select></td></tr><tr><td colspan="2"><font size="1">Escolha um servidor.</font><?=$msg3;?></div></td></tr></table></td></tr>
+<tr><td width="55%"><div id="servDiv"><font size=\"1\">Selecione um servidor para obter informaï¿½ï¿½es.</font></div></td><td width="45%"><table width="90%"><tr><td width="15%"><b>Servidor</b>:</td><td width="30%"><select name="serv" onchange="mudaText(this)"><option value="none" selected="selected">Selecione</option><option value="1">Servidor I</option><option value="2">Servidor II</option></select></td></tr><tr><td colspan="2"><font size="1">Escolha um servidor.</font><?=$msg3;?></div></td></tr></table></td></tr>
 </table>
 <br/>
 <center><input type="submit" name="register" value="Criar Personagem"></center>

@@ -33,8 +33,8 @@ include(__DIR__ . "/templates/private_header.php");
 if ($profile['gm_rank'] > 50) {
     echo "<fieldset>";
     echo "<legend><b>" . $profile['username'] . "</b></legend>";
-    echo "O usuário " . $profile['username'] . " é um dos administradores do jogo.<br/>";
-    echo "Apenas moderadores podem entrar em contato com o administrador. Se precisa falar com a administração, clique em contato no parte inferior do site ou mande uma mensagem para algum dos nossos moderadores:<br/>";
+    echo "O usuï¿½rio " . $profile['username'] . " ï¿½ um dos administradores do jogo.<br/>";
+    echo "Apenas moderadores podem entrar em contato com o administrador. Se precisa falar com a administraï¿½ï¿½o, clique em contato no parte inferior do site ou mande uma mensagem para algum dos nossos moderadores:<br/>";
     $query4 = $db->execute("select `username` from `players` where `gm_rank`>2 and `id`!=1 order by rand()");
     while($member1 = $query4->fetchrow()) {
         echo "<a href=\"mail.php?act=compose&to=" . $member1['username'] . "\">";
@@ -50,21 +50,21 @@ if ($profile['gm_rank'] > 50) {
 if ($profile['ban'] > time()) {
     echo "<fieldset>";
     echo "<legend><b>" . $profile['username'] . "</b></legend>";
-    echo "O usuário " . $profile['username'] . " foi banido.<br/>";
+    echo "O usuï¿½rio " . $profile['username'] . " foi banido.<br/>";
     $time = ($profile['ban'] - time());
     $time_remaining = ceil($time / 86400);
     if ($time_remaining > 100) {
-        echo "Este usuário foi banido permanentemente.";
+        echo "Este usuï¿½rio foi banido permanentemente.";
     } else {
         echo "Faltam " . $time_remaining . " dia(s) para o banimento terminar.";
     }
     echo "</fieldset>";
     echo "<br/><br/>";
     echo "<fieldset>";
-    echo "<legend><b>Comentários da administração</b></legend>";
+    echo "<legend><b>Comentï¿½rios da administraï¿½ï¿½o</b></legend>";
     $admincomments = $db->execute("select `msg` from `bans` where `player_id`=?", [$profile['id']]);
     if ($admincomments->recordcount() == 0) {
-        echo "Sem comentários da administração.";
+        echo "Sem comentï¿½rios da administraï¿½ï¿½o.";
     } else {
         $mensagemdoamn = $admincomments->fetchrow();
         echo $mensagemdoamn['msg'];
@@ -76,11 +76,11 @@ if ($profile['ban'] > time()) {
 
 if ($profile['gm_rank'] > 2) {
     echo "<div style=\"background-color:#45E61D; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">";
-    echo "<center><b>Este usuário é um moderador do jogo.</b></center>";
+    echo "<center><b>Este usuï¿½rio ï¿½ um moderador do jogo.</b></center>";
     echo "</div>";
 } elseif ($profile['serv'] != $player->serv) {
     echo "<div style=\"background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px\">";
-    echo "<center><b>Este usuário pertence a outro servidor.</b></center>";
+    echo "<center><b>Este usuï¿½rio pertence a outro servidor.</b></center>";
     echo "</div>";
 }
 
@@ -89,7 +89,7 @@ if ($profile['gm_rank'] > 2) {
   <div id="tabber13" class="simpleTabs">
     <ul class="simpleTabsNavigation">
       <li><a class="current" id="tabber13_a_0" href="#"><?=$profile['username']?></a></li>
-      <li><a class="" id="tabber13_a_1" href="#">Comentários</a></li>
+      <li><a class="" id="tabber13_a_1" href="#">Comentï¿½rios</a></li>
       <li><a class="" id="tabber13_a_2" href="#">Medalhas</a></li>
       <li><a class="" id="tabber13_a_3" href="#">Amigos</a></li>
       <li><a class="" id="tabber13_a_4" href="#">Estatisticas</a></li>
@@ -114,33 +114,33 @@ echo "<br/>";
 
 <table width="90%">
 <tr>
-<td width="50%"><b>Usuário:</b></td>
+<td width="50%"><b>Usuï¿½rio:</b></td>
 <td width="50%"><?=$profile['username']?> (<a href="mail.php?act=compose&to=<?=$profile['username']?>">Mensagem</a>)</td>
 </tr>
 <tr>
-<td><b>Nível:</b></td>
+<td><b>Nï¿½vel:</b></td>
 <td><?=$profile['level']?></td>
 </tr>
 <tr>
 <td><b>Ranking:</b></td>
 <td><?php
 $sql = "select id from players where gm_rank<10 and serv=" . $profile['serv'] . " order by level desc";
-$dados = mysql_query($sql);
+$dados = mysqli_query($db, $sql);
 $i = 1;
-while($linha = mysql_fetch_array($dados)) {
+while($linha = mysqli_fetch_array($dados)) {
     if ($linha['id'] == $profile['id']) {
         echo "$i";
     }
     $i++;
 }
-echo "º";
+echo "ï¿½";
 ?></td>
 </tr>
 <tr>
-<td><b>Vocação:</b></td>
+<td><b>Vocaï¿½ï¿½o:</b></td>
 <td><?php
 if ($profile['voc'] == 'archer' && $profile['promoted'] == 'f') {
-    echo "Caçador";
+    echo "Caï¿½ador";
 } elseif ($profile['voc'] == 'knight' && $profile['promoted'] == 'f') {
     echo "Espadachim";
 } elseif ($profile['voc'] == 'mage' && $profile['promoted'] == 'f') {
@@ -161,7 +161,7 @@ if ($profile['voc'] == 'archer' && $profile['promoted'] == 'f') {
 ?></td>
 </tr>
 <tr>
-<td><b>Clã:</b></td>
+<td><b>Clï¿½:</b></td>
 <td><?php
 if ($profile['guild'] == null || $profile['guild'] == '') {
     echo "[Nenhum]";
@@ -189,21 +189,21 @@ $age = (int) (($diff / 3600) / 24);
 <td><?=$age?> dias</td>
 </tr>
 <tr>
-<td><b>Última atividade:</b></td>
+<td><b>ï¿½ltima atividade:</b></td>
 <?php
         $valortempo = time() -  $profile['last_active'];
 if ($valortempo < 60) {
     $valortempo2 = $valortempo;
-    $auxiliar2 = "segundo(s) atrás.";
+    $auxiliar2 = "segundo(s) atrï¿½s.";
 } elseif ($valortempo < 3600) {
     $valortempo2 = floor($valortempo / 60);
-    $auxiliar2 = "minuto(s) atrás.";
+    $auxiliar2 = "minuto(s) atrï¿½s.";
 } elseif ($valortempo < 86400) {
     $valortempo2 = floor($valortempo / 3600);
-    $auxiliar2 = "hora(s) atrás.";
+    $auxiliar2 = "hora(s) atrï¿½s.";
 } elseif ($valortempo > 86400) {
     $valortempo2 = floor($valortempo / 86400);
-    $auxiliar2 = "dia(s) atrás.";
+    $auxiliar2 = "dia(s) atrï¿½s.";
 }
 echo "<td>" . $valortempo2 . " " . $auxiliar2 . "</td>";
 ?>
@@ -214,19 +214,19 @@ if ($profile['serv'] != $player->serv) {
 }
 
 if ($player->gm_rank > 50) {
-    echo "<tr><td>Vida Máxima:</td><td>" . $profile['maxhp'] . "</td></tr>";
-    echo "<tr><td>Energia Máxima:</td><td>" . $profile['maxenergy'] . "</td></tr>";
-    echo "<tr><td>Ouro em mãos:</td><td>" . $profile['gold'] . "</td></tr>";
+    echo "<tr><td>Vida Mï¿½xima:</td><td>" . $profile['maxhp'] . "</td></tr>";
+    echo "<tr><td>Energia Mï¿½xima:</td><td>" . $profile['maxenergy'] . "</td></tr>";
+    echo "<tr><td>Ouro em mï¿½os:</td><td>" . $profile['gold'] . "</td></tr>";
     echo "<tr><td>Ouro no banco:</td><td>" . $profile['bank'] . "</td></tr>";
     echo "<tr><td>Ouro total:</td><td>" . ($profile['bank'] + $profile['gold']) . "</td></tr>";
     echo "<tr><td>Pontos de Status:</td><td>" . $profile['stat_points'] . "</td></tr>";
-    echo "<tr><td>Força:</td><td>" . $profile['strength'] . "</td></tr>";
+    echo "<tr><td>Forï¿½a:</td><td>" . $profile['strength'] . "</td></tr>";
     echo "<tr><td>Vitalidade:</td><td>" . $profile['vitality'] . "</td></tr>";
     echo "<tr><td>Agilidade:</td><td>" . $profile['agility'] . "</td></tr>";
-    echo "<tr><td>Resistência:</td><td>" . $profile['resistance'] . "</td></tr>";
+    echo "<tr><td>Resistï¿½ncia:</td><td>" . $profile['resistance'] . "</td></tr>";
     echo "<tr><td>Status totais:</td><td>" . ($profile['strength'] + $profile['stat_points'] + $profile['agility'] + $profile['vitality'] + $profile['resistance']) . "</td></tr>";
-    echo "<tr><td>Status máximos para este nível:</td><td>" . (4 + (3 * $profile['level']) + (3 * $profile['buystats'])) . "</td></tr>";
-    echo "<tr><td>Senha de transferência:</td><td>" . $profile['transpass'] . "</td></tr>";
+    echo "<tr><td>Status mï¿½ximos para este nï¿½vel:</td><td>" . (4 + (3 * $profile['level']) + (3 * $profile['buystats'])) . "</td></tr>";
+    echo "<tr><td>Senha de transferï¿½ncia:</td><td>" . $profile['transpass'] . "</td></tr>";
 }
 ?>
 </table>
@@ -240,7 +240,7 @@ if ($player->gm_rank < 50) {
 }
 
 if ($player->gm_rank > 2 && $profile['username'] != 0 && $profile['username'] > 99) {
-    echo " | <a href=\"forum_unban.php?player=" . $profile['id'] . "\">Desbanir do Fórum</a>";
+    echo " | <a href=\"forum_unban.php?player=" . $profile['id'] . "\">Desbanir do Fï¿½rum</a>";
 }
 ?>
 
@@ -254,7 +254,7 @@ if ($player->gm_rank > 2 && $profile['username'] != 0 && $profile['username'] > 
 <?php
     $procuramengperfil = $db->execute("select `perfil` from `profile` where `player_id`=?", array($profile['id']));
 if ($procuramengperfil->recordcount() == 0) {
-    $mencomentario = "Sem comentários.";
+    $mencomentario = "Sem comentï¿½rios.";
 } else {
     $comentdocara = $procuramengperfil->fetchrow();
     $mencomentario = stripslashes($comentdocara['perfil']);
@@ -266,7 +266,7 @@ $nname = $db->GetOne("select `name` from `accounts` where `id`=?", [$profile['ac
 if ($nname != null) {
     echo $nname;
 } else {
-    echo "Não Informado";
+    echo "Nï¿½o Informado";
 }
 ?></td></tr>
 <tr><td><b>Sexo:</b></td><td><?php
@@ -277,7 +277,7 @@ if ($sex == 'm') {
 } elseif ($sex == 'f') {
     echo "Feminino";
 } else {
-    echo "Não Informado";
+    echo "Nï¿½o Informado";
 }
 ?></td></tr>
 <tr><td><b>Email:</b></td><td><?php
@@ -290,7 +290,7 @@ if ($checkshowmmaiele->recordcount() > 0) {
     echo "Email Oculto";
 }
 ?></td></tr>
-<tr><td><b>Comentários:</b></td><td><?=$bbcode->parse($mencomentario);?></td></tr>
+<tr><td><b>Comentï¿½rios:</b></td><td><?=$bbcode->parse($mencomentario);?></td></tr>
 </table>
 </div>
 
@@ -298,7 +298,7 @@ if ($checkshowmmaiele->recordcount() > 0) {
 <?php
 $medalha = $db->execute("select * from `medalhas` where `player_id`=?", [$profile['id']]);
 if ($medalha->recordcount() == 0) {
-    echo "<br/><center><b>" . $profile['username'] . " não tem medalhas.</b></center><br/>";
+    echo "<br/><center><b>" . $profile['username'] . " nï¿½o tem medalhas.</b></center><br/>";
 } else {
     echo "<table>";
 
@@ -317,12 +317,12 @@ if ($medalha->recordcount() == 0) {
 //Select all members ordered by level (highest first, members table also doubles as rankings table)
 $querwwq = $db->execute("select `fname` from `friends` where `uid`=? order by `fname` desc", [$profile['id']]);
 if ($querwwq->recordcount() == 0) {
-    echo "<br/><center><b>" . $profile['username'] . " não tem amigos.</b></center><br/>";
+    echo "<br/><center><b>" . $profile['username'] . " nï¿½o tem amigos.</b></center><br/>";
 } else {
     echo "<table width=\"95%\" border=\"0\">";
     echo "<tr>";
-    echo "<th width=\"60%\"><b>Usuário</b></td>";
-    echo "<th width=\"40%\"><b>Opções</b></td>";
+    echo "<th width=\"60%\"><b>Usuï¿½rio</b></td>";
+    echo "<th width=\"40%\"><b>Opï¿½ï¿½es</b></td>";
     echo "</tr>";
 
     while($friend = $querwwq->fetchrow()) {
@@ -336,11 +336,11 @@ if ($querwwq->recordcount() == 0) {
 ?>
 </div>
 <div id="tabber13_div_4" class="simpleTabsContent">
-<b>Usuários assassinados:</b> <?=$profile['kills']?>
+<b>Usuï¿½rios assassinados:</b> <?=$profile['kills']?>
 <br/><b>Monstros mortos:</b> <?=$profile['monsterkilled']?>
 <br/><b>Monstros mortos em grupo:</b> <?=$profile['groupmonsterkilled']?>
 <br/><b>Mortes:</b> <?=$profile['deaths']?>
-<br/><br/><b>Pontuação total:</b> <?=ceil(($profile['kills'] * 6) + ($profile['monsterkilled'] / 3) + ($profile['groupmonsterkilled'] / 12) - ($profile['deaths'] * 35))?>
+<br/><br/><b>Pontuaï¿½ï¿½o total:</b> <?=ceil(($profile['kills'] * 6) + ($profile['monsterkilled'] / 3) + ($profile['groupmonsterkilled'] / 12) - ($profile['deaths'] * 35))?>
 </div>
 </div>
 

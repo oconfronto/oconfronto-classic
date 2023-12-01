@@ -196,23 +196,29 @@ $query = $db->execute("update `players` set `last_active`=? where `id`=?", array
 <table width="100%" border="0">
 	<tr>
 		<td width="50%">
-			<b>Usu�rio:</b> <?= $player->username ?><br />
-			<b>Registrado:</b> <?= date("j F, Y, g:i a", $player->registered) ?><br />
+			<b>Usu�rio:</b>
+			<?= $player->username ?><br />
+			<b>Registrado:</b>
+			<?= date("j F, Y, g:i a", $player->registered) ?><br />
 			<?php
 			$diff = time() - $player->registered;
 			$age = intval(($diff / 3600) / 24);
 			?>
-			<b>Idade do personagem:</b> <?= $age ?> dias<br />
-			<b>Servidor:</b> <?= $player->serv ?><br />
+			<b>Idade do personagem:</b>
+			<?= $age ?> dias<br />
+			<b>Servidor:</b>
+			<?= $player->serv ?><br />
 			<br />
-			<b>Pontos de status:</b> <?= $player->stat_points ?> | <a href="buystats.php">Treinar!</a><br />
+			<b>Pontos de status:</b>
+			<?= $player->stat_points ?> | <a href="buystats.php">Treinar!</a><br />
 			<?php
 			if ($player->stat_points > 0) {
 				echo "<a href=\"stat_points.php\"><b>Clique aqui para utilizar seus pontos.</b></a><br />";
 			}
 			?>
 			<br />
-			<b>Pontos m�sticos:</b> <?= $player->magic_points ?><br />
+			<b>Pontos m�sticos:</b>
+			<?= $player->magic_points ?><br />
 		<td class="red" width="60%">
 			<?php
 			if ($player->magic_points > 0) {
@@ -233,7 +239,8 @@ $query = $db->execute("update `players` set `last_active`=? where `id`=?", array
 		<?php
 		$choapeaaww = $db->execute("select `id` from `quests` where `quest_id`=6 and `quest_status`=90 and `player_id`=?", array($player->id));
 		if ($player->level > 24 and $player->level < 36 and $choapeaaww->recordcount() == 0) { ?>
-			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px" align="center">
+			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px"
+				align="center">
 				<p>Voc� est� entre o nivel 25 e 35, e tem uma miss�o � fazer. <a href="quest3.php">Clique aqui</a>.</p>
 			</div>
 		<?php } ?>
@@ -241,29 +248,33 @@ $query = $db->execute("update `players` set `last_active`=? where `id`=?", array
 		<?php
 		$checkmission1 = $db->execute("select `id` from `quests` where `quest_id`=4 and `quest_status`=90 and `player_id`=?", array($player->id));
 		if ($player->level > 39 and $checkmission1->recordcount() == 0) { ?>
-			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px" align="center">
+			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px"
+				align="center">
 				<p>Voc� j� passou no nivel 39, e tem uma miss�o � fazer. <a href="quest2.php">Clique aqui</a>.</p>
 			</div>
 		<?php } ?>
 
-		<? if ($player->level > 79 and $player->promoted == "f") { ?>
-			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px" align="center">
-				<p>Voc� j� passou no nivel 79, agora voc� pode treinar sua voca��o e virar um <b><?php
-																									if ($player->voc == 'archer') {
-																										echo "Arqueiro";
-																									} else if ($player->voc == 'knight') {
-																										echo "Guerreiro";
-																									} else if ($player->voc == 'mage') {
-																										echo "Mago";
-																									}
-																									?></b>. <a href="promote.php">Clique aqui</a>.</p>
-			</div>
-		<?php } ?>
+		<? if ($player->level > 79 and $player->promoted == "f") {
+			echo '<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px"
+					align="center">
+					<p>Voc� j� passou no nivel 79, agora voc� pode treinar sua voca��o e virar um <b>';
+							if ($player->voc == 'archer') {
+								echo "Arqueiro";
+							} else if ($player->voc == 'knight') {
+								echo "Guerreiro";
+							} else if ($player->voc == 'mage') {
+								echo "Mago";
+							}
+						echo '</b>. <a href="promote.php">Clique aqui</a>.</p>
+				</div>
+			';
+		} ?>
 
 		<?php
 		$checaquestring = $db->execute("select `id` from `quests` where `quest_id`=2 and `quest_status`=90 and `player_id`=?", array($player->id));
 		if ($player->level > 99 and $checaquestring->recordcount() == 0) { ?>
-			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px" align="center">
+			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px"
+				align="center">
 				<p>Voc� j� passou no nivel 99, e tem uma miss�o � fazer.</b> <a href="quest1.php">Clique aqui</a>.</p>
 			</div>
 		<?php } ?>
@@ -272,17 +283,19 @@ $query = $db->execute("update `players` set `last_active`=? where `id`=?", array
 		<?php
 		$checaquestring = $db->execute("select `id` from `quests` where `quest_id`=7 and `quest_status`=90 and `player_id`=?", array($player->id));
 		if ($player->level > 129 and $checaquestring->recordcount() == 0) { ?>
-			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px" align="center">
+			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px"
+				align="center">
 				<p>Voc� j� passou no nivel 129, e tem uma miss�o � fazer.</b> <a href="quest4.php">Clique aqui</a>.</p>
 			</div>
-		<?php
+			<?php
 		}
 		?>
 
 		<?php
 		$chdrgdrg = $db->execute("select `id` from `quests` where `quest_id`=9 and `quest_status`=90 and `player_id`=?", array($player->id));
 		if ($player->level > 144 and $player->level < 156 and $chdrgdrg->recordcount() == 0) { ?>
-			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px" align="center">
+			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px"
+				align="center">
 				<p>Voc� est� entre o nivel 145 e 155, e tem uma miss�o � fazer. <a href="quest5.php">Clique aqui</a>.</p>
 			</div>
 		<?php } ?>
@@ -290,29 +303,33 @@ $query = $db->execute("update `players` set `last_active`=? where `id`=?", array
 		<?php
 		$chdsadasdasg = $db->execute("select `id` from `quests` where `quest_id`=11 and `quest_status`=90 and `player_id`=?", array($player->id));
 		if ($player->level > 159 and $chdsadasdasg->recordcount() == 0) { ?>
-			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px" align="center">
-				<p>Voc� j� passou do nivel 159, e pode comprar itens especiais no ferreiro. <a href="shop.php">Clique aqui</a>.</p>
+			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px"
+				align="center">
+				<p>Voc� j� passou do nivel 159, e pode comprar itens especiais no ferreiro. <a href="shop.php">Clique
+						aqui</a>.</p>
 			</div>
 		<?php } ?>
 
-		<? if ($player->level > 239 and $player->promoted != "p") { ?>
-			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px" align="center">
-				<p>Voc� j� passou no nivel 239, agora voc� pode treinar sua voca��o e virar um <b><?php
-																									if ($player->voc == 'archer') {
-																										echo "Arqueiro Royal";
-																									} else if ($player->voc == 'knight') {
-																										echo "Cavaleiro";
-																									} else if ($player->voc == 'mage') {
-																										echo "Arquimago";
-																									}
-																									?></b>. <a href="promo1.php">Clique aqui</a>.</p>
-			</div>
-		<?php } ?>
+		<? if ($player->level > 239 and $player->promoted != "p") {
+			echo '<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px"
+				align="center">
+				<p>Voc� j� passou no nivel 239, agora voc� pode treinar sua voca��o e virar um <b>';
+						if ($player->voc == 'archer') {
+							echo "Arqueiro Royal";
+						} else if ($player->voc == 'knight') {
+							echo "Cavaleiro";
+						} else if ($player->voc == 'mage') {
+							echo "Arquimago";
+						}
+					echo '</b>. <a href="promo1.php">Clique aqui</a>.</p>
+			</div>';
+		} ?>
 
 		<?php
 		$treinaquest1 = $db->execute("select `id` from `quests` where `quest_id`=14 and (`quest_status`=90 or `quest_status`=89) and `player_id`=?", array($player->id));
 		if ($player->level > 299 and $treinaquest1->recordcount() == 0) { ?>
-			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px" align="center">
+			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px"
+				align="center">
 				<p>Voc� j� passou do nivel 300, e tem uma miss�o � fazer. <a href="quest6.php">Clique aqui</a>.</p>
 			</div>
 		<?php } ?>
@@ -320,7 +337,8 @@ $query = $db->execute("update `players` set `last_active`=? where `id`=?", array
 		<?php
 		$treinaquest2 = $db->execute("select `id` from `quests` where `quest_id`=15 and `quest_status`=90 and `player_id`=?", array($player->id));
 		if (($player->level > 299) and ($treinaquest1->recordcount() != 0) and ($treinaquest2->recordcount() == 0)) { ?>
-			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px" align="center">
+			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px"
+				align="center">
 				<p>Voc� j� passou do nivel 300, e tem uma miss�o � fazer. <a href="quest7.php">Clique aqui</a>.</p>
 			</div>
 		<?php } ?>
@@ -328,7 +346,8 @@ $query = $db->execute("update `players` set `last_active`=? where `id`=?", array
 		<?php
 		$treinaquest3 = $db->execute("select `id` from `quests` where `quest_id`=17 and `quest_status`=90 and `player_id`=?", array($player->id));
 		if (($player->level > 299) and ($treinaquest2->recordcount() != 0) and ($treinaquest3->recordcount() == 0)) { ?>
-			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px" align="center">
+			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px"
+				align="center">
 				<p>Voc� j� passou do nivel 300, e tem uma miss�o � fazer. <a href="quest8.php">Clique aqui</a>.</p>
 			</div>
 		<?php } ?>
@@ -336,7 +355,8 @@ $query = $db->execute("update `players` set `last_active`=? where `id`=?", array
 		<?php
 		$treinaquest4 = $db->execute("select `id` from `quests` where `quest_id`=18 and `quest_status`=90 and `player_id`=?", array($player->id));
 		if (($player->level > 299) and ($treinaquest3->recordcount() != 0) and ($treinaquest4->recordcount() == 0)) { ?>
-			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px" align="center">
+			<div style="width:90%; background-color:#EEA2A2; padding:5px; border: 1px solid #DEDEDE; margin-bottom:10px"
+				align="center">
 				<p>Voc� j� passou do nivel 300, e tem uma miss�o � fazer. <a href="quest9.php">Clique aqui</a>.</p>
 			</div>
 		<?php } ?>
@@ -346,7 +366,9 @@ $query = $db->execute("update `players` set `last_active`=? where `id`=?", array
 			<table>
 				<tr>
 					<td><b>Nivel:</b></td>
-					<td><?= $player->level ?></td>
+					<td>
+						<?= $player->level ?>
+					</td>
 				</tr>
 				<tr>
 					<td><b>EXP:</b></td>
@@ -367,40 +389,45 @@ $query = $db->execute("update `players` set `last_active`=? where `id`=?", array
 			</table>
 			<br>
 			<b>Ouro:</b> <b>
-				<font color="#DFA40F"><?= $player->gold ?></font>
+				<font color="#DFA40F">
+					<?= $player->gold ?>
+				</font>
 			</b><br>
-			<b>Voca��o:</b> <?php
-							if ($player->voc == 'archer' and $player->promoted == 'f') {
-								echo "Ca�ador";
-							} else if ($player->voc == 'knight' and $player->promoted == 'f') {
-								echo "Espadachim";
-							} else if ($player->voc == 'mage' and $player->promoted == 'f') {
-								echo "Bruxo";
-							} else if (($player->voc == 'archer') and ($player->promoted == 't' or $player->promoted == 's' or $player->promoted == 'r')) {
-								echo "Arqueiro";
-							} else if (($player->voc == 'knight') and ($player->promoted == 't' or $player->promoted == 's' or $player->promoted == 'r')) {
-								echo "Guerreiro";
-							} else if (($player->voc == 'mage') and ($player->promoted == 't' or $player->promoted == 's' or $player->promoted == 'r')) {
-								echo "Mago";
-							} else if ($player->voc == 'archer' and $player->promoted == 'p') {
-								echo "Arqueiro Royal";
-							} else if ($player->voc == 'knight' and $player->promoted == 'p') {
-								echo "Cavaleiro";
-							} else if ($player->voc == 'mage' and $player->promoted == 'p') {
-								echo "Arquimago";
-							}
-							?><br>
-			<b>Cl�:</b> <?php
-						if ($player->guild == NULL or $player->guild == '') {
-							echo "[Nenhum]";
-						} else {
-							$nomecla = $db->GetOne("select `name` from `guilds` where `id`=?", array($player->guild));
-							echo "<b>[</b><a href=\"guild_home.php\">" . $nomecla . "</a><b>]</b>";
-						}
-						?>
+			<b>Voca��o:</b>
+			<?php
+			if ($player->voc == 'archer' and $player->promoted == 'f') {
+				echo "Ca�ador";
+			} else if ($player->voc == 'knight' and $player->promoted == 'f') {
+				echo "Espadachim";
+			} else if ($player->voc == 'mage' and $player->promoted == 'f') {
+				echo "Bruxo";
+			} else if (($player->voc == 'archer') and ($player->promoted == 't' or $player->promoted == 's' or $player->promoted == 'r')) {
+				echo "Arqueiro";
+			} else if (($player->voc == 'knight') and ($player->promoted == 't' or $player->promoted == 's' or $player->promoted == 'r')) {
+				echo "Guerreiro";
+			} else if (($player->voc == 'mage') and ($player->promoted == 't' or $player->promoted == 's' or $player->promoted == 'r')) {
+				echo "Mago";
+			} else if ($player->voc == 'archer' and $player->promoted == 'p') {
+				echo "Arqueiro Royal";
+			} else if ($player->voc == 'knight' and $player->promoted == 'p') {
+				echo "Cavaleiro";
+			} else if ($player->voc == 'mage' and $player->promoted == 'p') {
+				echo "Arquimago";
+			}
+			?><br>
+			<b>Cl�:</b>
+			<?php
+			if ($player->guild == NULL or $player->guild == '') {
+				echo "[Nenhum]";
+			} else {
+				$nomecla = $db->GetOne("select `name` from `guilds` where `id`=?", array($player->guild));
+				echo "<b>[</b><a href=\"guild_home.php\">" . $nomecla . "</a><b>]</b>";
+			}
+			?>
 			<br />
 			<br />
-			<b><?php
+			<b>
+				<?php
 
 				$checamagiastatus = $db->execute("select * from `magias` where `magia_id`=5 and `player_id`=?", array($player->id));
 				if ($checamagiastatus->recordcount() > 0) {
@@ -418,46 +445,55 @@ $query = $db->execute("update `players` set `last_active`=? where `id`=?", array
 				} else if ($player->voc == 'mage') {
 					echo "Ataque";
 				}
-				?>:</b> <?= $player->strength ?><?php
-								include("itemstatus.php");
-								echo " <font color=\"gray\">+" . $forcaadebonus . "</font>";
-								if ($player->promoted == 'r') {
-									$bonusvalor1 = (9 + $bonusmagico);
-									echo " +" . $bonusvalor1 . "%";
-								} else if (($player->promoted == 's') or ($player->promoted == 'p')) {
-									$bonusvalor2 = (15 + $bonusmagico);
-									echo " +" . $bonusvalor2 . "%";
-								} else {
-									echo $bonusmagico2;
-								}
-								?><br />
-			<b>Vitalidade:</b> <?= $player->vitality ?><?php
-														echo " <font color=\"green\">+" . $vitalidadeeeeebonus . "</font>";
-														?><br />
-			<b>Agilidade:</b> <?= $player->agility ?><?php
-													echo " <font color=\"blue\">+" . $agilidadeeedebonus . "</font>";
-													if ($player->promoted == 'r') {
-														$bonusvalor1 = (9 + $bonusmagico);
-														echo " +" . $bonusvalor1 . "%";
-													} else if (($player->promoted == 's') or ($player->promoted == 'p')) {
-														$bonusvalor2 = (15 + $bonusmagico);
-														echo " +" . $bonusvalor2 . "%";
-													} else {
-														echo $bonusmagico2;
-													}
-													?><br />
-			<b>Resist�ncia:</b> <?= $player->resistance ?><?php
-														echo " <font color=\"red\">+" . $resistenciaaaadebonus . "</font>";
-														if ($player->promoted == 'r') {
-															$bonusvalor1 = (9 + $bonusmagico);
-															echo " +" . $bonusvalor1 . "%";
-														} else if (($player->promoted == 's') or ($player->promoted == 'p')) {
-															$bonusvalor2 = (15 + $bonusmagico);
-															echo " +" . $bonusvalor2 . "%";
-														} else {
-															echo $bonusmagico2;
-														}
-														?><br />
+				?>:
+			</b>
+			<?= $player->strength ?>
+			<?php
+			include("itemstatus.php");
+			echo " <font color=\"gray\">+" . $forcaadebonus . "</font>";
+			if ($player->promoted == 'r') {
+				$bonusvalor1 = (9 + $bonusmagico);
+				echo " +" . $bonusvalor1 . "%";
+			} else if (($player->promoted == 's') or ($player->promoted == 'p')) {
+				$bonusvalor2 = (15 + $bonusmagico);
+				echo " +" . $bonusvalor2 . "%";
+			} else {
+				echo $bonusmagico2;
+			}
+			?><br />
+			<b>Vitalidade:</b>
+			<?= $player->vitality ?>
+			<?php
+			echo " <font color=\"green\">+" . $vitalidadeeeeebonus . "</font>";
+			?><br />
+			<b>Agilidade:</b>
+			<?= $player->agility ?>
+			<?php
+			echo " <font color=\"blue\">+" . $agilidadeeedebonus . "</font>";
+			if ($player->promoted == 'r') {
+				$bonusvalor1 = (9 + $bonusmagico);
+				echo " +" . $bonusvalor1 . "%";
+			} else if (($player->promoted == 's') or ($player->promoted == 'p')) {
+				$bonusvalor2 = (15 + $bonusmagico);
+				echo " +" . $bonusvalor2 . "%";
+			} else {
+				echo $bonusmagico2;
+			}
+			?><br />
+			<b>Resist�ncia:</b>
+			<?= $player->resistance ?>
+			<?php
+			echo " <font color=\"red\">+" . $resistenciaaaadebonus . "</font>";
+			if ($player->promoted == 'r') {
+				$bonusvalor1 = (9 + $bonusmagico);
+				echo " +" . $bonusvalor1 . "%";
+			} else if (($player->promoted == 's') or ($player->promoted == 'p')) {
+				$bonusvalor2 = (15 + $bonusmagico);
+				echo " +" . $bonusvalor2 . "%";
+			} else {
+				echo $bonusmagico2;
+			}
+			?><br />
 			<center><b><a href="reset_stats.php">Redistribuir pontos.</a></b></center>
 		</td>
 	</tr>
@@ -486,11 +522,18 @@ $query = $db->execute("update `players` set `last_active`=? where `id`=?", array
 		$query = $db->execute("update `settings` set `value`=? where `name`='user_record'", array($recorde));
 	}
 
-	?></font>
+	?>
+</font>
 <br /><br /><br />
-<b>Link para convidar amigos:</b> <a href="http://www.oconfronto.co.nr/?r=<?= $player->id ?>">http://www.oconfronto.co.nr/?r=<?= $player->id ?></a><br />
-<b>Amigos convidados:</b> <?= $player->ref ?> (voc� ganha 2500 de ouro a cada amigo convidado).<br />
-<font size="1">Seu amigo deve atingir o n�vel <?= $setting->activate_level ?> para voc� receber sua recompensa.</font>
+<b>Link para convidar amigos:</b> <a
+	href="http://www.oconfronto.co.nr/?r=<?= $player->id ?>">http://www.oconfronto.co.nr/?r=
+	<?= $player->id ?>
+</a><br />
+<b>Amigos convidados:</b>
+<?= $player->ref ?> (voc� ganha 2500 de ouro a cada amigo convidado).<br />
+<font size="1">Seu amigo deve atingir o n�vel
+	<?= $setting->activate_level ?> para voc� receber sua recompensa.
+</font>
 
 
 <br /><br />

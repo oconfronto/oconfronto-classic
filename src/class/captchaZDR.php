@@ -54,6 +54,7 @@ class captchaZDR
             $bgc = imagecolorallocate($im, 255, 255, 255);
             $tc  = imagecolorallocate($im, 0, 0, 0);
             imagefilledrectangle($im, 0, 0, 150, 30, $bgc);
+            $imgname = "image.png";
             imagestring($im, 1, 5, 5, "Error loading $imgname", $tc);
         }
         return $im;
