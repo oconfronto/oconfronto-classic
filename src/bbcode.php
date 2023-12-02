@@ -2,17 +2,17 @@
 
 class bbcode
 {
-    public function code_box($text)
+    public function code_box($text): string
     {
         return "<blockquote><b><font size=1>Código:</font></b><br/>" . htmlentities($text) . "</blockquote>";
     }
 
-    public function quote($text)
+    public function quote($text): string
     {
         return "<blockquote><b><font size=1>Citação:</font></b><br/>" . $text . "</blockquote>";
     }
 
-    public function htmlout($text)
+    public function htmlout($text): string
     {
         $text = stripslashes($text);
         $text = htmlspecialchars($text);
@@ -21,7 +21,7 @@ class bbcode
         return $text;
     }
 
-    public function parse($text)
+    public function parse($text): string
     {
         $text = " " . $text;
 

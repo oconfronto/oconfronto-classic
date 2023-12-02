@@ -5,6 +5,9 @@ include(__DIR__ . '/bbcode.php');
 $bbcode = new bbcode();
 define("PAGENAME", "Principal");
 
+/**
+ * @return void
+ */
 function redirectToCharacterPageIfNeeded($db, $secret_key) {
     if (!isset($_SESSION['accid'], $_SESSION['hash']) || $_SESSION['accid'] <= 0 || !$_SESSION['hash']) {
         return;
@@ -22,6 +25,9 @@ function redirectToCharacterPageIfNeeded($db, $secret_key) {
     }
 }
 
+/**
+ * @return void
+ */
 function attemptLogin($db, $secret_key, &$error, &$errormsg) {
     if (empty($_POST['username'])) {
         $errormsg .= "Por favor digite sua conta.";
@@ -62,7 +68,7 @@ function attemptLogin($db, $secret_key, &$error, &$errormsg) {
     header("Location: characters.php");
 }
 
-function updateLoginAttempts($db, $ip) {
+function updateLoginAttempts($db, $ip): void {
     $bloqueiaip = $db->GetRow("SELECT `tries` FROM `ip` WHERE `ip` = ?", [$ip]);
 
     if (empty($bloqueiaip)) {
@@ -73,6 +79,9 @@ function updateLoginAttempts($db, $ip) {
     }
 }
 
+/**
+ * @return void
+ */
 function displayNews($db, $bbcode) {
     $newsRows = $db->GetAll("SELECT `topic`, `detail`, `user_id`, `datetime` FROM `forum_question` WHERE `category` = 'noticias' ORDER BY `postado` DESC LIMIT 5");
 

@@ -39,7 +39,7 @@ if ($user['voc'] == 'archer') {
         $voca = "Mago";
     }
 }
-function LoadGif($imgname)
+function LoadGif($imgname): GdImage|false
 {
     $im = @imagecreatefromgif($imgname); /* Attempt to open */
     if (!$im) { /* See if it failed */

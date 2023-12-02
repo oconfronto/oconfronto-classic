@@ -4,6 +4,9 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 // Redirects to the index page and ends the session
+/**
+ * @return never
+ */
 function redirectToIndex() {
     session_unset();
     session_destroy();
@@ -12,7 +15,7 @@ function redirectToIndex() {
 }
 
 // Checks if the user account is valid
-function check_acc(string $secret_key, $db) {
+function check_acc(string $secret_key, $db): stdClass {
     if (!isset($_SESSION['accid']) || !isset($_SESSION['hash'])) {
         redirectToIndex();
     }
@@ -37,7 +40,7 @@ function check_acc(string $secret_key, $db) {
 }
 
 // Checks if user is logged in and returns user data as an object
-function check_user(string $secret_key, $db) {
+function check_user(string $secret_key, $db): stdClass {
     if (!isset($_SESSION['userid'])) {
         redirectToIndex();
     }
@@ -76,22 +79,22 @@ function unread_log($id, $db) {
 }
 
 // Insert a log message into the user logs
-function addLog($id, $msg, $db) {
+function addLog($id, $msg, $db): void {
     $db->autoExecute('user_log', ['player_id' => $id, 'msg' => $msg, 'time' => time()], 'INSERT');
 }
 
 // Insert a log message into the error log
-function errorLog($msg, $db) {
+function errorLog($msg, $db): void {
     $db->autoExecute('log_errors', ['msg' => $msg, 'time' => time()], 'INSERT');
 }
 
 // Insert a log message into the GM log
-function gmLog($msg, $db) {
+function gmLog($msg, $db): void {
     $db->autoExecute('log_gm', ['msg' => $msg, 'time' => time()], 'INSERT');
 }
 
 // Insert a log message into the forum log
-function forumLog($msg, $db) {
+function forumLog($msg, $db): void {
     $db->autoExecute('log_forum', ['msg' => $msg, 'time' => time()], 'INSERT');
 }
 

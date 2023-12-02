@@ -1,6 +1,6 @@
 <?php
 
-function fetchCronSettings($db) {
+function fetchCronSettings($db): array {
     $result = $db->execute("SELECT * FROM `cron`");
     if (!$result) {
         throw new Exception("Error executing query: " . $db->ErrorMsg());
@@ -14,7 +14,7 @@ function fetchCronSettings($db) {
     return $cron;
 }
 
-function updatePlayerStats($db, $diff) {
+function updatePlayerStats($db, $diff): void {
     $timedif = ($diff / 60);
     $addhp = (35 * $timedif);
     $addenergy = (10 * $timedif);
@@ -30,11 +30,11 @@ function updatePlayerStats($db, $diff) {
         [$addenergy, $addenergy]);
 }
 
-function updateCronLast($db, $name, $value) {
+function updateCronLast($db, $name, $value): void {
     $db->execute("UPDATE `cron` SET `value` = ? WHERE `name` = ?", [$value, $name]);
 }
 
-function cleanupOldData($db, $timeFrameInSeconds) {
+function cleanupOldData($db, $timeFrameInSeconds): void {
     $olderThanTime = ceil(time() - $timeFrameInSeconds);
 
     $tablesToCleanup = [
@@ -56,6 +56,9 @@ function cleanupOldData($db, $timeFrameInSeconds) {
     }
 }
 
+/**
+ * @return void
+ */
 function performWorkUpdates($db) {
     $updategeralwork = $db->execute("SELECT * FROM `work` WHERE `status` = 't' AND (`start` + (`worktime` * 3600)) < ?", [time()]);
     if (!$updategeralwork) {
