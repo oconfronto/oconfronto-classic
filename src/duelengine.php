@@ -8,6 +8,7 @@ if ($duel['time'] < (time() + 45)){
 	if ($duel['turn'] == 1){
 		$winner = $duel['rival'];
 		$loser = $duel['owner'];
+	}
 	elseif ($duel['turn'] == 2){
 		$winner = $duel['owner'];
 		$loser = $duel['rival'];
@@ -15,22 +16,22 @@ if ($duel['time'] < (time() + 45)){
 
 	$db->execute("update `duels` set `active`='f' where `id`=?", array($duel['id']));
 
-	$lossmsg =. "Você perdeu o duelo após ficar 45 segundos sem responder.<br/>";
-	$winmsg =. "Você ganhou o duelo após seu oponente ficar 45 segundos sem responder.<br/>";
+	$lossmsg ="Vocï¿½ perdeu o duelo apï¿½s ficar 45 segundos sem responder.<br/>";
+	$winmsg ="Vocï¿½ ganhou o duelo apï¿½s seu oponente ficar 45 segundos sem responder.<br/>";
 		
 	if ($duel['prize'] > 0){
 		$losergold = $db->GetOne("select `bank` from `players` where `id`=?", array($loser));
 			if ($losergold < $duel['prize']){
-				$winmsg =. "Parece que seu oponente não tinha " . $duel['prize'] . " no banco para lhe pagar, portanto você só receberá " . $losergold . ".<br/>";
-				$winmsg =. "Isso é um erro, contate o administrador.";
+				$winmsg ="Parece que seu oponente nï¿½o tinha " . $duel['prize'] . " no banco para lhe pagar, portanto vocï¿½ sï¿½ receberï¿½ " . $losergold . ".<br/>";
+				$winmsg ="Isso ï¿½ um erro, contate o administrador.";
 				$db->execute("update `players` set `bank`=`bank`+? where `id`=?", array($losergold, $winner));
 				$db->execute("update `players` set `bank`=`bank`-? where `id`=?", array($losergold, $loser));
-				$lossmsg =. "Você perdeu " . $losergold . " de ouro.";
+				$lossmsg ="Vocï¿½ perdeu " . $losergold . " de ouro.";
 			}else{
-				$winmsg =. "" . $duel['prize'] . " de ouro foi adicionado a sua conta bancária.<br/>";
+				$winmsg ="" . $duel['prize'] . " de ouro foi adicionado a sua conta bancï¿½ria.<br/>";
 				$db->execute("update `players` set `bank`=`bank`+? where `id`=?", array($duel['prize'], $winner));
 				$db->execute("update `players` set `bank`=`bank`-? where `id`=?", array($duel['prize'], $loser));
-				$lossmsg =. "Você perdeu " . $duel['prize'] . " de ouro.";
+				$lossmsg ="Vocï¿½ perdeu " . $duel['prize'] . " de ouro.";
 			}
 	}
 
@@ -38,5 +39,4 @@ if ($duel['time'] < (time() + 45)){
 	addlog($winner, $winmsg, $db);
 
 }
-
 ?>
