@@ -220,31 +220,41 @@ $query = $db->execute("update `players` set `last_active`=? where `id`=?", array
 			?>
 			<b>Idade do personagem:</b> <?= $age ?> dias<br />
 			<b>Servidor:</b> <?= $player->serv ?><br />
-			<br />
-			<b>Pontos de status:</b> <?= $player->stat_points ?> | <a href="buystats.php">Treinar!</a><br />
+			<br />			
+			<b>Voca��o:</b>
 			<?php
-			if ($player->stat_points > 0) {
-				echo "<a href=\"stat_points.php\"><b>Utilizar seus pontos.</b></a><br />";
+			if ($player->voc == 'archer' and $player->promoted == 'f') {
+				echo "Ca�ador";
+			} else if ($player->voc == 'knight' and $player->promoted == 'f') {
+				echo "Espadachim";
+			} else if ($player->voc == 'mage' and $player->promoted == 'f') {
+				echo "Bruxo";
+			} else if (($player->voc == 'archer') and ($player->promoted == 't' or $player->promoted == 's' or $player->promoted == 'r')) {
+				echo "Arqueiro";
+			} else if (($player->voc == 'knight') and ($player->promoted == 't' or $player->promoted == 's' or $player->promoted == 'r')) {
+				echo "Guerreiro";
+			} else if (($player->voc == 'mage') and ($player->promoted == 't' or $player->promoted == 's' or $player->promoted == 'r')) {
+				echo "Mago";
+			} else if ($player->voc == 'archer' and $player->promoted == 'p') {
+				echo "Arqueiro Royal";
+			} else if ($player->voc == 'knight' and $player->promoted == 'p') {
+				echo "Cavaleiro";
+			} else if ($player->voc == 'mage' and $player->promoted == 'p') {
+				echo "Arquimago";
 			}
-			?>
-			<br />
-			<b>Pontos m�sticos:</b> <?= $player->magic_points ?><br />
-			<!-- <td class="red" width="60%"> -->
+			?><br>
+			<b>Cl�:</b>
 			<?php
-			if ($player->magic_points > 0) {
-				echo "<a href=\"spells.php\"><b>Gerenciar.</b></a>";
+			if ($player->guild == NULL or $player->guild == '') {
+				echo "[Nenhum]";
 			} else {
-				echo "<a href=\"spells.php\"><b>Visualizar sua arvore de feitiços.</b></a>";
+				$nomecla = $db->GetOne("select `name` from `guilds` where `id`=?", array($player->guild));
+				echo "<b>[</b><a href=\"guild_home.php\">" . $nomecla . "</a><b>]</b>";
 			}
 			?>
 			<br />
 			<br />
-			<?php
-			$query_spells = $db->execute("SELECT * FROM magias where player_id = ?", array($player->id));
-			if ($query_spells->recordcount() > 1) {
-				echo "<a href=\"reset_spells.php\"><b>Redistribuir pontos de spells.</b></a>";
-			}
-			?>
+
 			<!-- </td> -->
 
 			<br><br>
@@ -380,7 +390,7 @@ $query = $db->execute("update `players` set `last_active`=? where `id`=?", array
 
 		</td>
 		<td width="50%">
-			<table>
+			<!-- <table>
 				<tr>
 					<td><b>Nivel:</b></td>
 					<td><?= $player->level ?></td>
@@ -402,43 +412,35 @@ $query = $db->execute("update `players` set `last_active`=? where `id`=?", array
 					<td> <img src="bargen.php?energy"></td>
 				</tr>
 			</table>
-			<br>
-			<b>Ouro:</b> <b>
-				<font color="#DFA40F"><?= $player->gold ?></font>
-			</b><br>
-			<b>Voca��o:</b>
+			<br> -->
+			<b>Pontos m�sticos:</b> <?= $player->magic_points ?><br />
+			<!-- <td class="red" width="60%"> -->
 			<?php
-			if ($player->voc == 'archer' and $player->promoted == 'f') {
-				echo "Ca�ador";
-			} else if ($player->voc == 'knight' and $player->promoted == 'f') {
-				echo "Espadachim";
-			} else if ($player->voc == 'mage' and $player->promoted == 'f') {
-				echo "Bruxo";
-			} else if (($player->voc == 'archer') and ($player->promoted == 't' or $player->promoted == 's' or $player->promoted == 'r')) {
-				echo "Arqueiro";
-			} else if (($player->voc == 'knight') and ($player->promoted == 't' or $player->promoted == 's' or $player->promoted == 'r')) {
-				echo "Guerreiro";
-			} else if (($player->voc == 'mage') and ($player->promoted == 't' or $player->promoted == 's' or $player->promoted == 'r')) {
-				echo "Mago";
-			} else if ($player->voc == 'archer' and $player->promoted == 'p') {
-				echo "Arqueiro Royal";
-			} else if ($player->voc == 'knight' and $player->promoted == 'p') {
-				echo "Cavaleiro";
-			} else if ($player->voc == 'mage' and $player->promoted == 'p') {
-				echo "Arquimago";
-			}
-			?><br>
-			<b>Cl�:</b>
-			<?php
-			if ($player->guild == NULL or $player->guild == '') {
-				echo "[Nenhum]";
+			if ($player->magic_points > 0) {
+				echo "<a href=\"spells.php\"><b>Gerenciar.</b></a>";
 			} else {
-				$nomecla = $db->GetOne("select `name` from `guilds` where `id`=?", array($player->guild));
-				echo "<b>[</b><a href=\"guild_home.php\">" . $nomecla . "</a><b>]</b>";
+				echo "<a href=\"spells.php\"><b>Visualizar sua arvore de feitiços.</b></a>";
 			}
 			?>
 			<br />
 			<br />
+			<?php
+			$query_spells = $db->execute("SELECT * FROM magias where player_id = ?", array($player->id));
+			if ($query_spells->recordcount() > 1) {
+				echo "<a href=\"reset_spells.php\"><b>Redistribuir pontos de spells.</b></a>";
+				echo "<br />";
+				echo "<br />";
+			}
+			?>
+			
+			<b>Pontos de status:</b> <?= $player->stat_points ?> | <a href="buystats.php">Treinar!</a><br />
+			<?php
+			if ($player->stat_points > 0) {
+				echo "<a href=\"stat_points.php\"><b>Utilizar seus pontos.</b></a><br />";
+			}
+			?>
+			<br />
+
 			<b>
 				<?php
 
