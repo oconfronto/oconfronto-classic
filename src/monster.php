@@ -400,9 +400,11 @@ switch ($_GET['act']) {
 							$damage = rand($enemy->mindmg, $enemy->maxdmg); //Calculate random damage
 							if (($fastmagia == 10) and ($fastturno > 0)) {
 								$bixo->hp -= $damage;
+								$bixo->hp = ($bixo->hp > 0) ? $bixo->hp : 0;
 								$_SESSION['ataques'] .= "<font color=\"green\">" . ucfirst($enemy->prepo) . " " . $enemy->username . " tentou te atacar mas seu ataque voltou e ele perdeu " . $damage . " de vida. ($bixo->hp)</font><br/>";
 							} else {
 								$player->hp -= $damage;
+								$player->hp = ($player->hp > 0) ? $player->hp : 0;
 								$_SESSION['ataques'] .= ($player->username == $enemy->username) ? "<font color=\"green\">" : "<font color=\"red\">";
 								$_SESSION['ataques'] .= ucfirst($enemy->prepo) . " " . $enemy->username . " te atacou e voc� perdeu " . $damage . " de vida. ($player->hp)<br/>";
 								$_SESSION['ataques'] .= "</font>";
