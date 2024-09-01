@@ -1,4 +1,4 @@
-# O Confronto
+# O Confronto - Clássico
 
 <p align="center">
     <img src="src/images/topo.jpg">
