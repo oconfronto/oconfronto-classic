@@ -5325,9 +5325,9 @@ CREATE TABLE IF NOT EXISTS `work` (
 --
 -- Estrutura para visualizar `guild_scores`
 --
-DROP TABLE IF EXISTS `guild_scores`;
+DROP VIEW IF EXISTS `guild_scores`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`luniabr1_conf`@`localhost` SQL SECURITY INVOKER VIEW `guild_scores` AS select `guilds`.`id` AS `guild_id`,(((((((`players`.`gold` + `players`.`bank`) + `guilds`.`gold`) / 90) + (`players`.`kills` * 4)) + `players`.`monsterkilled`) + (`players`.`level` * 28)) - (`players`.`deaths` * 10)) AS `score` from (`guilds` join `players`) where (`players`.`guild` = `guilds`.`id`) group by `guilds`.`id` order by (((((((`players`.`gold` + `players`.`bank`) + `guilds`.`gold`) / 90) + (`players`.`kills` * 4)) + `players`.`monsterkilled`) + (`players`.`level` * 28)) - (`players`.`deaths` * 10)) desc;
+CREATE VIEW `guild_scores` AS select `guilds`.`id` AS `guild_id`,(((((((`players`.`gold` + `players`.`bank`) + `guilds`.`gold`) / 90) + (`players`.`kills` * 4)) + `players`.`monsterkilled`) + (`players`.`level` * 28)) - (`players`.`deaths` * 10)) AS `score` from (`guilds` join `players`) where (`players`.`guild` = `guilds`.`id`) group by `guilds`.`id`, `players`.`gold`, `players`.`bank`, `players`.`kills`, `players`.`monsterkilled`, `players`.`level`, `players`.`deaths`, `guilds`.`gold` order by (((((((`players`.`gold` + `players`.`bank`) + `guilds`.`gold`) / 90) + (`players`.`kills` * 4)) + `players`.`monsterkilled`) + (`players`.`level` * 28)) - (`players`.`deaths` * 10)) DESC;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

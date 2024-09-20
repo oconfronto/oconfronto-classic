@@ -73,3 +73,125 @@
 	text-align: center;
 	
 }
+
+
+
+
+.bg-bar {
+    max-width: 195px;
+    height: 18px;
+    border: 2px solid #f0a315;
+    border-radius: 5px;
+    background-color: grey;
+}
+
+.bg-hp {
+    max-width: 195px;
+    height: 18px;
+    border-radius: 3px;
+    background-image: radial-gradient(circle at 60% 115.01%, #ce6300 0, #ca5100 12.5%, #c21d00 25%, #b72700 37.5%, #a70200 50%, #960007 62.5%, #87000c 75%, #790010 87.5%, #6c0013 100%);
+}
+
+.bg-mp {
+    max-width: 195px;
+    height: 18px;
+    border-radius: 3px;
+    background-image: radial-gradient(circle at 60% 115.01%, #333baa 0, #082053 50%, #000005 100%);
+}
+
+.bg-en {
+    max-width: 195px;
+    height: 18px;
+    border-radius: 3px;
+    background-image: radial-gradient(circle at 60% 84%, #407800 0, #337200 12.5%, #0c6900 25%, #255e00 37.5%, #005100 50%, #004405 62.5%, #003808 75%, #002f0a 87.5%, #00280c 100%);
+}
+
+/* .bg-hp{max-width:195px;height:16px;background-color: #A70301;border-radius: 8px;}
+.bg-mp{max-width:195px;height:16px;background-color: #092A53;border-radius: 8px;}
+.bg-en{max-width:195px;height:16px;background-color: #005100;border-radius: 8px;} */
+
+
+
+.ic-en {
+    margin-bottom: 5px;
+    max-width: 210px;
+    height: 14px;
+}
+
+.ic-hp {
+    margin-bottom: 10px;
+    max-width: 210px;
+    height: 14px;
+}
+
+.ic-mp {
+    margin-bottom: 10px;
+    max-width: 210px;
+    height: 14px;
+}
+
+.bg-bar .bg-hp span {
+    color: #fff;
+    font-weight: bold;
+    font-size: 10px;
+    margin-left: 8px;
+    position: absolute;
+    margin-top: 2px;
+}
+
+.bg-bar .bg-mp span {
+    color: #fff;
+    font-weight: bold;
+    font-size: 10px;
+    margin-left: 8px;
+    position: absolute;
+    margin-top: 2px;
+}
+
+.bg-bar .bg-en span {
+    color: #fff;
+    font-weight: bold;
+    font-size: 10px;
+    margin-left: 8px;
+    position: absolute;
+    margin-top: 2px;
+}
+
+.bg-barras {
+    background: #faf0e4;
+    padding: 5px 0px 10px 0px;
+    width: 150px;
+    height: 60px;
+    /* margin: 0px 0px 10px 5px; */
+}
+
+#ex-bg {
+    position: relative; /* Define o contêiner como relativo */
+    border: 2px solid #dfc087;
+    border-radius: 5px;
+    background: grey; 
+    width: 145px;   
+    height: 20px;
+    /* margin: 0px 0px 10px 5px; */
+}
+
+#expbar {
+    position: absolute; /* Posiciona a barra de progresso de forma absoluta dentro do contêiner */
+    border-radius: 3px;
+    height: 100%; /* Define a altura como 100% do contêiner para se ajustar */
+    background: linear-gradient(180deg, rgba(80, 0, 83, 1) 49%, rgba(150, 0, 155, 1) 100%);
+    z-index: 0; /* Barra de progresso atrás do texto */
+}
+
+#expbarText {
+    position: absolute; /* Posiciona o texto de forma absoluta dentro do contêiner */
+    z-index: 1; /* Texto sobre a barra de progresso */
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    left: 0; /* Ajusta a posição horizontal do texto */
+    top: 0; /* Ajusta a posição vertical do texto */
+    width: 100%; /* Faz o texto ocupar toda a largura do contêiner */
+    text-align: center; /* Centraliza o texto horizontalmente */
+    line-height: 20px; /* Alinha o texto verticalmente dentro da barra */
+}

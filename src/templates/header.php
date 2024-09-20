@@ -1,7 +1,8 @@
 <html>
 <head>
 <title>O Confronto :: <?php echo PAGENAME?></title>
-<meta name="keywords" content="confronto, confronto medieval, confrontos medievais, mmorpg, rpg online, webgame, jogo online, jogos online, diversão online, medieval, batalhas, jogo medieval, jogos medievais, tibia" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="keywords" content="confronto, confronto medieval, confrontos medievais, mmorpg, rpg online, webgame, jogo online, jogos online, diversï¿½o online, medieval, batalhas, jogo medieval, jogos medievais, tibia" />
 <meta name="description" content="Venha confrontar monstros e jogadores, neste incrivel e maravilhoso game medieval, sobreviva a este desafio online e totalmente gratuito! Jogue Online." />
 <meta name="RATING" content="GENERAL" />
 <meta name="audience" content="all" />
@@ -41,7 +42,7 @@ $deletechecknosite2 = $db->execute("delete from `login` where `time`<?", array((
 </div>
 <div id="wrapper">
 <center><img src="./images/topo.jpg" alt="O Confronto - MMORPG" border="0"></center>
-<div id="footer-text"><div id="textoAviso">Bem-vindo visitante, <a href="register.php?r=<?php echo $usaar?>">clique aqui</a> para se cadastrar e começar a jogar!</div></div>
+<div id="footer-text"><div id="textoAviso">Bem-vindo visitante, <a href="register.php?r=<?php echo $usaar?>">clique aqui</a> para se cadastrar e comeï¿½ar a jogar!</div></div>
 <div id="left">
 <div class="left-section">
 <br/>
